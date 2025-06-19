@@ -1,5 +1,5 @@
 import SideBarItem from './SideBarItem';
-import {  Calculator, FileText, Users } from 'lucide-react';
+import {  Calculator, FileText, Plus, Users } from 'lucide-react';
 import Logo from './Logo'
 
 function SideBar() {
@@ -14,7 +14,7 @@ function SideBar() {
                     <SideBarItem icon={<Calculator size={20} />}>Criar Orçamento</SideBarItem>
                     <SideBarItem icon={<FileText size={20} />}>Visualizar Orçamentos</SideBarItem>
                     <SideBarItem icon={<Users size={20} />}>Visualizar Clientes</SideBarItem>
-                    <SideBarItem icon={<Calculator size={20} />}>Criar Cliente</SideBarItem>
+                    <SideBarItem icon={<Plus size={20} />}>Criar Cliente</SideBarItem>
                 </div>
             </nav>
         </div>

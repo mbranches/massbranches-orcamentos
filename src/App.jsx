@@ -1,4 +1,4 @@
-import { Calculator, FileText, Users } from "lucide-react";
+import { Calculator, FileText, Plus, Users } from "lucide-react";
 import CardMenu from "./components/CardMenu";
 import SideBar from "./components/SideBar";
 
@@ -16,7 +16,7 @@ function App() {
           
           <CardMenu icon={<Users size={24}/>} title="Visualizar Clientes" description="Novo orçamento de obra" color="purple"/>
           
-          <CardMenu icon={<Calculator size={24}/>} title="Criar Cliente" description="Cadastrar novo cliente" color="orange"/>
+          <CardMenu icon={<Plus size={24}/>} title="Criar Cliente" description="Cadastrar novo cliente" color="orange"/>
         </div>
       </div>
     </div>
