@@ -1,5 +1,5 @@
 import SidebarItem from './SidebarItem';
-import {  Calculator, FileText, Plus, Users } from 'lucide-react';
+import {  Calculator, FileText, Plus, Users, X } from 'lucide-react';
 import Logo from './Logo'
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
@@ -12,9 +12,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 />
             )}
 
-            <div className={`w-[300px] min-h-screen z-50 transition-transform duration-100 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:z-auto bg-white shadow-xl`}>
-                <div className='p-6 border-b-[1px] border-gray-200'>
+            <div className={`w-[310px] min-h-screen z-50 transition-transform duration-100 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:z-auto bg-white shadow-xl`}>
+                <div className='p-6 border-b-[1px] border-gray-200 flex items-center gap-2'>
                     <Logo />
+                    <div className='hover:bg-gray-100 p-1 rounded-md lg:hidden' onClick={() => setSidebarOpen(false)}>
+                        <X size={20} />
+                    </div>
                 </div>
                 <nav className='p-6'>
                     <h2 className='uppercase mt-3 mb-3 text-slate-400 font-semibold text-[12px] tracking-wider'>Menu Principal</h2>
