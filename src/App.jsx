@@ -10,7 +10,7 @@ function App() {
     <div className="bg-slate-200">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      <div className="lg:hidden absolute top-5 left-5">
+      <div className="lg:hidden fixed top-5 left-5">
         <button className="cursor-pointer" onClick={() => setSidebarOpen(!sidebarOpen)}>
           <MenuIcon />
         </button>
