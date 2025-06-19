@@ -20,11 +20,11 @@ function CardMenu({title, description, icon, color}) {
                     {icon}
                 </div>
                 <div className="ml-15">
-                    <h2 className="text-[20px] font-semibold">{title}</h2>
+                    <h2 className="text-[18px] font-semibold">{title}</h2>
                     <p className="text-[14px] text-slate-600">{description}</p>
                 </div>
             </div>
-            <button className={`${buttonMap[color]} mt-4 w-[350px] px-4 py-2 rounded-md text-white font-semibold cursor-pointer`}>Acessar</button>
+            <button className={`${buttonMap[color]} mt-4 w-[350px] px-4 py-2 rounded-md text-white font-semibold cursor-pointer text-[14px]`}>Acessar</button>
         </div>
     );
 }
