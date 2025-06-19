@@ -1,4 +1,4 @@
-function SideBarItem({icon, children}) {
+function SidebarItem({icon, children}) {
     return (
         <button className="flex gap-3 text-slate-600 px-2 py-4 font-semibold text-[14px] cursor-pointer w-full hover:bg-gray-100 rounded-md">
             {icon}
@@ -7,4 +7,4 @@ function SideBarItem({icon, children}) {
     );
 }
 
-export default SideBarItem;
+export default SidebarItem;

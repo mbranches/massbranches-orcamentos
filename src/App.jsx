@@ -1,12 +1,12 @@
 import { Calculator, FileText, Plus, Users } from "lucide-react";
 import CardMenu from "./components/CardMenu";
-import SideBar from "./components/SideBar";
+import Sidebar from "./components/Sidebar";
 
 function App() {
 
   return (
     <div className="bg-slate-200">
-      <SideBar/>
+      <Sidebar/>
       <div className="min-h-screen min-w-scree flex justify-center items-center">
 
         <div className="ml-[350px] max-w-[1000px] flex items-center justify-center gap-4 flex-wrap">
