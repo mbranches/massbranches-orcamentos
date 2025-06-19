@@ -1,15 +1,25 @@
-import { Calculator, FileText, Plus, Users } from "lucide-react";
+import { Calculator, FileText, MenuIcon, Plus, Users } from "lucide-react";
 import CardMenu from "./components/CardMenu";
-import Sidebar from "./components/Sidebar";
+import Sidebar from './components/Sidebar'; 
+import { useState } from "react";
 
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="bg-slate-200">
-      <Sidebar/>
-      <div className="min-h-screen min-w-scree flex justify-center items-center">
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <div className="ml-[300px] max-w-[1000px] flex items-center justify-center gap-4 flex-wrap">
+      <div className="lg:hidden absolute top-5 left-5">
+        <button className="cursor-pointer" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <MenuIcon />
+        </button>
+      </div>
+      
+
+      <main className="min-h-screen flex justify-center items-center">
+
+        <div className="lg:ml-[300px] p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-6xl">
           <CardMenu icon={<Calculator size={24}/>} title="Criar Orçamento" description="Novo orçamento de obra" color="green"/>
 
           <CardMenu icon={<FileText size={24}/>} title="Visualizar Orçamentos" description="Gerenciar orçamentos existentes" color="blue"/>
@@ -18,7 +28,7 @@ function App() {
           
           <CardMenu icon={<Plus size={24}/>} title="Criar Cliente" description="Cadastrar novo cliente" color="orange"/>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
