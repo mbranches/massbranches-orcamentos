@@ -9,7 +9,7 @@ function App() {
       <Sidebar/>
       <div className="min-h-screen min-w-scree flex justify-center items-center">
 
-        <div className="ml-[350px] max-w-[1000px] flex items-center justify-center gap-4 flex-wrap">
+        <div className="ml-[300px] max-w-[1000px] flex items-center justify-center gap-4 flex-wrap">
           <CardMenu icon={<Calculator size={24}/>} title="Criar Orçamento" description="Novo orçamento de obra" color="green"/>
 
           <CardMenu icon={<FileText size={24}/>} title="Visualizar Orçamentos" description="Gerenciar orçamentos existentes" color="blue"/>

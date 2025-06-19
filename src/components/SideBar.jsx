@@ -4,7 +4,7 @@ import Logo from './Logo'
 
 function Sidebar() {
     return (
-        <div className='w-[350px] min-h-screen bg-white fixed'>
+        <div className='w-[300px] min-h-screen bg-white fixed'>
             <div className='p-6 border-b-[1px] border-gray-200'>
                 <Logo />
             </div>
