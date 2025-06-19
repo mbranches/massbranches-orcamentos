@@ -14,17 +14,19 @@ const bgMap = {
 
 function CardMenu({title, description, icon, color}) {
     return (
-        <div className="bg-white rounded-md shadow-lg p-6 flex flex-col">
-            <div className="relative">
-                <div className={`w-[45px] ${bgMap[color]} h-[45px] absolute left-0 top-0 bottom-0 flex items-center justify-center rounded-[14px] `}>
+        <div className="bg-white rounded-md shadow-lg flex flex-col space-y-1.5">
+            <div className="flex items-center p-6 pb-4 space-x-4 mr-20">
+                <div className={`w-[45px] h-[45px] ${bgMap[color]} flex items-center justify-center rounded-[14px] `}>
                     {icon}
                 </div>
-                <div className="ml-15">
+                <div>
                     <h2 className="text-[18px] font-semibold">{title}</h2>
                     <p className="text-[14px] text-slate-600">{description}</p>
                 </div>
             </div>
-            <button className={`${buttonMap[color]} mt-4 w-[350px] px-4 py-2 rounded-md text-white font-semibold cursor-pointer text-[14px]`}>Acessar</button>
+            <div className="p-6 pt-0"> 
+                <button className={`${buttonMap[color]} w-full px-8 py-2 rounded-md text-white font-semibold cursor-pointer text-[14px]`}>Acessar</button>
+            </div>
         </div>
     );
 }
