@@ -9,7 +9,7 @@ function App() {
 
   return (
     <div className="bg-slate-200">
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} actualSection={"tela-inicial"}/>
 
       <header className="flex justify-between p-6 bg-white shadow-lg shadow-slate-300">
         <div className="lg:hidden">
