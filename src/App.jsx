@@ -1,28 +1,15 @@
-import { Calculator, FileText, MenuIcon, Plus, Users } from "lucide-react";
+import { Calculator, FileText, Plus, Users } from "lucide-react";
 import CardMenu from "./components/CardMenu";
-import Sidebar from './components/Sidebar'; 
 import { useState } from "react";
-import ShowUser from './components/ShowUser';
+import { useNavigate } from "react-router-dom";
+import PanelLayout from "./components/PanelLayout";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="bg-slate-200">
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} actualSection={"tela-inicial"}/>
-
-      <header className="flex justify-between p-6 bg-white shadow-lg shadow-slate-300">
-        <div className="lg:hidden">
-          <button className="cursor-pointer" onClick={() => setSidebarOpen(!sidebarOpen)}>
-            <MenuIcon />
-          </button>
-        </div>
-
-        <div className="flex-1"></div>
-
-        <ShowUser />
-      </header>
-      
+      <PanelLayout sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} actualSection={"tela-inicial"} />
 
       <main className="min-h-screen mt-[-15px] flex justify-center items-center">
 
