@@ -2,7 +2,35 @@ import SidebarItem from './SidebarItem';
 import {  Calculator, FileText, Home, Plus, Users, X } from 'lucide-react';
 import Logo from './Logo'
 
-function Sidebar({ sidebarOpen, setSidebarOpen }) {
+function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
+    const sidebarItems = [
+        {
+            label: "Tela Inicial",
+            icon: <Home size={20} />,
+            key: "tela-inicial"
+        },
+        {
+            label: "Criar Orçamento",
+            icon: <Calculator size={20} />,
+            key: "criar-orcamento"
+        },
+        {
+            label: "Visualizar Orçamentos",
+            icon: <FileText size={20} />,
+            key: "visualizar-orcamentos"
+        },
+        {
+            label: "Visualizar Clientes",
+            icon: <Users size={20} />,
+            key: "visualizar-clientes"
+        },
+        {
+            label: "Criar Cliente",
+            icon: <Plus size={20} />,
+            key: "criar-cliente"
+        },
+    ]
+
     return (
         <>
             {sidebarOpen && (
@@ -22,11 +50,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 <nav className='p-6'>
                     <h2 className='uppercase mt-3 mb-3 text-slate-400 font-semibold text-[12px] tracking-wider'>Menu Principal</h2>
                     <div className='space-y-2'>
-                        <SidebarItem icon={<Home size={20} />}>Tela Inicial</SidebarItem>
-                        <SidebarItem icon={<Calculator size={20} />}>Criar Orçamento</SidebarItem>
-                        <SidebarItem icon={<FileText size={20} />}>Visualizar Orçamentos</SidebarItem>
-                        <SidebarItem icon={<Users size={20} />}>Visualizar Clientes</SidebarItem>
-                        <SidebarItem icon={<Plus size={20} />}>Criar Cliente</SidebarItem>
+                        {sidebarItems.map(item => 
+                            <SidebarItem icon={item.icon} active={item.key === actualSection}>
+                                {item.label}
+                            </SidebarItem>
+                        )}
                     </div>
                 </nav>
                 <div className='p-6'>
