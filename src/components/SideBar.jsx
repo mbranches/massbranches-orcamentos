@@ -1,5 +1,5 @@
 import SidebarItem from './SidebarItem';
-import {  Calculator, FileText, Plus, Users, X } from 'lucide-react';
+import {  Calculator, FileText, Home, Plus, Users, X } from 'lucide-react';
 import Logo from './Logo'
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
@@ -22,6 +22,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 <nav className='p-6'>
                     <h2 className='uppercase mt-3 mb-3 text-slate-400 font-semibold text-[12px] tracking-wider'>Menu Principal</h2>
                     <div className='space-y-2'>
+                        <SidebarItem icon={<Home size={20} />}>Tela Inicial</SidebarItem>
                         <SidebarItem icon={<Calculator size={20} />}>Criar Orçamento</SidebarItem>
                         <SidebarItem icon={<FileText size={20} />}>Visualizar Orçamentos</SidebarItem>
                         <SidebarItem icon={<Users size={20} />}>Visualizar Clientes</SidebarItem>
