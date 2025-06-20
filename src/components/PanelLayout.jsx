@@ -1,0 +1,25 @@
+import { MenuIcon } from "lucide-react";
+import ShowUser from "./ShowUser";
+import Sidebar from "./Sidebar";
+
+function PanelLayout({sidebarOpen, setSidebarOpen, actualSection}) {
+    return (
+        <div>
+            <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} actualSection={actualSection}/>
+
+            <header className="flex justify-between p-6 bg-white shadow-lg shadow-slate-300">
+                <div className="lg:hidden">
+                    <button className="cursor-pointer" onClick={() => setSidebarOpen(!sidebarOpen)}>
+                        <MenuIcon />
+                    </button>
+                </div>
+
+                <div className="flex-1"></div>
+
+                <ShowUser />
+            </header>
+        </div>
+    );
+}
+
+export default PanelLayout;
