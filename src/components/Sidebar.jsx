@@ -1,17 +1,22 @@
 import SidebarItem from './SidebarItem';
 import {  Calculator, FileText, Home, Plus, Users, X } from 'lucide-react';
 import Logo from './Logo'
+import { useNavigate } from 'react-router-dom';
 
 function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
+    const navigate = useNavigate();
+
     const sidebarItems = [
         {
             label: "Tela Inicial",
             icon: <Home size={20} />,
+            onClick: () => navigate("/home"),
             key: "tela-inicial"
         },
         {
             label: "Criar Orçamento",
             icon: <Calculator size={20} />,
+            onClick: () => navigate("/orcamentos/criar"),
             key: "criar-orcamento"
         },
         {
