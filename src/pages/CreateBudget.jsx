@@ -24,7 +24,7 @@ function CreateBudget() {
             <PanelLayout actualSection={"criar-orcamento"} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
 
             <main className="min-h-screen mt-[-15px] flex justify-center items-center">
-                <div className='flex flex-col w-[50%] lg:ml-[310px] px-5 py-8 bg-white rounded-lg'>
+                <div className='flex flex-col w-full h-screen justify-center md:w-3/4 md:h-auto lg:w-1/2 lg:ml-[310px] px-5 py-8 bg-white rounded-lg'>
                     <div className='mb-4'>
                         <h3 className='text-2xl'>
                             Criar Orçamento
@@ -66,7 +66,7 @@ function CreateBudget() {
 
 
                         <div className="flex justify-end">
-                            <button type="submit" className='px-10 py-2 border border-slate-300 hover:border-slate-400 rounded-lg text-slate-700 outline-none cursor-pointer'>Criar</button>
+                            <button type="submit" className='w-full py-4 px-10 md:py-2 md:w-auto border border-slate-300 hover:border-slate-400 rounded-lg text-slate-700 outline-none cursor-pointer'>Criar</button>
                         </div>
                     </form>
                 </div>
