@@ -15,7 +15,7 @@ function App() {
 
       <main className="min-h-screen mt-[-15px] flex justify-center items-center">
 
-        <div className="lg:ml-[310px] p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-6xl">
+        <div className="lg:ml-[310px] mt-15 md:mt-0 p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-6xl ">
           <CardMenu icon={<Calculator size={24}/>} title="Criar Orçamento" description="Novo orçamento de obra" color="green" onButtonClick={() => navigate('/orcamentos/criar')}/>
 
           <CardMenu icon={<FileText size={24}/>} title="Visualizar Orçamentos" description="Gerenciar orçamentos existentes" color="blue"/>
