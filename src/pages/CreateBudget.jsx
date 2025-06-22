@@ -5,6 +5,8 @@ import FormSelect from '../components/FormSelect';
 import { useState } from 'react';
 
 function CreateBudget() {
+    const [ sidebarOpen, setSidebarOpen ] = useState();
+
     const { control, register, handleSubmit, formState: { errors }} = useForm();
 
     const [ clients, setClients ] = useState([]);
@@ -19,7 +21,8 @@ function CreateBudget() {
 
     return (
         <div className="bg-slate-200">
-            <PanelLayout actualSection={"criar-orcamento"}/>
+            <PanelLayout actualSection={"criar-orcamento"} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
+
             <main className="min-h-screen mt-[-15px] flex justify-center items-center">
                 <div className='flex flex-col w-[50%] lg:ml-[310px] px-5 py-8 bg-white rounded-lg'>
                     <div className='mb-4'>
