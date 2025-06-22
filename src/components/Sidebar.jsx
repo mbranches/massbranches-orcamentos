@@ -45,7 +45,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
                 />
             )}
 
-            <div className={`w-[310px] h-screen z-50 transition-transform duration-100 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed bg-white shadow-xl overflow-y-auto`}>
+            <div className={`w-[310px] h-screen z-50 transition-transform duration-200 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed bg-white shadow-xl overflow-y-auto`}>
                 <div className='p-6 border-b-[1px] border-gray-200 flex items-center gap-2'>
                     <Logo />
                     <div className='hover:bg-gray-100 p-1 rounded-md lg:hidden cursor-pointer' onClick={() => setSidebarOpen(false)}>
