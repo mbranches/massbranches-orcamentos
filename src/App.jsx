@@ -6,6 +6,8 @@ import PanelLayout from "./components/PanelLayout";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  const navigate = useNavigate();
 
   return (
     <div className="bg-slate-200">
@@ -14,7 +16,7 @@ function App() {
       <main className="min-h-screen mt-[-15px] flex justify-center items-center">
 
         <div className="lg:ml-[310px] p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-6xl">
-          <CardMenu icon={<Calculator size={24}/>} title="Criar Orçamento" description="Novo orçamento de obra" color="green"/>
+          <CardMenu icon={<Calculator size={24}/>} title="Criar Orçamento" description="Novo orçamento de obra" color="green" onButtonClick={() => navigate('/orcamentos/criar')}/>
 
           <CardMenu icon={<FileText size={24}/>} title="Visualizar Orçamentos" description="Gerenciar orçamentos existentes" color="blue"/>
           
