@@ -7,3 +7,5 @@ spring:
     url: jdbc:mysql://localhost:3308/orcamentos_mass
     username: root
     password: ${ENV_MYSQL_PASSWORD}
+  jpa:
+    show-sql: true
