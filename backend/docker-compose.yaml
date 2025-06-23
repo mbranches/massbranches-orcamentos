@@ -1,7 +1,7 @@
 services:
   mysql:
     container_name: orcamentos-mass-db
-    image: mysql:9.3.0
+    image: mysql:8.1
     environment:
       MYSQL_DATABASE: orcamentos_mass
       MYSQL_ROOT_PASSWORD: ${ENV_MYSQL_PASSWORD}
