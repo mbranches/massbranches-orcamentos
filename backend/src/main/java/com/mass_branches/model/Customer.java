@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -30,6 +31,9 @@ public class Customer {
     @Column(name = "created_at", nullable = false)
     @CurrentTimestamp(source = SourceType.DB)
     private LocalDateTime createdAt;
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp(source = SourceType.DB)
+    private LocalDateTime updatedAt;
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     private User user;

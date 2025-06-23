@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -36,6 +37,9 @@ public class Budget {
     @Column(name = "created_at")
     @CreationTimestamp(source = SourceType.DB)
     private LocalDateTime createdAt;
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp(source = SourceType.DB)
+    private LocalDateTime updatedAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
