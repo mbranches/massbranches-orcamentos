@@ -1,4 +1,4 @@
-package com.mass_branches.exceptions;
+package com.mass_branches.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
