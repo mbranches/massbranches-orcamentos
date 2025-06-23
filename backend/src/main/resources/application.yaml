@@ -3,8 +3,6 @@ spring:
     import: optional:classpath:.env[.properties]
   application:
     name: orcamentos-mass
-  jpa:
-    database: mysql
   datasource:
     url: jdbc:mysql://localhost:3308/orcamentos_mass
     username: root
