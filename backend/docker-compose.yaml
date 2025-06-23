@@ -1,0 +1,13 @@
+services:
+  mysql:
+    container_name: orcamentos-mass-db
+    image: mysql:9.3.0
+    environment:
+      MYSQL_DATABASE: orcamentos_mass
+      MYSQL_ROOT_PASSWORD: ${ENV_MYSQL_PASSWORD}
+    ports:
+      - "3308:3306"
+    volumes:
+      - branches-db:/var/lib/mysql
+volumes:
+  branches-db:
