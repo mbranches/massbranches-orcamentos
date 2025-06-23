@@ -20,8 +20,8 @@ public class Budget {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @ManyToOne
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)

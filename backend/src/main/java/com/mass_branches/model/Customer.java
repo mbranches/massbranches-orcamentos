@@ -14,17 +14,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Client {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "idcliente")
+    @Column(name = "idcustomer")
     private String id;
     @Column(nullable = false)
     private String name;
     private String description;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ClientType type;
+    private CustomerType type;
     @Column(name = "created_at", nullable = false)
     @CurrentTimestamp(source = SourceType.DB)
     private LocalDateTime createdAt;
