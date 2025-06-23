@@ -25,6 +25,7 @@ public class Customer {
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_type_id")
     private CustomerType type;
+    @Column(nullable = false, columnDefinition = "TINYINT")
     private Boolean active;
     @Column(name = "created_at", nullable = false)
     @CurrentTimestamp(source = SourceType.DB)

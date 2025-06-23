@@ -23,6 +23,7 @@ public class Item {
     private String unitMeasurement;
     @Column(name = "unit_price", nullable = false, precision = 10, scale = 4    )
     private BigDecimal unitPrice;
+    @Column(nullable = false, columnDefinition = "TINYINT")
     private Boolean active;
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")

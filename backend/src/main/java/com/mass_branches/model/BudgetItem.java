@@ -23,14 +23,14 @@ public class BudgetItem {
     @ManyToOne(optional = false)
     @JoinColumn(name = "item_id")
     private Item item;
-    @Column(nullable = false)
-    private String order;
-    @Column(name = "unit_price", nullable = false, precision = 10, scale = 4)
+    @Column(name = "order_index", nullable = false)
+    private String orderIndex;
+    @Column(name = "unit_price", nullable = false, scale = 10, precision = 4)
     private BigDecimal unitPrice;
     @Column(nullable = false, precision = 10, scale = 4)
     private BigDecimal quantity;
-    @Column(name = "total_value", nullable = false)
-    private Double totalValue;
-    @Column(name = "total_with_bdi")
-    private Double totalWithBdi;
+    @Column(name = "total_value", nullable = false, scale = 10, precision = 2)
+    private BigDecimal totalValue;
+    @Column(name = "total_with_bdi", scale = 10, precision = 2)
+    private BigDecimal totalWithBdi;
 }

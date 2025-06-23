@@ -14,8 +14,8 @@ public class Stage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idstage")
     private Long id;
-    @Column(nullable = false)
-    private String order;
+    @Column(name = "order_index", nullable = false)
+    private String orderIndex;
     @Column(nullable = false)
     private String name;
     @ManyToOne(optional = false)

@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "idbudget")
     private String id;
     @ManyToOne
     @JoinColumn(name = "customer_id")
