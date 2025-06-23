@@ -31,12 +31,12 @@ create table customer(
     idcustomer varchar(36) PRIMARY KEY,
     name varchar(100) NOT NULL,
     description varchar(120),
-    customer_type bigint NOT NULL,
+    customer_type_id bigint NOT NULL,
     active tinyint NOT NULL,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     user_id varchar(36) NOT NULL,
-    FOREIGN KEY (customer_type) REFERENCES customer_type(idcustomer_type),
+    FOREIGN KEY (customer_type_id) REFERENCES customer_type(idcustomer_type),
     FOREIGN KEY (user_id) REFERENCES user(iduser)
 );
 
