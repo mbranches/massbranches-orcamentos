@@ -22,9 +22,10 @@ public class Customer {
     @Column(nullable = false)
     private String name;
     private String description;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_type_id")
     private CustomerType type;
+    private Boolean active;
     @Column(name = "created_at", nullable = false)
     @CurrentTimestamp(source = SourceType.DB)
     private LocalDateTime createdAt;
