@@ -4,9 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.SourceType;
-import org.hibernate.generator.EventType;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @With
@@ -16,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "iduser")
@@ -35,8 +39,45 @@ public class User {
     @CurrentTimestamp(source = SourceType.DB)
     private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
-    @CurrentTimestamp(source = SourceType.DB, event = EventType.UPDATE)
+    @UpdateTimestamp(source = SourceType.DB)
     private LocalDateTime updatedAt;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UserRole> roles;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream().map(userRole ->
+                        new SimpleGrantedAuthority("ROLE_" + userRole.getRole().getName().name())
+                ).toList();
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
+    }
 }
