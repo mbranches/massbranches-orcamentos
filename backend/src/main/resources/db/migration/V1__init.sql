@@ -9,6 +9,7 @@ create table user(
     first_name varchar(45) NOT NULL,
     last_name varchar(45) NOT NULL,
     email varchar(100) NOT NULL UNIQUE,
+    password varchar(200) NOT NULL,
     active tinyint NOT NULL,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

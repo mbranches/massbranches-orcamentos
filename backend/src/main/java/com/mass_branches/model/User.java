@@ -27,6 +27,8 @@ public class User {
     private String lastName;
     @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
+    private String password;
     @Column(nullable = false, columnDefinition = "TINYINT")
     private Boolean active;
     @Column(name = "created_at", nullable = false)
