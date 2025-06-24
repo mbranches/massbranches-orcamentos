@@ -1,6 +1,7 @@
 package com.mass_branches.controller;
 
 import com.mass_branches.dto.request.CustomerPostRequest;
+import com.mass_branches.dto.response.CustomerGetResponse;
 import com.mass_branches.dto.response.CustomerPostResponse;
 import com.mass_branches.model.User;
 import com.mass_branches.service.CustomerService;
@@ -8,10 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/customers")
@@ -26,5 +26,22 @@ public class CustomerController {
         CustomerPostResponse response = service.create(user, postRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CustomerGetResponse>> listAllMy(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        List<CustomerGetResponse> response = service.listAllMy(user);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerGetResponse> findMyById(Authentication authentication, @PathVariable String id) {
+        User user = (User) authentication.getPrincipal();
+
+        CustomerGetResponse response = service.findMyById(user, id);
+
+        return ResponseEntity.ok(response);
     }
 }
