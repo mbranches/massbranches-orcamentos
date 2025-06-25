@@ -17,7 +17,7 @@ public class GlobalErrorHandlerAdvice {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<DefaultErrorMessage> handlerAuthenticationException(AuthenticationException e) {
-        DefaultErrorMessage error = new DefaultErrorMessage(HttpStatus.UNAUTHORIZED.value(), "Login or password invalid");
+        DefaultErrorMessage error = new DefaultErrorMessage(HttpStatus.UNAUTHORIZED.value(), "Email or password invalid");
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
