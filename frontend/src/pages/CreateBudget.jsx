@@ -2,19 +2,22 @@ import { useForm } from 'react-hook-form';
 import PanelLayout from '../components/PanelLayout';
 import FormTextField from '../components/FormTextField';
 import FormSelect from '../components/FormSelect';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import listAllCustomers from '../services/Customer';
 
 function CreateBudget() {
     const [ sidebarOpen, setSidebarOpen ] = useState();
 
     const { control, register, handleSubmit, formState: { errors }} = useForm();
 
-    const [ clients, setClients ] = useState([]);
+    const [ customers, setCustomers ] = useState([]);
 
-    const onSubmit = (data) => {
-        console.log(data)
-    };
-    
+    useEffect(() => async () => {
+        const customers = await listAllCustomers();
+
+        setCustomers(customers);
+    }, [])
+
     const showRequiredErrorMessage = () => (
         <p className='text-red-500 -mt-3 text-[13px]'>Campo obrigatório.</p>
     );
@@ -46,11 +49,11 @@ function CreateBudget() {
 
                         <div>
                             <FormSelect 
-                                id={"client"}
-                                name="client"
+                                id={"customer"}
+                                name="customer"
                                 label={"Cliente"}
                                 control={control}
-                                options={clients}
+                                options={customers}
                             />
                         </div>
 
