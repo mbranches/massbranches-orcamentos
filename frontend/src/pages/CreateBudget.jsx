@@ -34,6 +34,7 @@ function CreateBudget() {
                     <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
                         <div>    
                             <FormTextField
+                                type={"text"}
                                 id={"description"}
                                 label={"Descrição"} 
                                 placeholder={"Descrição do Orçamento"} 
@@ -55,6 +56,7 @@ function CreateBudget() {
 
                         <div>
                             <FormTextField 
+                                type={"text"}
                                 id={"proposalNumber"}
                                 label={"Número da Proposta"}
                                 placeholder={"Ex: \"2025/0072\""}
