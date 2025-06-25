@@ -5,6 +5,7 @@ import App from './App.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import CreateBudget from './pages/CreateBudget.jsx'
 import Login from './pages/Login.jsx'
+import PrivateRoute from './routes/PrivateRoute.jsx';
 
 const router = createBrowserRouter(
   [
@@ -14,11 +15,19 @@ const router = createBrowserRouter(
     },
     {
       path: "/home",
-      element: <App />
+      element: (
+        <PrivateRoute>
+          <App />
+        </PrivateRoute>
+      )
     },
     {
       path: "/orcamentos/criar",
-      element: <CreateBudget />
+      element: (
+        <PrivateRoute>
+          <CreateBudget />
+        </PrivateRoute>
+      )
     }
   ]
 );
