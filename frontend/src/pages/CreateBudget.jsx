@@ -4,20 +4,34 @@ import FormTextField from '../components/FormTextField';
 import FormSelect from '../components/FormSelect';
 import { useEffect, useState } from 'react';
 import listAllCustomers from '../services/Customer';
+import LoadingScreen from '../components/LoadingScreen';
+import {toast, ToastContainer} from 'react-toastify';
 
 function CreateBudget() {
     const [ sidebarOpen, setSidebarOpen ] = useState();
 
     const { control, register, handleSubmit, formState: { errors }} = useForm();
 
+    const [ loading, setLoading ] = useState(false);
+
     const [ customers, setCustomers ] = useState([]);
 
     useEffect(() => async () => {
-        const customers = await listAllCustomers();
+        setLoading(true);
+        try {
+            const customers = await listAllCustomers();
 
-        setCustomers(customers);
+            setCustomers(customers);
+        } catch(error) {
+            toast.error("Ocorreu um erro interno, por favor tente novamente");
+        } finally {
+            setLoading(false);
+        }
     }, [])
 
+    const onSubmit = (data) => {
+    };
+    
     const showRequiredErrorMessage = () => (
         <p className='text-red-500 -mt-3 text-[13px]'>Campo obrigatório.</p>
     );
@@ -26,7 +40,7 @@ function CreateBudget() {
         <div className="bg-slate-200">
             <PanelLayout actualSection={"criar-orcamento"} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
 
-            <main className="min-h-screen mt-[-15px] flex justify-center items-center">
+            <main className="min-h-screen flex justify-center items-center">
                 <div className='flex flex-col w-full h-screen justify-center md:w-3/4 md:h-auto lg:w-1/2 lg:ml-[310px] px-5 py-8 bg-white rounded-lg'>
                     <div className='mb-4'>
                         <h3 className='text-2xl'>
@@ -63,12 +77,23 @@ function CreateBudget() {
                                 id={"proposalNumber"}
                                 label={"Número da Proposta"}
                                 placeholder={"Ex: \"2025/0072\""}
-                                register={register('proposalNumber', {required: "Campo obrigatório"})}
+                                register={register('proposalNumber', {required: true})}
                             />
                         </div>
 
                         {errors?.proposalNumber?.type === "required" && showRequiredErrorMessage()}
 
+                        <div>
+                            <FormTextField 
+                                type={"text"}
+                                id={"bdi"}
+                                label={"BDI (%)"}
+                                placeholder={"Ex: \"18.76\""}
+                                register={register('bdi', {required: true})}
+                            />
+                        </div>
+
+                        {errors?.bdi?.type === "required" && showRequiredErrorMessage()}
 
                         <div className="flex justify-end">
                             <button type="submit" className='w-full py-4 px-10 md:py-2 md:w-auto border border-slate-300 hover:border-slate-400 rounded-lg text-slate-700 outline-none cursor-pointer'>Criar</button>
@@ -76,6 +101,10 @@ function CreateBudget() {
                     </form>
                 </div>
             </main>
+
+            {loading && <LoadingScreen />}
+
+            <ToastContainer autoClose={3000} pauseOnHover={false} position='top-right'/>
         </div>
     );
 }

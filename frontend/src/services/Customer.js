@@ -6,7 +6,7 @@ async function listAllCustomers() {
         
         return response.data;
     } catch(error) {
-
+        throw error;
     }
 }
 
