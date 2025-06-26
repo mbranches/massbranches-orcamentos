@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import listAllCustomers from '../services/Customer';
 import LoadingScreen from '../components/LoadingScreen';
 import {toast, ToastContainer} from 'react-toastify';
+import createBudget from "../services/Budget";
 
 function CreateBudget() {
     const [ sidebarOpen, setSidebarOpen ] = useState();
@@ -23,17 +24,39 @@ function CreateBudget() {
 
             setCustomers(customers);
         } catch(error) {
-            toast.error("Ocorreu um erro interno, por favor tente novamente");
+            const status = error.response?.status;
+            
+            if (status === 401 || status === 403) {
+                toast.error("Conexão expirada, por favor faça login novamente")
+            } else {
+                toast.error("Ocorreu um erro interno, por favor tente novamente");
+            }
         } finally {
             setLoading(false);
         }
     }, [])
 
     const onSubmit = (data) => {
+        setLoading(true);
+
+        try {
+            console.log(data)
+            const customerId = data.customer.value;
+
+            createBudget(customerId, data.description, data.proposalNumber, data.bdi);
+        } catch {
+
+        } finally {
+            setLoading(false);
+        }
     };
     
     const showRequiredErrorMessage = () => (
         <p className='text-red-500 -mt-3 text-[13px]'>Campo obrigatório.</p>
+    );
+
+    const showBdiInvalidError = () => (
+        <p className='text-red-500 -mt-3 text-[13px]'>Digite um BDI válido.</p>
     );
 
     return (
@@ -89,11 +112,13 @@ function CreateBudget() {
                                 id={"bdi"}
                                 label={"BDI (%)"}
                                 placeholder={"Ex: \"18.76\""}
-                                register={register('bdi', {required: true})}
+                                register={register('bdi', {required: true, pattern: {
+                                    value: /^\d+([.,]\d{1,2})?$/
+                                }})}
                             />
                         </div>
 
-                        {errors?.bdi?.type === "required" && showRequiredErrorMessage()}
+                        {errors?.bdi?.type === "required" && showRequiredErrorMessage() || errors?.bdi?.type === "pattern" && showBdiInvalidError()}
 
                         <div className="flex justify-end">
                             <button type="submit" className='w-full py-4 px-10 md:py-2 md:w-auto border border-slate-300 hover:border-slate-400 rounded-lg text-slate-700 outline-none cursor-pointer'>Criar</button>
