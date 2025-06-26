@@ -112,7 +112,7 @@ function CreateBudget() {
                                 id={"bdi"}
                                 label={"BDI (%)"}
                                 placeholder={"Ex: \"18.76\""}
-                                register={register('bdi', {required: true, pattern: {
+                                register={register('bdi', {pattern: {
                                     value: /^\d+([.,]\d{1,2})?$/
                                 }})}
                             />

@@ -60,7 +60,7 @@ function Login() {
                         <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
                             <div>    
                                 <FormTextField
-                                    type={"text"}
+                                    type={"email"}
                                     id={"email"}
                                     label={"Email"} 
                                     placeholder={"email@dominio.com"} 
