@@ -22,7 +22,7 @@ public class BudgetService {
     private final CustomerService customerService;
 
     public BudgetPostResponse create(User user, BudgetPostRequest postRequest) {
-        Customer customer = customerService.findMyByIdOrThrowsNotFoundException(user, postRequest.customerId());
+        Customer customer = customerService.findByUserAndIdOrThrowsNotFoundException(user, postRequest.customerId());
 
         Budget budgetToSave = Budget.builder()
                 .customer(customer)
@@ -39,19 +39,24 @@ public class BudgetService {
         return BudgetPostResponse.by(savedBudget);
     }
 
-    public List<BudgetGetResponse> listAllMy(User user) {
+    public List<BudgetGetResponse> listAll(User requestingUser) {
         Sort sort = Sort.by("updatedAt").descending();
 
-        return repository.findAllByUser(user, sort).stream()
+        return repository.findAllByUser(requestingUser, sort).stream()
                 .map(BudgetGetResponse::by)
                 .toList();
     }
 
-    public BudgetGetResponse findMyById(User user, String id) {
-        return BudgetGetResponse.by(findMyByIdOrThrowsNotFoundException(user, id));
+    public BudgetGetResponse findById(User user, String id) {
+        return BudgetGetResponse.by(findByIdAndUserOrThrowsNotFoundException(user, id));
     }
 
-    public Budget findMyByIdOrThrowsNotFoundException(User user, String id) {
+    public Budget findByIdOrThrowsNotFoundException(String id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Budget with id \"%s\" not found".formatted(id)));
+    }
+
+    public Budget findByIdAndUserOrThrowsNotFoundException(User user, String id) {
         return repository.findByUserAndId(user, id)
                 .orElseThrow(() -> new NotFoundException("Budget with id \"%s\" not found".formatted(id)));
     }

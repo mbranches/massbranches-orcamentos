@@ -29,18 +29,18 @@ public class BudgetController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BudgetGetResponse>> listAllMy(Authentication authentication) {
+    public ResponseEntity<List<BudgetGetResponse>> listAll(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
-        List<BudgetGetResponse> response = service.listAllMy(user);
+        List<BudgetGetResponse> response = service.listAll(user);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BudgetGetResponse> findMyById(Authentication authentication, @PathVariable String id) {
+    public ResponseEntity<BudgetGetResponse> findById(Authentication authentication, @PathVariable String id) {
         User user = (User) authentication.getPrincipal();
 
-        BudgetGetResponse response = service.findMyById(user, id);
+        BudgetGetResponse response = service.findById(user, id);
 
         return ResponseEntity.ok(response);
     }

@@ -29,18 +29,18 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CustomerGetResponse>> listAllMy(Authentication authentication) {
+    public ResponseEntity<List<CustomerGetResponse>> listAll(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
-        List<CustomerGetResponse> response = service.listAllMy(user);
+        List<CustomerGetResponse> response = service.listAll(user);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerGetResponse> findMyById(Authentication authentication, @PathVariable String id) {
+    public ResponseEntity<CustomerGetResponse> findById(Authentication authentication, @PathVariable String id) {
         User user = (User) authentication.getPrincipal();
 
-        CustomerGetResponse response = service.findMyById(user, id);
+        CustomerGetResponse response = service.findByUserAndId(user, id);
 
         return ResponseEntity.ok(response);
     }

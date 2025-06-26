@@ -35,17 +35,22 @@ public class CustomerService {
         return CustomerPostResponse.by(savedCustomer);
     }
 
-    public List<CustomerGetResponse> listAllMy(User user) {
+    public List<CustomerGetResponse> listAll(User user) {
         return repository.findAllByUserAndActiveIsTrue(user)
                 .stream().map(CustomerGetResponse::by)
                 .toList();
     }
 
-    public CustomerGetResponse findMyById(User user, String id) {
-        return CustomerGetResponse.by(findMyByIdOrThrowsNotFoundException(user, id));
+    public CustomerGetResponse findByUserAndId(User user, String id) {
+        return CustomerGetResponse.by(findByUserAndIdOrThrowsNotFoundException(user, id));
     }
 
-    public Customer findMyByIdOrThrowsNotFoundException(User user, String id) {
+    public Customer findByIdOrThrowsNotFoundException(String id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer with id \"%s\" not found".formatted(id)));
+    }
+
+    public Customer findByUserAndIdOrThrowsNotFoundException(User user, String id) {
         return repository.findByUserAndActiveIsTrueAndId(user, id)
                 .orElseThrow(() -> new NotFoundException("Customer with id \"%s\" not found".formatted(id)));
     }
