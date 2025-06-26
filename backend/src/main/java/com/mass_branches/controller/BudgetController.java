@@ -29,10 +29,13 @@ public class BudgetController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BudgetGetResponse>> listAll(Authentication authentication) {
+    public ResponseEntity<List<BudgetGetResponse>> listAll(
+            Authentication authentication,
+            @RequestParam(required = false) Boolean personal
+    ) {
         User user = (User) authentication.getPrincipal();
 
-        List<BudgetGetResponse> response = service.listAll(user);
+        List<BudgetGetResponse> response = service.listAll(user, personal);
         return ResponseEntity.ok(response);
     }
 

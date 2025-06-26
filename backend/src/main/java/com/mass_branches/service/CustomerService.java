@@ -9,6 +9,7 @@ import com.mass_branches.model.CustomerType;
 import com.mass_branches.model.User;
 import com.mass_branches.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,23 +36,37 @@ public class CustomerService {
         return CustomerPostResponse.by(savedCustomer);
     }
 
-    public List<CustomerGetResponse> listAll(User user) {
-        return repository.findAllByUserAndActiveIsTrue(user)
-                .stream().map(CustomerGetResponse::by)
+    public List<CustomerGetResponse> listAll(User user, Boolean personal) {
+        Sort sort = Sort.by("updatedAt").descending();
+
+        boolean shouldFetchAllCustomers = !Boolean.TRUE.equals(personal);
+
+        List<Customer> response = user.isAdmin() && shouldFetchAllCustomers ? repository.findAll(sort)
+                : repository.findAllByUserAndActiveIsTrue(user);
+
+        return response.stream()
+                .map(CustomerGetResponse::by)
                 .toList();
     }
 
-    public CustomerGetResponse findByUserAndId(User user, String id) {
-        return CustomerGetResponse.by(findByUserAndIdOrThrowsNotFoundException(user, id));
+    public CustomerGetResponse findById(User requestingUser, String id) {
+        Customer response = requestingUser.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+                : findByUserAndIdOrThrowsNotFoundException(requestingUser, id);
+
+        return CustomerGetResponse.by(response);
     }
 
     public Customer findByIdOrThrowsNotFoundException(String id) {
         return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Customer with id \"%s\" not found".formatted(id)));
+                .orElseThrow(() -> throwsCustomerIdNotFoundException(id));
     }
 
     public Customer findByUserAndIdOrThrowsNotFoundException(User user, String id) {
         return repository.findByUserAndActiveIsTrueAndId(user, id)
-                .orElseThrow(() -> new NotFoundException("Customer with id \"%s\" not found".formatted(id)));
+                .orElseThrow(() -> throwsCustomerIdNotFoundException(id));
+    }
+
+    private static NotFoundException throwsCustomerIdNotFoundException(String id) {
+        return new NotFoundException("Customer with id '%s' not found".formatted(id));
     }
 }

@@ -4,9 +4,7 @@ import com.mass_branches.dto.request.BudgetPostRequest;
 import com.mass_branches.dto.response.BudgetGetResponse;
 import com.mass_branches.dto.response.BudgetPostResponse;
 import com.mass_branches.exception.NotFoundException;
-import com.mass_branches.model.Budget;
-import com.mass_branches.model.Customer;
-import com.mass_branches.model.User;
+import com.mass_branches.model.*;
 import com.mass_branches.repository.BudgetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -39,25 +37,37 @@ public class BudgetService {
         return BudgetPostResponse.by(savedBudget);
     }
 
-    public List<BudgetGetResponse> listAll(User requestingUser) {
+    public List<BudgetGetResponse> listAll(User requestingUser, Boolean personal) {
         Sort sort = Sort.by("updatedAt").descending();
 
-        return repository.findAllByUser(requestingUser, sort).stream()
+        boolean shouldFetchAllBudgets = !Boolean.TRUE.equals(personal);
+
+        List<Budget> response = requestingUser.isAdmin() && shouldFetchAllBudgets ? repository.findAll(sort)
+                : repository.findAllByUser(requestingUser, sort);
+
+        return response.stream()
                 .map(BudgetGetResponse::by)
                 .toList();
     }
 
-    public BudgetGetResponse findById(User user, String id) {
-        return BudgetGetResponse.by(findByIdAndUserOrThrowsNotFoundException(user, id));
+    public BudgetGetResponse findById(User requestingUser, String id) {
+        Budget response = requestingUser.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+                : findByUserAndIdOrThrowsNotFoundException(requestingUser, id);
+
+        return BudgetGetResponse.by(response);
     }
 
     public Budget findByIdOrThrowsNotFoundException(String id) {
         return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Budget with id \"%s\" not found".formatted(id)));
+                .orElseThrow(() -> throwsBudgetIdNotFoundException(id));
     }
 
-    public Budget findByIdAndUserOrThrowsNotFoundException(User user, String id) {
+    public Budget findByUserAndIdOrThrowsNotFoundException(User user, String id) {
         return repository.findByUserAndId(user, id)
-                .orElseThrow(() -> new NotFoundException("Budget with id \"%s\" not found".formatted(id)));
+                .orElseThrow(() -> throwsBudgetIdNotFoundException(id));
+    }
+
+    private NotFoundException throwsBudgetIdNotFoundException(String id) {
+        return new NotFoundException("Budget with id '%s' not found".formatted(id));
     }
 }

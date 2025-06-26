@@ -80,4 +80,10 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return active;
     }
+
+    public boolean isAdmin() {
+        List<RoleType> userRoleTypes = this.roles.stream().map(userRole -> userRole.getRole().getName()).toList();
+
+        return userRoleTypes.contains(RoleType.ADMIN);
+    }
 }

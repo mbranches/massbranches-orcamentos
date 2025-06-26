@@ -29,10 +29,13 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CustomerGetResponse>> listAll(Authentication authentication) {
+    public ResponseEntity<List<CustomerGetResponse>> listAll(
+            Authentication authentication,
+            @RequestParam(required = false) Boolean personal
+    ) {
         User user = (User) authentication.getPrincipal();
 
-        List<CustomerGetResponse> response = service.listAll(user);
+        List<CustomerGetResponse> response = service.listAll(user, personal);
         return ResponseEntity.ok(response);
     }
 
@@ -40,7 +43,7 @@ public class CustomerController {
     public ResponseEntity<CustomerGetResponse> findById(Authentication authentication, @PathVariable String id) {
         User user = (User) authentication.getPrincipal();
 
-        CustomerGetResponse response = service.findByUserAndId(user, id);
+        CustomerGetResponse response = service.findById(user, id);
 
         return ResponseEntity.ok(response);
     }
