@@ -7,6 +7,7 @@ import CreateBudget from './pages/CreateBudget.jsx'
 import Login from './pages/Login.jsx'
 import AuthProvider from './contexts/AuthProvider.jsx';
 import PrivateRoutes from './routes/PrivateRoutes.jsx'
+import NotFoundRedirect from './routes/NotFoundRedirect'
 
 const router = createBrowserRouter(
   [
@@ -27,6 +28,10 @@ const router = createBrowserRouter(
           element: <CreateBudget />
         }
       ]
+    },
+    {
+      path: "*",
+      element: <NotFoundRedirect />
     }
   ]
 );
