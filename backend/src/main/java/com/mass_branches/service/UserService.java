@@ -2,6 +2,7 @@ package com.mass_branches.service;
 
 import com.mass_branches.dto.response.LoginResponse;
 import com.mass_branches.dto.request.LoginRequest;
+import com.mass_branches.dto.response.UserGetResponse;
 import com.mass_branches.infra.security.JwtTokenService;
 import com.mass_branches.model.User;
 import com.mass_branches.repository.UserRepository;
@@ -27,5 +28,9 @@ public class UserService {
         User user = (User) authentication.getPrincipal();
 
         return new LoginResponse(jwtTokenService.generateToken(user));
+    }
+
+    public UserGetResponse getMe(User requestingUser) {
+        return UserGetResponse.by(requestingUser);
     }
 }
