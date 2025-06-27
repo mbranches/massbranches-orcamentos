@@ -8,7 +8,7 @@ function PanelLayout({sidebarOpen, setSidebarOpen, actualSection, children}) {
             <div>
                 <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} actualSection={actualSection}/>
 
-                <header className="w-full fixed flex top-0 left-0 justify-between p-6 bg-white shadow-lg shadow-slate-300">
+                <header className="w-full fixed flex top-0 left-0 justify-between p-6 bg-white shadow-sm shadow-slate-200">
                     <div className="lg:hidden">
                         <button className="cursor-pointer" onClick={() => setSidebarOpen(!sidebarOpen)}>
                             <MenuIcon />
