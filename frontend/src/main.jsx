@@ -5,7 +5,8 @@ import App from './App.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import CreateBudget from './pages/CreateBudget.jsx'
 import Login from './pages/Login.jsx'
-import PrivateRoute from './routes/PrivateRoute.jsx';
+import AuthProvider from './contexts/AuthProvider.jsx';
+import PrivateRoutes from './routes/PrivateRoutes.jsx'
 
 const router = createBrowserRouter(
   [
@@ -14,26 +15,26 @@ const router = createBrowserRouter(
       element: <Login />
     },
     {
-      path: "/home",
-      element: (
-        <PrivateRoute>
-          <App />
-        </PrivateRoute>
-      )
-    },
-    {
-      path: "/orcamentos/criar",
-      element: (
-        <PrivateRoute>
-          <CreateBudget />
-        </PrivateRoute>
-      )
+      path: "/",
+      element: <PrivateRoutes />,
+      children: [
+        {
+          path: "/home",
+          element: <App />
+        },
+        {
+          path: "/orcamentos/criar",
+          element: <CreateBudget />
+        }
+      ]
     }
   ]
 );
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 )

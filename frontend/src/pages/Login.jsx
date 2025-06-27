@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form";
 import Logo from "../components/Logo"
-import login from "../services/Login";
+import getToken from "../services/Login";
 import FormTextField from "../components/FormTextField";
 import { useState } from "react";
 import LoadingScreen from "../components/LoadingScreen";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 function Login() {
     const [loginError, setLoginError] = useState(null);
@@ -15,10 +16,13 @@ function Login() {
 
     const navigate = useNavigate();
 
+    const {login} = useAuth();
+
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            await login(data.email, data.password);
+            const token = await getToken(data.email, data.password);
+            await login(token);
 
             navigate("/home")
         } catch(error) {

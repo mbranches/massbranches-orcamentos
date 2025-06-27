@@ -1,8 +1,9 @@
 import api from "./Api";
 
-async function listAllCustomers() {
+async function listAllCustomers(personal = false) {
     try {
-        const response = await api.get("customers");
+        const url = personal ? `/customers?personal=${personal}` : "/customers";
+        const response = await api.get(url);
         
         return response.data;
     } catch(error) {

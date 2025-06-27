@@ -7,6 +7,7 @@ import listAllCustomers from '../services/Customer';
 import LoadingScreen from '../components/LoadingScreen';
 import {toast, ToastContainer} from 'react-toastify';
 import createBudget from "../services/Budget";
+import { useAuth } from '../hooks/useAuth';
 
 function CreateBudget() {
     const [ sidebarOpen, setSidebarOpen ] = useState();
@@ -17,8 +18,11 @@ function CreateBudget() {
 
     const [ customers, setCustomers ] = useState([]);
 
+    const x = useAuth();
+
     useEffect(() => async () => {
         setLoading(true);
+
         try {
             const customers = await listAllCustomers();
 
@@ -40,7 +44,6 @@ function CreateBudget() {
         setLoading(true);
 
         try {
-            console.log(data)
             const customerId = data.customer.value;
 
             createBudget(customerId, data.description, data.proposalNumber, data.bdi);
