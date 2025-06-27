@@ -6,7 +6,7 @@ function NotFoundPage() {
     const [sidebarOpen, setSidebarOpen] = useState();
 
     return (
-        <div className="bg-slate-200">
+        <div className="bg-gray-100">
             <PanelLayout sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}> 
                 <div className="text-center lg:ml-[310px]">
                     <h1 className="text-6xl font-bold text-slate-700">404</h1>
