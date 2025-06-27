@@ -22,16 +22,19 @@ function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
         {
             label: "Visualizar Orçamentos",
             icon: <FileText size={20} />,
+            onClick: () => navigate("/orcamentos"),
             key: "visualizar-orcamentos"
         },
         {
             label: "Visualizar Clientes",
             icon: <Users size={20} />,
+            onClick: () => navigate("/clientes"),
             key: "visualizar-clientes"
         },
         {
             label: "Criar Cliente",
             icon: <Plus size={20} />,
+            onClick: () => navigate("/clientes/criar"),
             key: "criar-cliente"
         },
     ]
