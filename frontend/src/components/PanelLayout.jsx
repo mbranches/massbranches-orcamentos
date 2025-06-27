@@ -2,22 +2,27 @@ import { MenuIcon } from "lucide-react";
 import ShowUser from "./ShowUser";
 import Sidebar from "./Sidebar";
 
-function PanelLayout({sidebarOpen, setSidebarOpen, actualSection}) {
+function PanelLayout({sidebarOpen, setSidebarOpen, actualSection, children}) {
     return (
         <div>
-            <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} actualSection={actualSection}/>
+            <div>
+                <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} actualSection={actualSection}/>
 
-            <header className="w-full fixed flex top-0 left-0 justify-between p-6 bg-white shadow-lg shadow-slate-300">
-                <div className="lg:hidden">
-                    <button className="cursor-pointer" onClick={() => setSidebarOpen(!sidebarOpen)}>
-                        <MenuIcon />
-                    </button>
-                </div>
+                <header className="w-full fixed flex top-0 left-0 justify-between p-6 bg-white shadow-lg shadow-slate-300">
+                    <div className="lg:hidden">
+                        <button className="cursor-pointer" onClick={() => setSidebarOpen(!sidebarOpen)}>
+                            <MenuIcon />
+                        </button>
+                    </div>
 
-                <div className="flex-1"></div>
+                    <div className="flex-1"></div>
 
-                <ShowUser />
-            </header>
+                    <ShowUser />
+                </header>
+            </div>
+            <main className="min-h-screen flex justify-center items-center">
+                {children}
+            </main>
         </div>
     );
 }

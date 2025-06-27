@@ -7,9 +7,7 @@ function NotFoundPage() {
 
     return (
         <div className="bg-slate-200">
-            <PanelLayout sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> 
-
-            <main className="flex-grow h-screen flex items-center justify-center">
+            <PanelLayout sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}> 
                 <div className="text-center lg:ml-[310px]">
                     <h1 className="text-6xl font-bold text-slate-700">404</h1>
                     <p className="text-xl text-slate-600 mt-4">Página Não Encontrada</p>
@@ -23,7 +21,7 @@ function NotFoundPage() {
                         Voltar para o Início
                     </Link>
                 </div>
-            </main>
+            </PanelLayout>  
         </div>
     );
 }
