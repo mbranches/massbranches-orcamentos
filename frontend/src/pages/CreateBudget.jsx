@@ -18,13 +18,13 @@ function CreateBudget() {
 
     const [ customers, setCustomers ] = useState([]);
 
-    const x = useAuth();
+    const { isAdmin } = useAuth();
 
     useEffect(() => async () => {
         setLoading(true);
 
         try {
-            const customers = await listAllCustomers();
+            const customers = isAdmin? await listAllCustomers(true) : await listAllCustomers();
 
             setCustomers(customers);
         } catch(error) {
