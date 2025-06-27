@@ -1,6 +1,6 @@
 import api from "./Api";
 
-function createBudget(customerId, description, proposalNumber, bdi) {
+async function createBudget(customerId, description, proposalNumber, bdi) {
     const request = {
         customerId,
         description,
@@ -8,9 +8,12 @@ function createBudget(customerId, description, proposalNumber, bdi) {
         bdi
     }
 
-    console.log(request)
+    return api.post("/budgets", request);
 
-    api.post("/budgets", request);
 }
 
-export default createBudget;
+async function findBudgetById(id) {
+    return api(`/budgets/${id}`);
+}
+
+export {createBudget, findBudgetById};
