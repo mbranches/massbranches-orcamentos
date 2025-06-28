@@ -1,11 +1,9 @@
 package com.mass_branches.service;
 
 import com.mass_branches.dto.request.BudgetItemPostRequest;
-import com.mass_branches.dto.response.BudgetItemPostResponse;
 import com.mass_branches.model.Budget;
 import com.mass_branches.model.BudgetItem;
 import com.mass_branches.model.Item;
-import com.mass_branches.model.User;
 import com.mass_branches.repository.BudgetItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,20 +15,13 @@ import java.math.RoundingMode;
 @Service
 public class BudgetItemService {
     private final BudgetItemRepository repository;
-    private final BudgetService budgetService;
-    private final ItemService itemService;
 
-    public BudgetItemPostResponse create(User user, String budgetId, BudgetItemPostRequest postRequest) {
-        Budget budget = budgetService.findByUserAndIdOrThrowsNotFoundException(user, budgetId);
+    public BudgetItem create(Budget budget, Item item, BudgetItemPostRequest postRequest) {
         BigDecimal bdi = budget.getBdi();
-
-        if (!budget.getUser().equals(user)) throw budgetService.throwsBudgetIdNotFoundException(budgetId);
-
-        Item item = itemService.findByIdAndUserAndActiveIsTrueOrThrowsNotFoundException(postRequest.itemId(), user);
 
         BigDecimal unitPrice = postRequest.unitPrice();
         BigDecimal quantity = postRequest.quantity();
-        BigDecimal totalValue = unitPrice.multiply(quantity);
+        BigDecimal totalValue = unitPrice.multiply(quantity).setScale(2, RoundingMode.HALF_UP);
         BigDecimal percentage = bdi.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
         BigDecimal totalWithBdi = totalValue.multiply(BigDecimal.ONE.add(percentage)).setScale(2, RoundingMode.HALF_UP);
         BudgetItem budgetItemToSave = BudgetItem.builder()
@@ -43,8 +34,14 @@ public class BudgetItemService {
                 .totalWithBdi(totalWithBdi)
                 .build();
 
-        BudgetItem savedBudgetItem = repository.save(budgetItemToSave);
+        return repository.save(budgetItemToSave);
+    }
 
-        return BudgetItemPostResponse.by(savedBudgetItem);
+    public BigDecimal totalValueOfItemsByBudgetId(String budgetId) {
+        return repository.sumTotalValueByBudget_Id(budgetId);
+    }
+
+    public BigDecimal totalWithBdiOfItemsByBudgetId(String budgetId) {
+        return repository.sumTotalWithBdiByBudget_Id(budgetId);
     }
 }

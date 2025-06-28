@@ -61,7 +61,7 @@ public class BudgetController {
     ) {
         User user = (User) authentication.getPrincipal();
 
-        BudgetItemPostResponse response = budgetItemService.create(user, id, postRequest);
+        BudgetItemPostResponse response = service.addItem(user, id, postRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

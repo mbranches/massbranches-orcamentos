@@ -1,7 +1,9 @@
 package com.mass_branches.service;
 
+import com.mass_branches.dto.request.BudgetItemPostRequest;
 import com.mass_branches.dto.request.BudgetPostRequest;
 import com.mass_branches.dto.response.BudgetGetResponse;
+import com.mass_branches.dto.response.BudgetItemPostResponse;
 import com.mass_branches.dto.response.BudgetPostResponse;
 import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.*;
@@ -18,6 +20,8 @@ import java.util.List;
 public class BudgetService {
     private final BudgetRepository repository;
     private final CustomerService customerService;
+    private final ItemService itemService;
+    private final BudgetItemService budgetItemService;
 
     public BudgetPostResponse create(User user, BudgetPostRequest postRequest) {
         Customer customer = customerService.findByUserAndIdOrThrowsNotFoundException(user, postRequest.customerId());
@@ -69,5 +73,32 @@ public class BudgetService {
 
     public NotFoundException throwsBudgetIdNotFoundException(String id) {
         return new NotFoundException("Budget with id '%s' not found".formatted(id));
+    }
+
+    public BudgetItemPostResponse addItem(User user, String id, BudgetItemPostRequest postRequest) {
+        Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+                : findByUserAndIdOrThrowsNotFoundException(user, id);
+
+        if (!user.isAdmin() && !budget.getUser().equals(user)) throw throwsBudgetIdNotFoundException(id);
+
+        Long itemId = postRequest.itemId();
+        Item item = user.isAdmin() ? itemService.findByIdOrThrowsNotFoundException(itemId)
+                : itemService.findByIdAndUserAndActiveIsTrueOrThrowsNotFoundException(itemId, user);
+
+        BudgetItem savedBudgetItem = budgetItemService.create(budget, item, postRequest);
+
+        recalculateTotals(budget);
+
+        return BudgetItemPostResponse.by(savedBudgetItem);
+    }
+
+    private void recalculateTotals(Budget budget) {
+        BigDecimal totalValue = budgetItemService.totalValueOfItemsByBudgetId(budget.getId());
+        BigDecimal totalWithBdi = budgetItemService.totalWithBdiOfItemsByBudgetId(budget.getId());
+
+        budget.setTotalValue(totalValue);
+        budget.setTotalWithBdi(totalWithBdi);
+
+        repository.save(budget);
     }
 }
