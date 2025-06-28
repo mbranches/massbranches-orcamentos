@@ -30,7 +30,7 @@ public class UserAdminConfig implements CommandLineRunner {
             log.info("Admin já cadastrado");
 
             return;
-        };
+        }
 
         Role adminRole = roleService.findByName(RoleType.ADMIN);
 

@@ -28,11 +28,11 @@ public class Budget {
     private String description;
     @Column(nullable = false)
     private String proposalNumber;
-    @Column(scale = 10, precision = 2)
+    @Column(precision = 10, scale = 2)
     private BigDecimal bdi;
-    @Column(name = "total_value", nullable = false, scale = 10, precision = 2)
+    @Column(name = "total_value", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalValue;
-    @Column(name = "total_with_bdi", scale = 10, precision = 2)
+    @Column(name = "total_with_bdi", precision = 10, scale = 2)
     private BigDecimal totalWithBdi;
     @Column(name = "created_at")
     @CreationTimestamp(source = SourceType.DB)

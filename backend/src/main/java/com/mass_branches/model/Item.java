@@ -21,7 +21,7 @@ public class Item {
     private String name;
     @Column(nullable = false)
     private String unitMeasurement;
-    @Column(name = "unit_price", nullable = false, precision = 10, scale = 4    )
+    @Column(name = "unit_price", nullable = false, precision = 10, scale = 4)
     private BigDecimal unitPrice;
     @Column(nullable = false, columnDefinition = "TINYINT")
     private Boolean active;

@@ -25,12 +25,12 @@ public class BudgetItem {
     private Item item;
     @Column(name = "order_index", nullable = false)
     private String orderIndex;
-    @Column(name = "unit_price", nullable = false, scale = 10, precision = 4)
+    @Column(name = "unit_price", nullable = false, precision = 10, scale = 4)
     private BigDecimal unitPrice;
     @Column(nullable = false, precision = 10, scale = 4)
     private BigDecimal quantity;
-    @Column(name = "total_value", nullable = false, scale = 10, precision = 2)
+    @Column(name = "total_value", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalValue;
-    @Column(name = "total_with_bdi", scale = 10, precision = 2)
+    @Column(name = "total_with_bdi", precision = 10, scale = 2)
     private BigDecimal totalWithBdi;
 }
