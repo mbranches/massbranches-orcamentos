@@ -1,9 +1,12 @@
 package com.mass_branches.controller;
 
+import com.mass_branches.dto.request.BudgetItemPostRequest;
 import com.mass_branches.dto.request.BudgetPostRequest;
 import com.mass_branches.dto.response.BudgetGetResponse;
+import com.mass_branches.dto.response.BudgetItemPostResponse;
 import com.mass_branches.dto.response.BudgetPostResponse;
 import com.mass_branches.model.User;
+import com.mass_branches.service.BudgetItemService;
 import com.mass_branches.service.BudgetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,7 @@ import java.util.List;
 @RestController
 public class BudgetController {
     private final BudgetService service;
+    private final BudgetItemService budgetItemService;
 
     @PostMapping
     public ResponseEntity<BudgetPostResponse> create(Authentication authentication, @RequestBody BudgetPostRequest postRequest) {
@@ -46,5 +50,19 @@ public class BudgetController {
         BudgetGetResponse response = service.findById(user, id);
 
         return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("/{id}/items")
+    public ResponseEntity<BudgetItemPostResponse> addItem(
+            Authentication authentication,
+            @PathVariable String id,
+            @RequestBody BudgetItemPostRequest postRequest
+    ) {
+        User user = (User) authentication.getPrincipal();
+
+        BudgetItemPostResponse response = budgetItemService.create(user, id, postRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

@@ -16,6 +16,7 @@ import java.util.List;
 @With
 @Getter
 @Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,6 +25,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "iduser")
+    @EqualsAndHashCode.Include
     private String id;
     @Column(name = "first_name", nullable = false)
     private String firstName;

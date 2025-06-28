@@ -26,7 +26,7 @@ public class BudgetService {
                 .customer(customer)
                 .description(postRequest.description())
                 .proposalNumber(postRequest.proposalNumber())
-                .bdi(postRequest.bdi())
+                .bdi(postRequest.bdi() != null ? postRequest.bdi() : BigDecimal.ZERO)
                 .totalValue(BigDecimal.ZERO)
                 .totalWithBdi(BigDecimal.ZERO)
                 .user(user)
@@ -67,7 +67,7 @@ public class BudgetService {
                 .orElseThrow(() -> throwsBudgetIdNotFoundException(id));
     }
 
-    private NotFoundException throwsBudgetIdNotFoundException(String id) {
+    public NotFoundException throwsBudgetIdNotFoundException(String id) {
         return new NotFoundException("Budget with id '%s' not found".formatted(id));
     }
 }
