@@ -28,7 +28,7 @@ public class Budget {
     private String description;
     @Column(nullable = false)
     private String proposalNumber;
-    @Column(scale = 10, precision = 5)
+    @Column(scale = 10, precision = 2)
     private BigDecimal bdi;
     @Column(name = "total_value", nullable = false, scale = 10, precision = 2)
     private BigDecimal totalValue;

@@ -56,7 +56,7 @@ create table budget(
     customer_id varchar(36) NOT NULL,
     description varchar(120) NOT NULL,
     proposal_number varchar(50) NOT NULL,
-    bdi decimal(10, 5),
+    bdi decimal(10, 2),
     total_value decimal(10, 2),
     total_with_bdi decimal(10, 2),
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
