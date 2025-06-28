@@ -11,6 +11,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: validate
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:db/sql/inserts_default.sql
 server:
   error:
     include-message: never
