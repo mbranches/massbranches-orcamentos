@@ -25,7 +25,7 @@ public class UserAdminConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String adminEmail = "admin@massbranches.com";
+        String adminEmail = "admin@admin.com";
         if (repository.findByEmail(adminEmail).isPresent()) {
             log.info("Admin já cadastrado");
 
@@ -38,7 +38,7 @@ public class UserAdminConfig implements CommandLineRunner {
                 .firstName("admin")
                 .lastName("admin")
                 .email(adminEmail)
-                .password(passwordEncoder.encode("Senh@Admin_"))
+                .password(passwordEncoder.encode("123"))
                 .active(true).build();
         UserRole userRole = UserRole.builder().user(user).role(adminRole).build();
 
