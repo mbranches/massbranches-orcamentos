@@ -2,9 +2,11 @@ package com.mass_branches.controller;
 
 import com.mass_branches.dto.request.BudgetItemPostRequest;
 import com.mass_branches.dto.request.BudgetPostRequest;
+import com.mass_branches.dto.request.StagePostRequest;
 import com.mass_branches.dto.response.BudgetGetResponse;
 import com.mass_branches.dto.response.BudgetItemPostResponse;
 import com.mass_branches.dto.response.BudgetPostResponse;
+import com.mass_branches.dto.response.StagePostResponse;
 import com.mass_branches.model.User;
 import com.mass_branches.service.BudgetItemService;
 import com.mass_branches.service.BudgetService;
@@ -62,6 +64,20 @@ public class BudgetController {
         User user = (User) authentication.getPrincipal();
 
         BudgetItemPostResponse response = service.addItem(user, id, postRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+
+    @PostMapping("/{id}/stages")
+    public ResponseEntity<StagePostResponse> addStage(
+            Authentication authentication,
+            @PathVariable String id,
+            @RequestBody StagePostRequest postRequest
+    ) {
+        User user = (User) authentication.getPrincipal();
+
+        StagePostResponse response = service.addStage(user, id, postRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

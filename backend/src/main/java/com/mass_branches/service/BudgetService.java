@@ -2,9 +2,11 @@ package com.mass_branches.service;
 
 import com.mass_branches.dto.request.BudgetItemPostRequest;
 import com.mass_branches.dto.request.BudgetPostRequest;
+import com.mass_branches.dto.request.StagePostRequest;
 import com.mass_branches.dto.response.BudgetGetResponse;
 import com.mass_branches.dto.response.BudgetItemPostResponse;
 import com.mass_branches.dto.response.BudgetPostResponse;
+import com.mass_branches.dto.response.StagePostResponse;
 import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.*;
 import com.mass_branches.repository.BudgetRepository;
@@ -22,6 +24,7 @@ public class BudgetService {
     private final CustomerService customerService;
     private final ItemService itemService;
     private final BudgetItemService budgetItemService;
+    private final StageService stageService;
 
     public BudgetPostResponse create(User user, BudgetPostRequest postRequest) {
         Customer customer = customerService.findByUserAndIdOrThrowsNotFoundException(user, postRequest.customerId());
@@ -90,6 +93,17 @@ public class BudgetService {
         recalculateTotals(budget);
 
         return BudgetItemPostResponse.by(savedBudgetItem);
+    }
+
+    public StagePostResponse addStage(User user, String id, StagePostRequest postRequest) {
+        Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+                : findByUserAndIdOrThrowsNotFoundException(user, id);
+
+        if (!user.isAdmin() && !budget.getUser().equals(user)) throw throwsBudgetIdNotFoundException(id);
+
+        Stage savedStage = stageService.create(postRequest, budget);
+
+        return StagePostResponse.by(savedStage);
     }
 
     private void recalculateTotals(Budget budget) {
