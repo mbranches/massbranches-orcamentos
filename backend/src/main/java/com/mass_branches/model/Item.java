@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @With
 @Getter
 @Setter
+@EqualsAndHashCode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
