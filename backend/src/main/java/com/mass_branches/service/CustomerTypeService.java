@@ -13,7 +13,11 @@ public class CustomerTypeService {
     private final CustomerTypeRepository repository;
 
     public CustomerType findByNameOrThrowsNotFoundException(String name) {
-        return repository.findByName(CustomerTypeName.valueOf(name))
-                .orElseThrow(() -> new NotFoundException("Type not found"));
+        try {
+            return repository.findByName(CustomerTypeName.valueOf(name))
+                    .orElseThrow(RuntimeException::new);
+        } catch (Exception e) {
+            throw new NotFoundException("Customer type not found");
+        }
     }
 }
