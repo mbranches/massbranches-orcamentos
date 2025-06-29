@@ -8,7 +8,6 @@ import com.mass_branches.dto.response.BudgetItemPostResponse;
 import com.mass_branches.dto.response.BudgetPostResponse;
 import com.mass_branches.dto.response.StagePostResponse;
 import com.mass_branches.model.User;
-import com.mass_branches.service.BudgetItemService;
 import com.mass_branches.service.BudgetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,6 @@ import java.util.List;
 @RestController
 public class BudgetController {
     private final BudgetService service;
-    private final BudgetItemService budgetItemService;
 
     @PostMapping
     public ResponseEntity<BudgetPostResponse> create(Authentication authentication, @RequestBody BudgetPostRequest postRequest) {
