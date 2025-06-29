@@ -179,8 +179,6 @@ class ItemServiceTest {
 
         Long randomId = 999L;
 
-        ItemGetResponse expectedResponse = itemGetResponseList.get(1);
-
         BDDMockito.when(repository.findById(randomId)).thenReturn(Optional.empty());
 
         Assertions.assertThatThrownBy(() -> service.findById(user, randomId))
