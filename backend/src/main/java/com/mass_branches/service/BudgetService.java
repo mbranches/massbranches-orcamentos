@@ -3,10 +3,7 @@ package com.mass_branches.service;
 import com.mass_branches.dto.request.BudgetItemPostRequest;
 import com.mass_branches.dto.request.BudgetPostRequest;
 import com.mass_branches.dto.request.StagePostRequest;
-import com.mass_branches.dto.response.BudgetGetResponse;
-import com.mass_branches.dto.response.BudgetItemPostResponse;
-import com.mass_branches.dto.response.BudgetPostResponse;
-import com.mass_branches.dto.response.StagePostResponse;
+import com.mass_branches.dto.response.*;
 import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.*;
 import com.mass_branches.repository.BudgetRepository;
@@ -15,6 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -114,5 +113,27 @@ public class BudgetService {
         budget.setTotalWithBdi(totalWithBdi);
 
         repository.save(budget);
+    }
+
+    public List<BudgetElementGetResponse> listAllElements(User user, String id) {
+        Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+                : findByUserAndIdOrThrowsNotFoundException(user, id);
+
+        List<BudgetItem> budgetItems = budgetItemService.findAllByBudget(budget);
+        List<Stage> stages = stageService.findAllByBudget(budget);
+
+        List<BudgetElementGetResponse> response = new ArrayList<>();
+
+        budgetItems.forEach(budgetItem ->
+                response.add(BudgetElementGetResponse.by(budgetItem))
+        );
+
+        stages.forEach(stage ->
+                response.add(BudgetElementGetResponse.by(stage))
+        );
+
+        response.sort(Comparator.comparing(BudgetElementGetResponse::order));
+
+        return response;
     }
 }

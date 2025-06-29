@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -43,5 +44,9 @@ public class BudgetItemService {
 
     public BigDecimal totalWithBdiOfItemsByBudgetId(String budgetId) {
         return repository.sumTotalWithBdiByBudget_Id(budgetId);
+    }
+
+    public List<BudgetItem> findAllByBudget(Budget budget) {
+        return repository.findAllByBudget(budget);
     }
 }

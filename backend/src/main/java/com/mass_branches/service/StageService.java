@@ -7,6 +7,8 @@ import com.mass_branches.repository.StageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class StageService {
@@ -16,5 +18,9 @@ public class StageService {
         Stage stage = Stage.builder().budget(budget).orderIndex(postRequest.order()).name(postRequest.name()).build();
 
         return repository.save(stage);
+    }
+
+    public List<Stage> findAllByBudget(Budget budget) {
+        return repository.findAllByBudget(budget);
     }
 }
