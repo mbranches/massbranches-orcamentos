@@ -136,4 +136,8 @@ public class BudgetService {
 
         return response;
     }
+
+    public Integer numberOfBudgets(User user) {
+        return repository.countBudgetsByUser(user);
+    }
 }
