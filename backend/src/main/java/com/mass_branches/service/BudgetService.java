@@ -141,7 +141,16 @@ public class BudgetService {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdOrThrowsNotFoundException(user, id);
 
-        budgetItemService.removeItem(budget, budgetItemId);
+        budgetItemService.remove(budget, budgetItemId);
+
+        recalculateTotals(budget);
+    }
+
+    public void removeStage(User user, String id, Long stageId) {
+        Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+                : findByUserAndIdOrThrowsNotFoundException(user, id);
+
+        stageService.remove(budget, stageId);
 
         recalculateTotals(budget);
     }

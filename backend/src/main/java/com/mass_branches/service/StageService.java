@@ -1,6 +1,8 @@
 package com.mass_branches.service;
 
 import com.mass_branches.dto.request.StagePostRequest;
+import com.mass_branches.exception.BadRequestException;
+import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.Budget;
 import com.mass_branches.model.Stage;
 import com.mass_branches.repository.StageRepository;
@@ -22,5 +24,18 @@ public class StageService {
 
     public List<Stage> findAllByBudget(Budget budget) {
         return repository.findAllByBudget(budget);
+    }
+
+    public void remove(Budget budget, Long id) {
+        Stage stage = findByIdOrThrowsNotFoundException(id);
+
+        if (!stage.getBudget().equals(budget)) throw new BadRequestException("The stage does not belongs to the given budget");
+
+        repository.delete(stage);
+    }
+
+    public Stage findByIdOrThrowsNotFoundException(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Stage with id '%s' not found".formatted(id)));
     }
 }

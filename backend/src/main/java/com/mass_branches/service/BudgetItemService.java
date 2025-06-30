@@ -52,7 +52,7 @@ public class BudgetItemService {
         return repository.findAllByBudget(budget);
     }
 
-    public void removeItem(Budget budget, Long budgetItemId) {
+    public void remove(Budget budget, Long budgetItemId) {
         BudgetItem budgetItem = findByIdOrThrowsNotFoundException(budgetItemId);
 
         if (!budgetItem.getBudget().equals(budget)) throw new BadRequestException("Budget item does not belongs to the given budget");

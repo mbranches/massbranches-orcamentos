@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @With
 @Getter
 @Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -20,6 +21,7 @@ public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "idbudget")
+    @EqualsAndHashCode.Include
     private String id;
     @ManyToOne
     @JoinColumn(name = "customer_id")
