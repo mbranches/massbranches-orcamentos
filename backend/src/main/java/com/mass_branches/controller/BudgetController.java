@@ -76,6 +76,19 @@ public class BudgetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @DeleteMapping("{id}/items/{budgetItemId}")
+    public ResponseEntity<Void> removeItem(
+            Authentication authentication,
+            @PathVariable String id,
+            @PathVariable Long budgetItemId
+    ) {
+        User user = (User) authentication.getPrincipal();
+
+        service.removeItem(user, id, budgetItemId);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/{id}/stages")
     public ResponseEntity<StagePostResponse> addStage(
             Authentication authentication,

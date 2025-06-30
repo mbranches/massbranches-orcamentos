@@ -1,6 +1,8 @@
 package com.mass_branches.service;
 
 import com.mass_branches.dto.request.BudgetItemPostRequest;
+import com.mass_branches.exception.BadRequestException;
+import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.Budget;
 import com.mass_branches.model.BudgetItem;
 import com.mass_branches.model.Item;
@@ -48,5 +50,18 @@ public class BudgetItemService {
 
     public List<BudgetItem> findAllByBudget(Budget budget) {
         return repository.findAllByBudget(budget);
+    }
+
+    public void removeItem(Budget budget, Long budgetItemId) {
+        BudgetItem budgetItem = findByIdOrThrowsNotFoundException(budgetItemId);
+
+        if (!budgetItem.getBudget().equals(budget)) throw new BadRequestException("Budget item does not belongs to the given budget");
+
+        repository.delete(budgetItem);
+    }
+
+    public BudgetItem findByIdOrThrowsNotFoundException(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Budget item with id '%s' not found".formatted(id)));
     }
 }

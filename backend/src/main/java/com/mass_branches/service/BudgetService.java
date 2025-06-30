@@ -137,6 +137,15 @@ public class BudgetService {
         return response;
     }
 
+    public void removeItem(User user, String id, Long budgetItemId) {
+        Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+                : findByUserAndIdOrThrowsNotFoundException(user, id);
+
+        budgetItemService.removeItem(budget, budgetItemId);
+
+        recalculateTotals(budget);
+    }
+
     public Integer numberOfBudgets(User user) {
         return repository.countBudgetsByUser(user);
     }
