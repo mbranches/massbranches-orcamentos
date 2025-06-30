@@ -151,8 +151,6 @@ public class BudgetService {
                 : findByUserAndIdOrThrowsNotFoundException(user, id);
 
         stageService.remove(budget, stageId);
-
-        recalculateTotals(budget);
     }
 
     public Integer numberOfBudgets(User user) {
