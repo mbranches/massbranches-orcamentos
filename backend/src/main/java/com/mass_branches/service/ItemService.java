@@ -31,9 +31,22 @@ public class ItemService {
         return ItemPostResponse.by(savedItem);
     }
 
-    public List<ItemGetResponse> listAll(User user, Boolean personal) {
-        List<Item> items = user.isAdmin() && !Boolean.TRUE.equals(personal) ? repository.findAll()
-                : repository.findAllByUserAndActiveIsTrue(user);
+    public List<ItemGetResponse> listAll(User user, String name, Boolean personal) {
+        boolean isAdmin = user.isAdmin();
+        boolean isPersonal = Boolean.TRUE.equals(personal);
+        boolean hasName = name != null && !name.isBlank();
+
+        List<Item> items;
+
+        if(isAdmin && !isPersonal && !hasName) {
+            items = repository.findAll();
+        } else if (isAdmin && !isPersonal) {
+            items = repository.findAllByNameContaining(name);
+        } else if (hasName) {
+            items = repository.findAllByUserAndNameContainingAndActiveIsTrue(user, name);
+        } else {
+            items = repository.findAllByUserAndActiveIsTrue(user);
+        }
 
         return items.stream().map(ItemGetResponse::by).toList();
     }

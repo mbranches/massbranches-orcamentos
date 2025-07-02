@@ -29,10 +29,14 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemGetResponse>> listAll(Authentication authentication, @RequestParam(required = false) Boolean personal) {
+    public ResponseEntity<List<ItemGetResponse>> listAll(
+            Authentication authentication,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Boolean personal
+    ) {
         User user = (User) authentication.getPrincipal();
 
-        List<ItemGetResponse> response = service.listAll(user, personal);
+        List<ItemGetResponse> response = service.listAll(user, name, personal);
 
         return ResponseEntity.ok(response);
     }
