@@ -132,7 +132,10 @@ public class BudgetService {
                 response.add(BudgetElementGetResponse.by(stage))
         );
 
-        response.sort(Comparator.comparing(BudgetElementGetResponse::order));
+        response.sort(Comparator
+                .comparingInt((BudgetElementGetResponse el) -> Integer.parseInt(el.order().split("\\.")[0]))
+                .thenComparingInt(el -> Integer.parseInt(el.order().split("\\.")[1]))
+        );
 
         return response;
     }
