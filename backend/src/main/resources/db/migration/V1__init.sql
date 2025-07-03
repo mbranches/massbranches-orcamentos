@@ -53,7 +53,7 @@ create table item(
 
 create table budget(
     idbudget varchar(36) PRIMARY KEY,
-    customer_id varchar(36) NOT NULL,
+    customer_id varchar(36),
     description varchar(120) NOT NULL,
     proposal_number varchar(50) NOT NULL,
     bdi decimal(10, 2),
