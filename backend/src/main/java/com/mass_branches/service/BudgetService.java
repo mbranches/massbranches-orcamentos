@@ -26,7 +26,8 @@ public class BudgetService {
     private final StageService stageService;
 
     public BudgetPostResponse create(User user, BudgetPostRequest postRequest) {
-        Customer customer = customerService.findByUserAndIdOrThrowsNotFoundException(user, postRequest.customerId());
+        Customer customer = postRequest.customerId() != null ? customerService.findByUserAndIdOrThrowsNotFoundException(user, postRequest.customerId())
+                : null;
 
         Budget budgetToSave = Budget.builder()
                 .customer(customer)
