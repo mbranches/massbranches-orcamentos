@@ -8,12 +8,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
@@ -32,7 +34,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
                 String subject = jwtTokenService.validateToken(token);
 
                 User user = repository.findById(subject)
-                        .orElseThrow(() -> new BadCredentialsException(null));
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
