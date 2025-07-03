@@ -5,6 +5,7 @@ import com.mass_branches.dto.response.CustomerGetResponse;
 import com.mass_branches.dto.response.CustomerPostResponse;
 import com.mass_branches.model.User;
 import com.mass_branches.service.CustomerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class CustomerController {
     private final CustomerService service;
 
     @PostMapping
-    public ResponseEntity<CustomerPostResponse> post(Authentication authentication, @RequestBody CustomerPostRequest postRequest) {
+    public ResponseEntity<CustomerPostResponse> post(Authentication authentication, @Valid @RequestBody CustomerPostRequest postRequest) {
         User user = (User) authentication.getPrincipal();
 
         CustomerPostResponse response = service.create(user, postRequest);

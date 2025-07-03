@@ -1,9 +1,10 @@
 package com.mass_branches.dto.request;
 
-import com.mass_branches.model.Stage;
+import jakarta.validation.constraints.NotBlank;
 
-public record StagePostRequest(String order, String name) {
-    public static StagePostRequest by(Stage stage) {
-        return new StagePostRequest(stage.getOrderIndex(), stage.getName());
-    }
-}
+public record StagePostRequest(
+        @NotBlank(message = "The field 'order' is required")
+        String order,
+        @NotBlank(message = "The field 'name' is required")
+        String name
+){}

@@ -5,6 +5,7 @@ import com.mass_branches.dto.response.ItemGetResponse;
 import com.mass_branches.dto.response.ItemPostResponse;
 import com.mass_branches.model.User;
 import com.mass_branches.service.ItemService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class ItemController {
     private final ItemService service;
 
     @PostMapping
-    public ResponseEntity<ItemPostResponse> create(Authentication authentication, @RequestBody ItemPostRequest postRequest) {
+    public ResponseEntity<ItemPostResponse> create(Authentication authentication, @Valid @RequestBody ItemPostRequest postRequest) {
         User user = (User) authentication.getPrincipal();
 
         ItemPostResponse response = service.create(user, postRequest);
