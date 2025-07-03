@@ -1,20 +1,16 @@
-import { useForm } from 'react-hook-form';
 import PanelLayout from '../components/PanelLayout';
-import FormTextField from '../components/FormTextField';
-import FormSelect from '../components/FormSelect';
+import BudgetForm from '../components/BudgetForm';
 import { useEffect, useState } from 'react';
 import listAllCustomers from '../services/Customer';
 import LoadingScreen from '../components/LoadingScreen';
-import {toast, ToastContainer} from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 import {createBudget} from "../services/budget";
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import statusValidate from '../utils/statusValidate'
+import statusValidate from '../Utils/statusValidate';
 
 function CreateBudget() {
     const [ sidebarOpen, setSidebarOpen ] = useState();
-
-    const { control, register, handleSubmit, formState: { errors }} = useForm();
 
     const [ loading, setLoading ] = useState(false);
 
@@ -40,11 +36,11 @@ function CreateBudget() {
         }
     }, [])
 
-    const onSubmit = async (data) => {
+    const onFormSubmit = async (data) => {
         setLoading(true);
 
         try {
-            const customerId = data.customer.value;
+            const customerId = data.customer?.id;
 
             const response = await createBudget(customerId, data.description, data.proposalNumber, data.bdi);
 
@@ -52,7 +48,6 @@ function CreateBudget() {
 
             navigate(`/orcamentos/${createdBudget.id}`)
         } catch(error) {
-            console.log(error)
             const status = error?.response?.status;
 
             statusValidate(status);
@@ -60,14 +55,6 @@ function CreateBudget() {
             setLoading(false);
         }
     };
-    
-    const showRequiredErrorMessage = () => (
-        <p className='text-red-500 -mt-3 text-[13px]'>Campo obrigatório.</p>
-    );
-
-    const showBdiInvalidError = () => (
-        <p className='text-red-500 -mt-3 text-[13px]'>Digite um BDI válido.</p>
-    );
 
     return (
         <div className="bg-gray-100">
@@ -79,59 +66,7 @@ function CreateBudget() {
                         </h3>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
-                        <div>    
-                            <FormTextField
-                                type={"text"}
-                                id={"description"}
-                                label={"Descrição"} 
-                                placeholder={"Descrição do Orçamento"} 
-                                register={register('description', {required: true})} 
-                            />
-                        </div>
-
-                        {errors?.description?.type === "required" && showRequiredErrorMessage()}
-
-                        <div>
-                            <FormSelect 
-                                id={"customer"}
-                                name="customer"
-                                label={"Cliente"}
-                                control={control}
-                                options={customers}
-                            />
-                        </div>
-
-                        <div>
-                            <FormTextField 
-                                type={"text"}
-                                id={"proposalNumber"}
-                                label={"Número da Proposta"}
-                                placeholder={"Ex: \"2025/0072\""}
-                                register={register('proposalNumber', {required: true})}
-                            />
-                        </div>
-
-                        {errors?.proposalNumber?.type === "required" && showRequiredErrorMessage()}
-
-                        <div>
-                            <FormTextField 
-                                type={"text"}
-                                id={"bdi"}
-                                label={"BDI (%)"}
-                                placeholder={"Ex: \"18.76\""}
-                                register={register('bdi', {pattern: {
-                                    value: /^\d+([.,]\d{1,2})?$/
-                                }})}
-                            />
-                        </div>
-
-                        {errors?.bdi?.type === "required" && showRequiredErrorMessage() || errors?.bdi?.type === "pattern" && showBdiInvalidError()}
-
-                        <div className="flex justify-end">
-                            <button type="submit" className='w-full py-4 px-10 md:py-2 md:w-auto border border-slate-300 hover:border-slate-400 rounded-lg text-slate-700 outline-none cursor-pointer'>Criar</button>
-                        </div>
-                    </form>
+                    <BudgetForm customers={customers} onSubmit={onFormSubmit} />
                 </div>
             </PanelLayout>
 
