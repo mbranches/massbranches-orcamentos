@@ -1,11 +1,9 @@
 import PanelLayout from '../components/PanelLayout';
 import BudgetForm from '../components/BudgetForm';
-import { useEffect, useState } from 'react';
-import listAllCustomers from '../services/Customer';
+import { useState } from 'react';
 import LoadingScreen from '../components/LoadingScreen';
 import {ToastContainer} from 'react-toastify';
 import {createBudget} from "../services/budget";
-import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import statusValidate from '../Utils/statusValidate';
 
@@ -14,33 +12,13 @@ function CreateBudget() {
 
     const [ loading, setLoading ] = useState(false);
 
-    const [ customers, setCustomers ] = useState([]);
-
-    const { isAdmin } = useAuth();
-
     const navigate = useNavigate();
-
-    useEffect(() => async () => {
-        setLoading(true);
-
-        try {
-            const customers = isAdmin? await listAllCustomers(true) : await listAllCustomers();
-
-            setCustomers(customers);
-        } catch(error) {
-            const status = error.response?.status;
-
-            statusValidate(status);
-        } finally {
-            setLoading(false);
-        }
-    }, [])
 
     const onFormSubmit = async (data) => {
         setLoading(true);
 
         try {
-            const customerId = data.customer?.id;
+            const customerId = data.customer?.value;
 
             const response = await createBudget(customerId, data.description, data.proposalNumber, data.bdi);
 
@@ -66,7 +44,7 @@ function CreateBudget() {
                         </h3>
                     </div>
 
-                    <BudgetForm customers={customers} onSubmit={onFormSubmit} />
+                    <BudgetForm onSubmit={onFormSubmit} setLoading={setLoading} />
                 </div>
             </PanelLayout>
 

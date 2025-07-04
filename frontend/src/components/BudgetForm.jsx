@@ -1,15 +1,41 @@
 import { useForm } from "react-hook-form";
 import FormSelect from "./FormSelect";
 import FormTextField from "./FormTextField";
+import { useEffect, useState } from "react";
+import {listAllCustomers} from "../services/Customer";
+import statusValidate from "../Utils/statusValidate";
+import { useAuth } from "../hooks/useAuth";
 
-function BudgetForm({ onSubmit, customers, defaultValues={} }) {
+function BudgetForm({ onSubmit, defaultValues={}, setLoading, selectedCustomer }) {
+    const [ customers, setCustomers ] = useState([]);
+    const { isAdmin } = useAuth();
+
     const showRequiredErrorMessage = () => (
         <p className='text-red-500 -mt-3 text-[13px]'>Campo obrigatório.</p>
     );
+
     const showBdiInvalidError = () => (
         <p className='text-red-500 -mt-3 text-[13px]'>Digite um BDI válido.</p>
     );
+
     const { control, register, handleSubmit, formState: { errors }} = useForm({defaultValues});
+
+    useEffect(() => async () => {
+            setLoading(true);
+
+            try {
+                const customers = isAdmin? await listAllCustomers(true) : await listAllCustomers();
+
+                setCustomers(customers);
+            } catch(error) {
+                const status = error.response?.status;
+
+                statusValidate(status);
+            } finally {
+                setLoading(false);
+            }
+        }, []);
+
     return(
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
             <div>    
@@ -31,6 +57,7 @@ function BudgetForm({ onSubmit, customers, defaultValues={} }) {
                     label={"Cliente"}
                     control={control}
                     options={customers}
+                    selectedCustomer={selectedCustomer}
                 />
             </div>
 
