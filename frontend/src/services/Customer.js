@@ -1,14 +1,12 @@
 import api from "./Api";
 
-async function listAllCustomers(personal = false) {
-    try {
-        const url = personal ? `/customers?personal=${personal}` : "/customers";
-        const response = await api.get(url);
-        
-        return response.data;
-    } catch(error) {
-        throw error;
-    }
+export async function listAllCustomers(personal = false) {
+    const url = personal ? `/customers?personal=${personal}` : "/customers";
+    const response = await api.get(url);
+    
+    return response.data;
 }
 
-export default listAllCustomers;
+export async function findCustomerById(id) {
+    return api(`/customers/${id}`);
+}

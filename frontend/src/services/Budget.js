@@ -1,19 +1,49 @@
 import api from "./Api";
 
-async function createBudget(customerId, description, proposalNumber, bdi) {
+export async function createBudget(customerId, description, proposalNumber, bdi) {
     const request = {
         customerId,
         description,
         proposalNumber, 
         bdi
-    }
+    };
 
     return api.post("/budgets", request);
 
 }
 
-async function findBudgetById(id) {
+export async function findBudgetById(id) {
     return api(`/budgets/${id}`);
 }
 
-export {createBudget, findBudgetById};
+export async function listElementsByBudgetId(id) {
+    return api(`budgets/${id}/elements`);
+}
+
+export async function createStage(budgetId, order, name) {
+    const request = {
+      order,
+      name
+    };
+
+    return api.post(`/budgets/${budgetId}/stages`, request);
+}
+
+export async function createBudgetItem(budgetId, order, itemId, unitPrice, quantity) {
+    const request = {
+        order,
+        itemId: itemId,
+        unitPrice, 
+        quantity
+    };
+
+    return api.post(`/budgets/${budgetId}/items`, request);
+}
+
+export async function deleteItemByBudgetId(budgetId, itemId) {
+    return api.delete(`/budgets/${budgetId}/items/${itemId}`);
+}
+
+export async function deleteStageByBudgetId(budgetId, stageId) {
+    return api.delete(`/budgets/${budgetId}/stages/${stageId}`);
+}
