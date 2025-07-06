@@ -3,6 +3,7 @@ package com.mass_branches.controller;
 import com.mass_branches.dto.request.LoginRequest;
 import com.mass_branches.dto.response.LoginResponse;
 import com.mass_branches.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,7 @@ public class AuthenticationController {
     private final UserService service;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(service.login(request));
     }
 }

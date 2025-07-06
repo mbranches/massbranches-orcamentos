@@ -10,6 +10,7 @@ import com.mass_branches.dto.response.BudgetPostResponse;
 import com.mass_branches.dto.response.StagePostResponse;
 import com.mass_branches.model.User;
 import com.mass_branches.service.BudgetService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class BudgetController {
     private final BudgetService service;
 
     @PostMapping
-    public ResponseEntity<BudgetPostResponse> create(Authentication authentication, @RequestBody BudgetPostRequest postRequest) {
+    public ResponseEntity<BudgetPostResponse> create(Authentication authentication, @Valid @RequestBody BudgetPostRequest postRequest) {
         User user = (User) authentication.getPrincipal();
 
         BudgetPostResponse response = service.create(user, postRequest);
@@ -67,7 +68,7 @@ public class BudgetController {
     public ResponseEntity<BudgetItemPostResponse> addItem(
             Authentication authentication,
             @PathVariable String id,
-            @RequestBody BudgetItemPostRequest postRequest
+            @Valid @RequestBody BudgetItemPostRequest postRequest
     ) {
         User user = (User) authentication.getPrincipal();
 
@@ -93,7 +94,7 @@ public class BudgetController {
     public ResponseEntity<StagePostResponse> addStage(
             Authentication authentication,
             @PathVariable String id,
-            @RequestBody StagePostRequest postRequest
+            @Valid @RequestBody StagePostRequest postRequest
     ) {
         User user = (User) authentication.getPrincipal();
 
