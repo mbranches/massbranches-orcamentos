@@ -9,6 +9,8 @@ import AuthProvider from './contexts/AuthProvider.jsx';
 import PrivateRoutes from './routes/PrivateRoutes.jsx'
 import NotFoundRedirect from './routes/NotFoundRedirect'
 import Budget from './pages/Budget.jsx'
+import BudgetDetails from './pages/BudgetDetails.jsx'
+import { ToastContainer } from 'react-toastify'
 
 const router = createBrowserRouter(
   [
@@ -31,6 +33,10 @@ const router = createBrowserRouter(
         {
           path: "/orcamentos/:id",
           element: <Budget />
+        },
+        {
+          path: "/orcamentos/:id/detalhes",
+          element: <BudgetDetails />
         }
       ]
     },
@@ -45,6 +51,12 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
       <RouterProvider router={router} />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        closeOnClick
+        pauseOnHover={false}
+      />
     </AuthProvider>
   </StrictMode>,
 )

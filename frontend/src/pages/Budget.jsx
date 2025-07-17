@@ -3,19 +3,16 @@ import PanelLayout from '../components/PanelLayout'
 import {findBudgetById, listElementsByBudgetId} from '../services/budget';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadingScreen from '../components/LoadingScreen'
-import { ToastContainer } from 'react-toastify';
 import statusValidate from '../Utils/statusValidate';
 import Action from '../components/Action'
 import { Box, ChevronLeft, Info, ListPlus } from 'lucide-react';
 import BudgetTable from '../components/BudgetTable';
 import { formatCurrency } from '../utils/format';
 import Card from '../components/Card';
-import BudgetDetails from '../components/BudgetDetails';
 
 function Budget() {
     const [newStage, setNewStage] = useState();
     const [newItem, setNewItem] = useState();
-    const [openBudgetDetails, setOpenBudgetDetails] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState();
     const [currentBudget, setCurrentBudget] = useState();
     const [loading, setLoading] = useState(false);
@@ -107,7 +104,7 @@ function Budget() {
         {
             label: "Detalhes",
             icon: <Info size={18}  />,
-            onClick: () => {setOpenBudgetDetails(true)},
+            onClick: () => {navigate(`/orcamentos/${id}/detalhes`)},
             key: "detalhes"
         },
     ]
@@ -215,10 +212,6 @@ function Budget() {
                         </Card>
                     </div>
                 </div>
-
-                {openBudgetDetails && <BudgetDetails setLoading={setLoading} budget={currentBudget} />}
-
-                <ToastContainer autoClose={3000} pauseOnHover={false} position='top-right'/>
             </PanelLayout>
         </div>
     )
