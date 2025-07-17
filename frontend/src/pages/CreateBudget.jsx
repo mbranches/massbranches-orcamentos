@@ -44,7 +44,7 @@ function CreateBudget() {
                         </h3>
                     </div>
 
-                    <BudgetForm onSubmit={onFormSubmit} setLoading={setLoading} />
+                    <BudgetForm submitButtonLabel={"Criar"} onSubmit={onFormSubmit} setLoading={setLoading} />
                 </div>
             </PanelLayout>
 

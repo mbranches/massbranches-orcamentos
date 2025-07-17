@@ -6,7 +6,7 @@ import {listAllCustomers} from "../services/Customer";
 import statusValidate from "../Utils/statusValidate";
 import { useAuth } from "../hooks/useAuth";
 
-function BudgetForm({ onSubmit, defaultValues={}, setLoading, selectedCustomer }) {
+function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading, selectedCustomer }) {
     const [ customers, setCustomers ] = useState([]);
     const { isAdmin } = useAuth();
 
@@ -17,24 +17,39 @@ function BudgetForm({ onSubmit, defaultValues={}, setLoading, selectedCustomer }
     const showBdiInvalidError = () => (
         <p className='text-red-500 -mt-3 text-[13px]'>Digite um BDI válido.</p>
     );
-
-    const { control, register, handleSubmit, formState: { errors }} = useForm({defaultValues});
+    
+    const { control, register, handleSubmit, formState: { errors }, reset} = useForm({
+        defaultValues: {...defaultValues, customer: null}
+    });
 
     useEffect(() => async () => {
-            setLoading(true);
+        setLoading(true);
 
-            try {
-                const customers = isAdmin? await listAllCustomers(true) : await listAllCustomers();
+        try {
+            const customers = isAdmin? await listAllCustomers(true) : await listAllCustomers();
 
-                setCustomers(customers);
-            } catch(error) {
-                const status = error.response?.status;
+            setCustomers(customers);
+        } catch(error) {
+            const status = error.response?.status;
 
-                statusValidate(status);
-            } finally {
-                setLoading(false);
+            statusValidate(status);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (selectedCustomer) {
+            reset(prev => ({
+            ...prev,
+            ...defaultValues,
+            customer: {
+                value: selectedCustomer.id,
+                label: selectedCustomer.name
             }
-        }, []);
+            }));
+        }
+        }, [selectedCustomer, defaultValues, reset]);
 
     return(
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
@@ -57,7 +72,6 @@ function BudgetForm({ onSubmit, defaultValues={}, setLoading, selectedCustomer }
                     label={"Cliente"}
                     control={control}
                     options={customers}
-                    selectedCustomer={selectedCustomer}
                 />
             </div>
 
@@ -88,7 +102,7 @@ function BudgetForm({ onSubmit, defaultValues={}, setLoading, selectedCustomer }
             {errors?.bdi?.type === "required" && showRequiredErrorMessage() || errors?.bdi?.type === "pattern" && showBdiInvalidError()}
 
             <div className="flex justify-end">
-                <button type="submit" className='w-full py-4 px-10 md:py-2 md:w-auto border border-slate-300 hover:border-slate-400 rounded-lg text-slate-700 outline-none cursor-pointer'>Criar</button>
+                <button type="submit" className='w-full py-4 px-10 md:py-2 md:w-auto border border-slate-300 hover:border-slate-400 rounded-lg text-slate-700 outline-none cursor-pointer'>{submitButtonLabel}</button>
             </div>
         </form>
     );
