@@ -5,6 +5,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import {createBudget} from "../services/budget";
 import { useNavigate } from 'react-router-dom';
 import statusValidate from '../Utils/statusValidate';
+import { toast } from 'react-toastify';
 
 function CreateBudget() {
     const [ sidebarOpen, setSidebarOpen ] = useState();
@@ -23,7 +24,8 @@ function CreateBudget() {
 
             const createdBudget = response.data;
 
-            navigate(`/orcamentos/${createdBudget.id}`)
+            toast.success("Orçamento criado com sucesso")
+            navigate(`/orcamentos/${createdBudget.id}`);
         } catch(error) {
             const status = error?.response?.status;
 
