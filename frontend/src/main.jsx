@@ -8,6 +8,7 @@ import Login from './pages/Login.jsx'
 import AuthProvider from './contexts/AuthProvider.jsx';
 import PrivateRoutes from './routes/PrivateRoutes.jsx'
 import NotFoundRedirect from './routes/NotFoundRedirect'
+import Budget from './pages/Budget.jsx'
 
 const router = createBrowserRouter(
   [
@@ -26,6 +27,10 @@ const router = createBrowserRouter(
         {
           path: "/orcamentos/criar",
           element: <CreateBudget />
+        },
+        {
+          path: "/orcamentos/:id",
+          element: <Budget />
         }
       ]
     },
