@@ -2,7 +2,6 @@ import PanelLayout from '../components/PanelLayout';
 import BudgetForm from '../components/BudgetForm';
 import { useState } from 'react';
 import LoadingScreen from '../components/LoadingScreen';
-import {ToastContainer} from 'react-toastify';
 import {createBudget} from "../services/budget";
 import { useNavigate } from 'react-router-dom';
 import statusValidate from '../Utils/statusValidate';
@@ -50,7 +49,6 @@ function CreateBudget() {
 
             {loading && <LoadingScreen />}
 
-            <ToastContainer autoClose={3000} pauseOnHover={false} position='top-right'/>
         </div>
     );
 }
