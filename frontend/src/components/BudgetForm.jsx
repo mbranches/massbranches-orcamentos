@@ -22,22 +22,27 @@ function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading,
         defaultValues: {...defaultValues, customer: null}
     });
 
-    useEffect(() => async () => {
-        setLoading(true);
+    useEffect(() => {
+        
+        const fetchCustomer = async () => {
+            setLoading(true);
 
-        try {
-            const customers = isAdmin? await listAllCustomers(true) : await listAllCustomers();
+            try {
+                const customers = isAdmin? await listAllCustomers(true) : await listAllCustomers();
 
-            setCustomers(customers);
-        } catch(error) {
-            const status = error.response?.status;
+                setCustomers(customers);
+            } catch(error) {
+                const status = error.response?.status;
 
-            statusValidate(status);
-        } finally {
-            setLoading(false);
-        }
+                statusValidate(status);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCustomer();
     }, []);
-
+    
     useEffect(() => {
         if (selectedCustomer) {
             reset(prev => ({
@@ -99,10 +104,10 @@ function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading,
                 />
             </div>
 
-            {errors?.bdi?.type === "required" && showRequiredErrorMessage() || errors?.bdi?.type === "pattern" && showBdiInvalidError()}
+            {(errors?.bdi?.type === "required" && showRequiredErrorMessage()) || (errors?.bdi?.type === "pattern" && showBdiInvalidError())}
 
             <div className="flex justify-end">
-                <button type="submit" className='w-full py-4 px-10 md:py-2 md:w-auto border border-slate-300 hover:border-slate-400 rounded-lg text-slate-700 outline-none cursor-pointer'>{submitButtonLabel}</button>
+                <button type="submit" className='w-full py-4 px-10 md:py-2 md:w-auto border border-slate-300 hover:border-slate-400 rounded-lg text-slate-700 outline-none cursor-pointer'>{submitButtonLabel   }</button>
             </div>
         </form>
     );
