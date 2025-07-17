@@ -24,20 +24,26 @@ public class BudgetItemService {
 
         BigDecimal unitPrice = postRequest.unitPrice();
         BigDecimal quantity = postRequest.quantity();
-        BigDecimal totalValue = unitPrice.multiply(quantity).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal percentage = bdi.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
-        BigDecimal totalWithBdi = totalValue.multiply(BigDecimal.ONE.add(percentage)).setScale(2, RoundingMode.HALF_UP);
         BudgetItem budgetItemToSave = BudgetItem.builder()
                 .budget(budget)
                 .item(item)
                 .orderIndex(postRequest.order())
                 .unitPrice(unitPrice)
                 .quantity(quantity)
-                .totalValue(totalValue)
-                .totalWithBdi(totalWithBdi)
                 .build();
 
+        setNewTotalValues(budgetItemToSave, bdi);
+
         return repository.save(budgetItemToSave);
+    }
+
+    private void setNewTotalValues(BudgetItem budgetItem, BigDecimal bdi) {
+        BigDecimal totalValue = budgetItem.getItem().getUnitPrice().multiply(budgetItem.getQuantity()).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal percentage = bdi.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
+        BigDecimal totalWithBdi = totalValue.multiply(BigDecimal.ONE.add(percentage)).setScale(2, RoundingMode.HALF_UP);
+
+        budgetItem.setTotalValue(totalValue);
+        budgetItem.setTotalWithBdi(totalWithBdi);
     }
 
     public BigDecimal totalValueOfItemsByBudgetId(String budgetId) {
@@ -63,5 +69,13 @@ public class BudgetItemService {
     public BudgetItem findByIdOrThrowsNotFoundException(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Budget item with id '%s' not found".formatted(id)));
+    }
+
+    public void updateBudgetItemsTotalValueByBudget(Budget budget, BigDecimal bdi) {
+        List<BudgetItem> budgetItems = repository.findAllByBudget(budget);
+
+        budgetItems.forEach(budgetItem -> setNewTotalValues(budgetItem, budget.getBdi()));
+
+        repository.saveAll(budgetItems);
     }
 }

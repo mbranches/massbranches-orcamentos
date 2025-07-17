@@ -2,11 +2,14 @@ package com.mass_branches.service;
 
 import com.mass_branches.dto.request.BudgetItemPostRequest;
 import com.mass_branches.dto.request.BudgetPostRequest;
+import com.mass_branches.dto.request.BudgetPutRequest;
 import com.mass_branches.dto.request.StagePostRequest;
 import com.mass_branches.dto.response.*;
+import com.mass_branches.exception.BadRequestException;
 import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.*;
 import com.mass_branches.repository.BudgetRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -44,6 +47,28 @@ public class BudgetService {
         return BudgetPostResponse.by(savedBudget);
     }
 
+    @Transactional
+    public void update(String id, BudgetPutRequest request, User user) {
+        if (!id.equals(request.id())) throw new BadRequestException("The url id (%s) is different from the request body id(%s)".formatted(id, request.id()));
+
+        Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id) : findByUserAndIdOrThrowsNotFoundException(user, id);
+
+        Customer customer = request.customerId() != null ? customerService.findByUserAndIdOrThrowsNotFoundException(budget.getUser(), request.customerId()) : null;
+        BigDecimal bdi = request.bdi() != null ? request.bdi() : BigDecimal.ZERO;
+
+        if (!bdi.equals(budget.getBdi())) {
+            budget.setBdi(bdi);
+
+            budgetItemService.updateBudgetItemsTotalValueByBudget(budget, bdi);
+        }
+
+        budget.setDescription(request.description());
+        budget.setProposalNumber(request.proposalNumber());
+        budget.setCustomer(customer);
+
+        recalculateTotals(budget);
+    }
+
     public List<BudgetGetResponse> listAll(User requestingUser, Boolean personal) {
         Sort sort = Sort.by("updatedAt").descending();
 
@@ -57,7 +82,7 @@ public class BudgetService {
                 .toList();
     }
 
-    public BudgetGetResponse findById(User requestingUser, String id) {
+    public BudgetGetResponse findById(User requestingUser, String id) throws InterruptedException {
         Budget response = requestingUser.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdOrThrowsNotFoundException(requestingUser, id);
 
@@ -78,6 +103,7 @@ public class BudgetService {
         return new NotFoundException("Budget with id '%s' not found".formatted(id));
     }
 
+    @Transactional
     public BudgetItemPostResponse addItem(User user, String id, BudgetItemPostRequest postRequest) {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdOrThrowsNotFoundException(user, id);
@@ -141,6 +167,7 @@ public class BudgetService {
         return response;
     }
 
+    @Transactional
     public void removeItem(User user, String id, Long budgetItemId) {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdOrThrowsNotFoundException(user, id);

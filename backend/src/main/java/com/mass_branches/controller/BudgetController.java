@@ -1,5 +1,6 @@
 package com.mass_branches.controller;
 
+import com.mass_branches.dto.request.BudgetPutRequest;
 import com.mass_branches.dto.response.BudgetElementGetResponse;
 import com.mass_branches.dto.request.BudgetItemPostRequest;
 import com.mass_branches.dto.request.BudgetPostRequest;
@@ -45,6 +46,15 @@ public class BudgetController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(@PathVariable String id, @Valid @RequestBody BudgetPutRequest request, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        service.update(id, request, user);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/quantity")
     public ResponseEntity<Integer> numberOfBudgets(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -55,7 +65,7 @@ public class BudgetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BudgetGetResponse> findById(Authentication authentication, @PathVariable String id) {
+    public ResponseEntity<BudgetGetResponse> findById(Authentication authentication, @PathVariable String id) throws InterruptedException {
         User user = (User) authentication.getPrincipal();
 
         BudgetGetResponse response = service.findById(user, id);
