@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import FormSelect from "./FormSelect";
 import FormTextField from "./FormTextField";
 import { useEffect, useState } from "react";
-import {listAllCustomers} from "../services/Customer";
+import {listAllCustomers} from "../services/customer";
 import statusValidate from "../Utils/statusValidate";
 import { useAuth } from "../hooks/useAuth";
 
