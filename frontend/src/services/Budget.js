@@ -20,6 +20,10 @@ export async function updateBudget(budgetToUpdate) {
     return api.put(`/budgets/${budgetToUpdate.id}`, budgetToUpdate); 
 }
 
+export async function findMyBudgetQuantity() {
+    return api("/budgets/quantity");
+}
+
 export async function listElementsByBudgetId(id) {
     return api(`budgets/${id}/elements`);
 }

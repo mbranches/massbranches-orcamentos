@@ -10,3 +10,7 @@ export async function listAllCustomers(personal = false) {
 export async function findCustomerById(id) {
     return api(`/customers/${id}`);
 }
+
+export async function findMyCustomerQuantity() {
+    return api("/customers/quantity");
+}

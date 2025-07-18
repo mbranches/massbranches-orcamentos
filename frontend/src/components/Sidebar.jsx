@@ -2,9 +2,16 @@ import SidebarItem from './SidebarItem';
 import {  Calculator, FileText, Home, Plus, Users, X } from 'lucide-react';
 import Logo from './Logo'
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { findMyBudgetQuantity } from '../services/budget';
+import { findMyCustomerQuantity } from '../services/customer';
 
 function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
     const navigate = useNavigate();
+
+    const [budgetCount, setBudgetCount] = useState(0); 
+
+    const [customerCount, setCustomerCount] = useState(0); 
 
     const sidebarItems = [
         {
@@ -39,6 +46,23 @@ function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
         },
     ]
 
+    useEffect(() => {
+        const fetchBudgetCount = async () => {
+            const response = await findMyBudgetQuantity();
+
+            setBudgetCount(response.data);
+        };
+
+        const fetchCustomerCount = async () => {
+            const response = await findMyCustomerQuantity();
+
+            setCustomerCount(response.data);
+        };
+    
+        fetchBudgetCount();
+        fetchCustomerCount();
+    }, []);
+
     return (
         <>
             {sidebarOpen && (
@@ -70,11 +94,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
                     <div className='space-y-3'>
                         <div className='flex items-center justify-between text-[14px]'>
                             <span className='text-gray-600'>Orçamentos Criados</span>
-                            <div className='inline-flex px-2.5 py-0.5 bg-gray-100 rounded-[14px] font-semibold'>10</div>
+                            <div className='inline-flex px-2.5 py-0.5 bg-gray-100 rounded-[14px] font-semibold'>{budgetCount}</div>
                         </div>
                         <div className='flex items-center justify-between text-[14px]'>
                             <span className='text-gray-600'>Clientes Cadastrados</span>
-                            <div className='inline-flex px-2.5 py-0.5 bg-gray-100 rounded-[14px] font-semibold'>10</div>
+                            <div className='inline-flex px-2.5 py-0.5 bg-gray-100 rounded-[14px] font-semibold'>{customerCount}</div>
                         </div>
                     </div>
                     
