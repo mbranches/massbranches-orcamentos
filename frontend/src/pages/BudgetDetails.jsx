@@ -64,7 +64,7 @@ function BudgetDetails() {
     return (
         <div className="bg-gray-100">
             <PanelLayout actualSection={"criar-orcamento"} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}>
-                <div className='flex flex-col w-full h-screen justify-center md:w-3/4 md:h-auto lg:w-1/2 lg:ml-[310px] px-5 py-8 bg-white rounded-lg'>
+                <div className='flex flex-col w-full mt-[83px] h-screen justify-center md:w-3/4 md:h-auto lg:w-1/2 lg:ml-[310px] px-5 py-8 bg-white rounded-lg'>
                     <div>
                         <div className='mb-4 flex items-center gap-3'>
                             <div 
