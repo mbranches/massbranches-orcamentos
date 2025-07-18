@@ -48,4 +48,13 @@ public class CustomerController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/quantity")
+    public ResponseEntity<Integer> numberOfCustomers(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        Integer response = service.numberOfCustomers(user);
+
+        return ResponseEntity.ok(response);
+    }
 }

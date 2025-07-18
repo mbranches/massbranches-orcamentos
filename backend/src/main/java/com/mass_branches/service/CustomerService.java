@@ -69,4 +69,8 @@ public class CustomerService {
     private static NotFoundException throwsCustomerIdNotFoundException(String id) {
         return new NotFoundException("Customer with id '%s' not found".formatted(id));
     }
+
+    public Integer numberOfCustomers(User user) {
+        return repository.countCustomersByUser(user);
+    }
 }
