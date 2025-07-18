@@ -186,8 +186,8 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
                     Itens do Orçamento
                 </h3>
             </div>
-            <div>
-                <table className='w-full max-w-[1200px] text-[12px]'>
+            <div className='overflow-x-auto'>
+                <table className='w-full min-w-[900px] max-w-[1200px] text-[12px]'>
                     <thead className='bg-gray-50 border-b border-gray-200'>
                         <tr>
                             <Th>Ordem</Th>

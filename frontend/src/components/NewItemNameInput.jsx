@@ -50,7 +50,7 @@ function NewItemNameInput({ value, error, placeholder, newItem, setNewItem, thro
             />
 
             {showSuggestions && suggestions.length > 0 && (
-                <ul className="w-full absolute bg-white border border-slate-200">
+                <ul className="w-full absolute bottom-full h-[60px] overflow-auto bg-white border border-slate-200">
                     {suggestions.map(suggestion => 
                         <li 
                             key={suggestion.id} 
