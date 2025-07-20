@@ -62,6 +62,7 @@ create table budget(
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     user_id varchar(36),
+    active tinyint NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customer(idcustomer),
     FOREIGN KEY (user_id) REFERENCES user(iduser)
 );

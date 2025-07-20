@@ -36,13 +36,15 @@ public class Budget {
     private BigDecimal totalValue;
     @Column(name = "total_with_bdi", precision = 10, scale = 2)
     private BigDecimal totalWithBdi;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     @Column(name = "created_at")
     @CreationTimestamp(source = SourceType.DB)
     private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
     @UpdateTimestamp(source = SourceType.DB)
     private LocalDateTime updatedAt;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false, columnDefinition = "TINYINT")
+    private Boolean active;
 }
