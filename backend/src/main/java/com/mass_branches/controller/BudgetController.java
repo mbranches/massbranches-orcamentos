@@ -55,6 +55,15 @@ public class BudgetController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        service.delete(id, user);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/quantity")
     public ResponseEntity<Integer> numberOfBudgets(Authentication authentication) {
         User user = (User) authentication.getPrincipal();

@@ -40,6 +40,7 @@ public class BudgetService {
                 .totalValue(BigDecimal.ZERO)
                 .totalWithBdi(BigDecimal.ZERO)
                 .user(user)
+                .active(true)
                 .build();
 
         Budget savedBudget = repository.save(budgetToSave);
@@ -96,6 +97,11 @@ public class BudgetService {
 
     public Budget findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(User user, String id) {
         return repository.findByUserAndIdAndActiveIsTrue(user, id)
+                .orElseThrow(() -> throwsBudgetIdNotFoundException(id));
+    }
+
+    public Budget findByIdAndActiveIsTrueOrThrowsNotFoundException(String id) {
+        return repository.findByIdAndActiveIsTrue(id)
                 .orElseThrow(() -> throwsBudgetIdNotFoundException(id));
     }
 
@@ -184,6 +190,16 @@ public class BudgetService {
     }
 
     public Integer numberOfBudgets(User user) {
-        return repository.countBudgetsByUser(user);
+        return repository.countBudgetsByUserAndActiveIsTrue(user);
+    }
+
+    public void delete(String id, User user) {
+        Budget budget = findByIdAndActiveIsTrueOrThrowsNotFoundException(id);
+
+        if (!user.isAdmin() && !budget.getUser().equals(user)) throw throwsBudgetIdNotFoundException(id);
+
+        budget.setActive(false);
+
+        repository.save(budget);
     }
 }

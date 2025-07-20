@@ -15,5 +15,7 @@ public interface BudgetRepository extends JpaRepository<Budget, String> {
 
     Optional<Budget> findByUserAndIdAndActiveIsTrue(User user, String id);
 
-    Integer countBudgetsByUser(User user);
+    Optional<Budget> findByIdAndActiveIsTrue(String id);
+
+    Integer countBudgetsByUserAndActiveIsTrue(User user);
 }
