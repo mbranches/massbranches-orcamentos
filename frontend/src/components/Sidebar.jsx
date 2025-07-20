@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { findMyBudgetQuantity } from '../services/budget';
 import { findMyCustomerQuantity } from '../services/customer';
+import { toast } from 'react-toastify';
 
 function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
     const navigate = useNavigate();
@@ -59,8 +60,14 @@ function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
             setCustomerCount(response.data);
         };
     
-        fetchBudgetCount();
-        fetchCustomerCount();
+        try {
+            fetchBudgetCount();
+            fetchCustomerCount();
+        } catch (error) {
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+                
+            statusValidate(status);
+        }
     }, []);
 
     return (

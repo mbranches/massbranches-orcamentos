@@ -11,7 +11,6 @@ function AuthProvider({ children }) {
     
     useEffect(() =>  {
         const initAuth = async () => {
-            console.log("init Auth")
             const storedToken = localStorage.getItem('token');
             if (storedToken) {
                 try {

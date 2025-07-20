@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import {listAllCustomers} from "../services/customer";
 import statusValidate from "../Utils/statusValidate";
 import { useAuth } from "../hooks/useAuth";
+import { toast } from "react-toastify";
 
 function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading, selectedCustomer }) {
     const [ customers, setCustomers ] = useState([]);
@@ -32,8 +33,8 @@ function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading,
 
                 setCustomers(customers);
             } catch(error) {
-                const status = error.response?.status;
-
+                const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+                
                 statusValidate(status);
             } finally {
                 setLoading(false);

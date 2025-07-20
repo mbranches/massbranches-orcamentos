@@ -27,8 +27,8 @@ function CreateBudget() {
             toast.success("Orçamento criado com sucesso")
             navigate(`/orcamentos/${createdBudget.id}`);
         } catch(error) {
-            const status = error?.response?.status;
-
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+                
             statusValidate(status);
         } finally {
             setLoading(false);

@@ -94,8 +94,8 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
             await fetchBudgetElements();
             await fetchBudget();
         } catch(error) {
-            const status = error?.status;
-
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+                
             statusValidate(status);
 
             if(status === 404 || status === 400) {
@@ -115,8 +115,8 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
 
             await fetchBudgetElements();
         } catch(error) {
-            const status = error?.status;
-
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+                
             statusValidate(status);
 
             if(status === 404 || status === 400) {
@@ -140,8 +140,8 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
 
             await fetchBudgetElements();      
         } catch(error) {
-            const status = error?.status;
-            
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+                
             statusValidate(status);
         } finally {
             setLoading(false);
@@ -171,8 +171,8 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
             await fetchBudgetElements();     
             await fetchBudget(); 
         } catch(error) {
-            const status = error?.status;
-            
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+                
             statusValidate(status);
         } finally {
             setLoading(false);

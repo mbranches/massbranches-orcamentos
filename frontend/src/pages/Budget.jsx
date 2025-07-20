@@ -9,6 +9,7 @@ import { Box, ChevronLeft, Info, ListPlus } from 'lucide-react';
 import BudgetTable from '../components/BudgetTable';
 import { formatCurrency } from '../utils/format';
 import Card from '../components/Card';
+import { toast } from 'react-toastify';
 
 function Budget() {
     const [newStage, setNewStage] = useState();
@@ -117,8 +118,8 @@ function Budget() {
 
                 await fetchBudgetElements();
             } catch (error) {
-                const status = error?.response?.status;
-                
+                const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+                                
                 statusValidate(status);
 
                 if(status === 404) {

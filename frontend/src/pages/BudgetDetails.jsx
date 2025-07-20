@@ -30,8 +30,8 @@ function BudgetDetails() {
                 setBudget(response.data);
                 setSelectedCustomer(response.data?.customer);
             } catch(error) {
-                const status = error?.response?.status;
-
+                const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+                
                 statusValidate(status);
             } finally {
                 setLoading(false)
@@ -53,9 +53,9 @@ function BudgetDetails() {
             toast.success("Orçamento atualizado com sucesso");
             navigate(`/orcamentos/${id}`);
         } catch(error) {
-            const status = error?.response?.status;
-
-            statusValidate(status);
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+                
+                statusValidate(status);
         } finally {
             setLoading(false);
         }
