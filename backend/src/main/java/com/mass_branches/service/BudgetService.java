@@ -51,7 +51,7 @@ public class BudgetService {
     public void update(String id, BudgetPutRequest request, User user) {
         if (!id.equals(request.id())) throw new BadRequestException("The url id (%s) is different from the request body id(%s)".formatted(id, request.id()));
 
-        Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id) : findByUserAndIdOrThrowsNotFoundException(user, id);
+        Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id) : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
 
         Customer customer = request.customerId() != null ? customerService.findByUserAndIdOrThrowsNotFoundException(budget.getUser(), request.customerId()) : null;
         BigDecimal bdi = request.bdi() != null ? request.bdi() : BigDecimal.ZERO;
@@ -75,7 +75,7 @@ public class BudgetService {
         boolean shouldFetchAllBudgets = !Boolean.TRUE.equals(personal);
 
         List<Budget> response = requestingUser.isAdmin() && shouldFetchAllBudgets ? repository.findAll(sort)
-                : repository.findAllByUser(requestingUser, sort);
+                : repository.findAllByUserAndActiveIsTrue(requestingUser, sort);
 
         return response.stream()
                 .map(BudgetGetResponse::by)
@@ -84,7 +84,7 @@ public class BudgetService {
 
     public BudgetGetResponse findById(User requestingUser, String id) throws InterruptedException {
         Budget response = requestingUser.isAdmin() ? findByIdOrThrowsNotFoundException(id)
-                : findByUserAndIdOrThrowsNotFoundException(requestingUser, id);
+                : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(requestingUser, id);
 
         return BudgetGetResponse.by(response);
     }
@@ -94,8 +94,8 @@ public class BudgetService {
                 .orElseThrow(() -> throwsBudgetIdNotFoundException(id));
     }
 
-    public Budget findByUserAndIdOrThrowsNotFoundException(User user, String id) {
-        return repository.findByUserAndId(user, id)
+    public Budget findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(User user, String id) {
+        return repository.findByUserAndIdAndActiveIsTrue(user, id)
                 .orElseThrow(() -> throwsBudgetIdNotFoundException(id));
     }
 
@@ -106,13 +106,12 @@ public class BudgetService {
     @Transactional
     public BudgetItemPostResponse addItem(User user, String id, BudgetItemPostRequest postRequest) {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
-                : findByUserAndIdOrThrowsNotFoundException(user, id);
+                : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
 
         if (!user.isAdmin() && !budget.getUser().equals(user)) throw throwsBudgetIdNotFoundException(id);
 
         Long itemId = postRequest.itemId();
-        Item item = user.isAdmin() ? itemService.findByIdOrThrowsNotFoundException(itemId)
-                : itemService.findByIdAndUserAndActiveIsTrueOrThrowsNotFoundException(itemId, user);
+        Item item = itemService.findByIdAndUserAndActiveIsTrueOrThrowsNotFoundException(itemId, budget.getUser());
 
         BudgetItem savedBudgetItem = budgetItemService.create(budget, item, postRequest);
 
@@ -123,7 +122,7 @@ public class BudgetService {
 
     public StagePostResponse addStage(User user, String id, StagePostRequest postRequest) {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
-                : findByUserAndIdOrThrowsNotFoundException(user, id);
+                : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
 
         if (!user.isAdmin() && !budget.getUser().equals(user)) throw throwsBudgetIdNotFoundException(id);
 
@@ -144,7 +143,7 @@ public class BudgetService {
 
     public List<BudgetElementGetResponse> listAllElements(User user, String id) {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
-                : findByUserAndIdOrThrowsNotFoundException(user, id);
+                : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
 
         List<BudgetItem> budgetItems = budgetItemService.findAllByBudget(budget);
         List<Stage> stages = stageService.findAllByBudget(budget);
@@ -170,7 +169,7 @@ public class BudgetService {
     @Transactional
     public void removeItem(User user, String id, Long budgetItemId) {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
-                : findByUserAndIdOrThrowsNotFoundException(user, id);
+                : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
 
         budgetItemService.remove(budget, budgetItemId);
 
@@ -179,7 +178,7 @@ public class BudgetService {
 
     public void removeStage(User user, String id, Long stageId) {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
-                : findByUserAndIdOrThrowsNotFoundException(user, id);
+                : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
 
         stageService.remove(budget, stageId);
     }
