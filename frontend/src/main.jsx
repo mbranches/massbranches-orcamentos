@@ -40,7 +40,7 @@ const router = createBrowserRouter(
           element: <Budget />
         },
         {
-          path: "/orcamentos/:id/detalhes",
+          path: "/orcamentos/:id/dados",
           element: <BudgetDetails />
         }
       ]

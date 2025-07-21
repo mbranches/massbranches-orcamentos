@@ -8,7 +8,7 @@ import { findBudgetById, updateBudget } from '../services/budget';
 import statusValidate from '../Utils/statusValidate';
 import { ChevronLeft } from 'lucide-react';
 
-function BudgetDetails() { 
+function BudgetData() { 
     const navigate = useNavigate();
 
     const [budget, setBudget] = useState(null);
@@ -89,4 +89,4 @@ function BudgetDetails() {
     );
 }
 
-export default BudgetDetails;
+export default BudgetData;

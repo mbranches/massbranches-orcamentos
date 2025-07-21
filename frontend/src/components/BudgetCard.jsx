@@ -37,7 +37,7 @@ function BudgetCard({budget, onViewButtonClick, onEditButtonClick, onDeleteButto
                         </BudgetCardAction>
 
                         <BudgetCardAction icon={<LucideSquarePen size={16}/>} onClick={onEditButtonClick}>
-                            Editar
+                            Editar dados
                         </BudgetCardAction>
 
                         <BudgetCardAction icon={<LucideTrash2 size={16}/>} onClick={onDeleteButtonClick} color="red">

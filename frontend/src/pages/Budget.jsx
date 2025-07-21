@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import LoadingScreen from '../components/LoadingScreen'
 import statusValidate from '../Utils/statusValidate';
 import Action from '../components/Action'
-import { Box, ChevronLeft, Info, ListPlus } from 'lucide-react';
+import { Box, ChevronLeft, Info, ListPlus, LucideSquarePen } from 'lucide-react';
 import BudgetTable from '../components/BudgetTable';
 import { formatCurrency } from '../utils/format';
 import Card from '../components/Card';
@@ -103,10 +103,10 @@ function Budget() {
             key: "adicionar-item"
         },
         {
-            label: "Detalhes",
-            icon: <Info size={18}  />,
-            onClick: () => {navigate(`/orcamentos/${id}/detalhes`)},
-            key: "detalhes"
+            label: "Editar dados",
+            icon: <LucideSquarePen size={18}  />,
+            onClick: () => {navigate(`/orcamentos/${id}/dados`)},
+            key: "dados-orcamento"
         },
     ]
 

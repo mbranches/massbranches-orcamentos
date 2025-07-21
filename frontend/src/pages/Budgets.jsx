@@ -124,7 +124,7 @@ function Budgets() {
                                 key={budget.id} 
                                 budget={budget} 
                                 onViewButtonClick={() => navigate(`/orcamentos/${budget.id}`)}
-                                onEditButtonClick={() => navigate(`/orcamentos/${budget.id}/detalhes`)}
+                                onEditButtonClick={() => navigate(`/orcamentos/${budget.id}/dados`)}
                                 onDeleteButtonClick={() => onDeleteBudgetButtonClick(budget)} 
                             />
                         );
