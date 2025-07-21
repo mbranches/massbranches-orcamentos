@@ -7,7 +7,7 @@ import { findMyBudgetQuantity } from '../services/budget';
 import { findMyCustomerQuantity } from '../services/customer';
 import { toast } from 'react-toastify';
 
-function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
+function Sidebar({ sidebarOpen, setSidebarOpen, actualSection, refreshSidebar }) {
     const navigate = useNavigate();
 
     const [budgetCount, setBudgetCount] = useState(0); 
@@ -68,7 +68,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, actualSection }) {
                 
             statusValidate(status);
         }
-    }, []);
+    }, [refreshSidebar]);
 
     return (
         <>

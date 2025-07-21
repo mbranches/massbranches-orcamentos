@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import PanelLayout from '../components/PanelLayout';
-import { deleteBudgetById, findAllBudgets } from '../services/budget';
+import { deleteBudgetById, findAllBudgets, findAllBudgetsByDescription } from '../services/budget';
 import { Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import BudgetCard from '../components/BudgetCard';
 import LoadingScreen from '../components/LoadingScreen';
 import statusValidate from '../utils/statusValidate';
 import { toast } from 'react-toastify';
+import { useAuth } from '../hooks/useAuth';
 
 function Budgets() {
     const [loading, setLoading] = useState(false);
@@ -15,13 +16,28 @@ function Budgets() {
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
+    const [refreshBudgets, setRefreshSidebar] = useState(0);
+
+    const [deleteConfirmationBoxIsOpen, setDeleteConfirmationBoxIsOpen] = useState(false);
+
+    const [budgetToDelete, setBudgetToDelete] = useState();
+
     const navigate = useNavigate();
+
+    const { isAdmin } = useAuth();
 
     const deleteBudget = async (budget) => {
         setLoading(true);
 
         try {
             await deleteBudgetById(budget.id);
+
+            setRefreshSidebar(refreshBudgets + 1);
+
+            setDeleteConfirmationBoxIsOpen(false);
+            setBudgetToDelete(null);
+
+            toast.success("Orçamento deletado com sucesso");
         } catch (error) {
             const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
                 
@@ -31,28 +47,50 @@ function Budgets() {
         }
     };
 
+    const fetchBudgets = async() => {
+        setLoading(true);
+
+        try {
+            const response = isAdmin ? await findAllBudgets(true) : await findAllBudgets();
+
+            setBudgets(response.data);
+        } catch (error) {
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+            
+            statusValidate(status);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const filterBudgetsByDescription = async (description) => {   
+        if(description.trim() === "") {
+            fetchBudgets();
+            return;
+        }
+
+        try {
+            const response = isAdmin ? await findAllBudgetsByDescription(description, true) : await filterBudgetsByDescription(description);
+
+            setBudgets(response.data);
+        } catch (error) {
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+            
+            statusValidate(status);
+        }
+    };
+
+    const onDeleteBudgetButtonClick = (budget) => {
+        setDeleteConfirmationBoxIsOpen(true);
+        setBudgetToDelete(budget);
+    };
+
     useEffect(() => {
-        const fetchBudgets = async() => {
-            setLoading(true);
-
-            try {
-                const response = await findAllBudgets();
-
-                setBudgets(response.data);
-            } catch (error) {
-                const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
-                
-                statusValidate(status);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchBudgets();
-    }, [])
+    }, [refreshBudgets])
 
     return (
-        <PanelLayout actualSection={"budgets"} setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen}>
+        <PanelLayout actualSection={"budgets"} setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen} refreshSidebar={refreshBudgets}>
             {loading && <LoadingScreen />}
 
             <div className='w-full min-h-screen mt lg:ml-[310px] mt-[83px] p-4 flex flex-col gap-4'>
@@ -73,25 +111,66 @@ function Budgets() {
                         <Search size={15} />
                     </div>
 
-                    <input type="text" placeholder='Buscar por descrição do orçamento' className='block text-sm w-full px-1 py-1 outline-none'/>
+                    <input type="text" placeholder='Buscar por descrição do orçamento' className='block text-sm w-full px-1 py-1 outline-none' onChange={(e) => {
+                        filterBudgetsByDescription(e.target.value);
+                    }}/>
                 </div>
 
                 <div className='flex flex-col gap-4 mt-4'>
-                    {budgets.map(budget => {
+                    {
+                    (budgets.length > 0 && budgets.map(budget => {
                         return ( 
                             <BudgetCard 
                                 key={budget.id} 
                                 budget={budget} 
                                 onViewButtonClick={() => navigate(`/orcamentos/${budget.id}`)}
                                 onEditButtonClick={() => navigate(`/orcamentos/${budget.id}/detalhes`)}
-                                onDeleteButtonClick={() => deleteBudget(budget.id)} 
+                                onDeleteButtonClick={() => onDeleteBudgetButtonClick(budget)} 
                             />
                         );
-                    })}
+                    })) || (
+                        <div className='flex justify-center items-center h-96'>
+                            <p className='text-gray-600'>Nenhum orçamento encontrado</p>
+                        </div>
+                    )}
                 </div>
             </div>
+
+            {deleteConfirmationBoxIsOpen && (
+                <div 
+                    className='fixed inset-0 bg-black/40 flex justify-center items-center'
+                    onClick={() => setDeleteConfirmationBoxIsOpen(false)}
+                >
+                    <div 
+                        className='lg:ml-[310px] flex justify-center items-center flex-col gap-4 bg-white px-4 py-6 rounded-md shadow-lg'
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div>
+                            <h3>{`Excluir ${budgetToDelete.description} ?`}</h3>
+                            <p className='text-sm text-gray-600'>Essa ação não poderá ser desfeita</p>
+                        </div>
+
+                        <div className='flex gap-3'>
+                            <button 
+                                onClick={() => setDeleteConfirmationBoxIsOpen(false)}
+                                className='border border-gray-200 text-sm px-4 py-2 rounded-md hover:border-gray-300 transition-all duration-100 cursor-pointer'
+                            >
+                                Cancelar
+                            </button>
+
+                            <button 
+                                onClick={() => deleteBudget(budgetToDelete)}
+                                className='bg-red-500 text-white text-sm px-4 py-2 rounded-md hover:bg-red-600 transition-all duration-100 cursor-pointer'
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </PanelLayout>
-    );
+    );         
+        
 }
 
 export default Budgets;
