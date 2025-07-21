@@ -11,6 +11,7 @@ import NotFoundRedirect from './routes/NotFoundRedirect'
 import Budget from './pages/Budget.jsx'
 import BudgetDetails from './pages/BudgetDetails.jsx'
 import { ToastContainer } from 'react-toastify'
+import Budgets from './pages/Budgets.jsx'
 
 const router = createBrowserRouter(
   [
@@ -25,6 +26,10 @@ const router = createBrowserRouter(
         {
           path: "/home",
           element: <App />
+        },
+        {
+          path: "/orcamentos",
+          element: <Budgets />,
         },
         {
           path: "/orcamentos/criar",
