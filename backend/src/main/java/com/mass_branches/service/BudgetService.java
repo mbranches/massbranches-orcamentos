@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -70,13 +71,18 @@ public class BudgetService {
         recalculateTotals(budget);
     }
 
-    public List<BudgetGetResponse> listAll(User requestingUser, Boolean personal) {
+    public List<BudgetGetResponse> listAll(User requestingUser, Optional<String> description, Boolean personal) {
         Sort sort = Sort.by("updatedAt").descending();
 
         boolean shouldFetchAllBudgets = !Boolean.TRUE.equals(personal);
 
-        List<Budget> response = requestingUser.isAdmin() && shouldFetchAllBudgets ? repository.findAll(sort)
-                : repository.findAllByUserAndActiveIsTrue(requestingUser, sort);
+        boolean isAdmin = requestingUser.isAdmin();
+        boolean fetchByName = description.isPresent();
+        List<Budget> response =
+                isAdmin && shouldFetchAllBudgets && !fetchByName ? repository.findAll(sort)
+                : isAdmin && shouldFetchAllBudgets ? repository.findAllByDescriptionContaining(description.get(), sort)
+                : !fetchByName ? repository.findAllByUserAndActiveIsTrue(requestingUser, sort)
+                : repository.findAllByDescriptionContainingAndUserAndActiveIsTrue(description.get(), requestingUser, sort);
 
         return response.stream()
                 .map(BudgetGetResponse::by)

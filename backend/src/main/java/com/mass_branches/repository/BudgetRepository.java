@@ -18,4 +18,8 @@ public interface BudgetRepository extends JpaRepository<Budget, String> {
     Optional<Budget> findByIdAndActiveIsTrue(String id);
 
     Integer countBudgetsByUserAndActiveIsTrue(User user);
+
+    List<Budget> findAllByDescriptionContaining(String description, Sort sort);
+
+    List<Budget> findAllByDescriptionContainingAndUserAndActiveIsTrue(String description, User user, Sort sort);
 }

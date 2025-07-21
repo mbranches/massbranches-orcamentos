@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/budgets")
@@ -38,11 +39,12 @@ public class BudgetController {
     @GetMapping
     public ResponseEntity<List<BudgetGetResponse>> listAll(
             Authentication authentication,
-            @RequestParam(required = false) Boolean personal
+            @RequestParam(required = false) Boolean personal,
+            @RequestParam(required = false) Optional<String> description
     ) {
         User user = (User) authentication.getPrincipal();
 
-        List<BudgetGetResponse> response = service.listAll(user, personal);
+        List<BudgetGetResponse> response = service.listAll(user, description, personal);
         return ResponseEntity.ok(response);
     }
 
