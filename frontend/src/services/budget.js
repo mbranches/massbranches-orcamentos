@@ -51,6 +51,30 @@ export async function deleteBudgetById(id) {
     return api.delete(`/budgets/${id}`);
 }
 
+export async function exportBudgetById(id) {
+    const response = await api(`/budgets/${id}/export`, {
+      responseType: "blob"
+    });
+
+    const blob = new Blob([response.data], {
+      type: response.headers["content-type"],
+    });
+
+    const fileName = response.headers["content-disposition"].replace("attachment; filename=", "").replace(/"/g, "");
+
+    const downloadUrl = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.setAttribute("download", fileName);
+
+    document.body.appendChild(link);
+    link.click();
+
+    link.remove();
+    window.URL.revokeObjectURL(downloadUrl);
+}
+
 export async function findMyBudgetQuantity() {
     return api("/budgets/quantity");
 }

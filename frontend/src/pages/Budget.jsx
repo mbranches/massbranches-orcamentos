@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import PanelLayout from '../components/PanelLayout'
-import {findBudgetById, listElementsByBudgetId} from '../services/budget';
+import {exportBudgetById, findBudgetById, listElementsByBudgetId} from '../services/budget';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadingScreen from '../components/LoadingScreen'
 import statusValidate from '../Utils/statusValidate';
 import Action from '../components/Action'
-import { Box, ChevronLeft, Info, ListPlus, LucideSquarePen } from 'lucide-react';
+import { Box, ChevronLeft, FileDown, Info, ListPlus, LucideSquarePen } from 'lucide-react';
 import BudgetTable from '../components/BudgetTable';
 import { formatCurrency } from '../utils/format';
 import Card from '../components/Card';
@@ -89,6 +89,18 @@ function Budget() {
         }); 
     };
 
+    const onBudgetExportButtonClick = async() => {
+        try {
+            await exportBudgetById(id);
+
+            toast.success("Orçamento exportado com sucesso!");
+        } catch (error) {
+            const status = error?.response?.status || toast.error("Ocorreu um erro ao exportar o orçamento, por favor tente novamente");
+
+            statusValidate(status);
+        };
+    }
+
     const actions = [
         {
             label: "Adicionar Etapa",
@@ -107,6 +119,12 @@ function Budget() {
             icon: <LucideSquarePen size={18}  />,
             onClick: () => {navigate(`/orcamentos/${id}/dados`)},
             key: "dados-orcamento"
+        },
+        {
+            label: "Exportar Orçamento",
+            icon: <FileDown size={18}  />,
+            onClick: () => {onBudgetExportButtonClick()},
+            key: "exportar-orcamento"
         },
     ]
 
@@ -153,7 +171,7 @@ function Budget() {
                         </div>
                     </div>
 
-                    <div className='grid grid-cols-1 md:grid-cols-3 gap-4 p-6 bg-white rounded-lg'>
+                    <div className='grid grid-cols-1 md:grid-cols-4 gap-4 p-6 bg-white rounded-lg'>
                         {actions.map(action => {
                             return (
                                 <Action icon={action.icon} label={action.label} onClick={action.onClick} key={action.key} />
