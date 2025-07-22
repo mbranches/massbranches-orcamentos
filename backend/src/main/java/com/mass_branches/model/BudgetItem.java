@@ -25,7 +25,7 @@ public class BudgetItem {
     private Item item;
     @ManyToOne
     @JoinColumn(name = "stage_id")
-    private Item stage;
+    private Stage stage;
     @Column(name = "order_index", nullable = false)
     private String orderIndex;
     @Column(name = "unit_price", nullable = false, precision = 10, scale = 4)
