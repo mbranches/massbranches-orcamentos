@@ -5,10 +5,6 @@ import com.mass_branches.model.Stage;
 
 import java.math.BigDecimal;
 
-enum BudgetElementType {
-    ITEM, STAGE
-}
-
 public record BudgetElementGetResponse(
         Long id,
         String order,
