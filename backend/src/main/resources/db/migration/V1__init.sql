@@ -67,23 +67,26 @@ create table budget(
     FOREIGN KEY (user_id) REFERENCES user(iduser)
 );
 
+create table stage(
+    idstage bigint PRIMARY KEY AUTO_INCREMENT,
+    order_index varchar(20) NOT NULL,
+    name varchar(100) NOT NULL,
+    total_value decimal(10, 2),
+    budget_id varchar(36) NOT NULL,
+    FOREIGN KEY (budget_id) REFERENCES budget(idbudget)
+);
+
 create table budget_item(
     idbudget_item bigint PRIMARY KEY AUTO_INCREMENT,
     budget_id varchar(36) NOT NULL,
     item_id bigint NOT NULL,
+    stage_id bigint,
     order_index varchar(20) NOT NULL,
     unit_price decimal(12, 4) NOT NULL,
     quantity decimal(10, 4) NOT NULL,
     total_value decimal(10, 2) NOT NULL ,
     total_with_bdi decimal(10, 2),
-    FOREIGN KEY (budget_id) REFERENCES budget(idbudget) ON DELETE CASCADE,
+    FOREIGN KEY (budget_id) REFERENCES budget(idbudget),
+    FOREIGN KEY (stage_id) REFERENCES stage(idstage),
     FOREIGN KEY (item_id) REFERENCES item(iditem)
-);
-
-create table stage(
-    idstage bigint PRIMARY KEY AUTO_INCREMENT,
-    order_index varchar(20) NOT NULL,
-    name varchar(100) NOT NULL,
-    budget_id varchar(36) NOT NULL,
-    FOREIGN KEY (budget_id) REFERENCES budget(idbudget) ON DELETE CASCADE
 );
