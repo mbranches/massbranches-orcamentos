@@ -2,7 +2,7 @@ import { Controller } from "react-hook-form";
 import FormLabel from "./FormLabel";
 import Select from "react-select";
 
-function FormSelect({ id, name, label, control, options }) {
+function FormSelect({ id, name, label, control, options, noOptionsMessage, placeholder, isSearchable=false }) {
     const mappedOptions = options.map((opt) => ({
         value: opt.id,
         label: opt.name
@@ -37,10 +37,10 @@ function FormSelect({ id, name, label, control, options }) {
                         {...field}
                         inputId={id}
                         options={mappedOptions}
-                        placeholder="Opcional"
-                        isSearchable
+                        placeholder={placeholder}
                         styles={customStyles}
-                        noOptionsMessage={() => "Nenhum cliente encontrado"}
+                        isSearchable={isSearchable}
+                        noOptionsMessage={() => noOptionsMessage}
                     />
                 )}  
             />

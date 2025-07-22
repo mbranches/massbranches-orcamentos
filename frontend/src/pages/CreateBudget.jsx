@@ -19,8 +19,9 @@ function CreateBudget() {
 
         try {
             const customerId = data.customer?.value;
+            const status = data.status.value;
 
-            const response = await createBudget(customerId, data.description, data.proposalNumber, data.bdi);
+            const response = await createBudget(customerId, data.description, data.proposalNumber, status, data.bdi);
 
             const createdBudget = response.data;
 

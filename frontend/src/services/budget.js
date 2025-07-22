@@ -1,10 +1,11 @@
 import api from "./Api";
 
-export async function createBudget(customerId, description, proposalNumber, bdi) {
+export async function createBudget(customerId, description, proposalNumber, status, bdi) {
     const request = {
         customerId,
         description,
         proposalNumber, 
+        status,
         bdi
     };
 

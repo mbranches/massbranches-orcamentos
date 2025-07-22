@@ -48,7 +48,9 @@ function BudgetData() {
         try {
             const customerId = data.customer?.value;
 
-            await updateBudget({id: id, customerId: customerId, description: data.description, proposalNumber: data.proposalNumber, bdi: data.bdi});
+            const budgetStatus = data.status.value;
+
+            await updateBudget({id: id, customerId: customerId, description: data.description, proposalNumber: data.proposalNumber, budgetStatus, bdi: data.bdi});
 
             toast.success("Orçamento atualizado com sucesso");
             navigate(`/orcamentos/${id}`);
