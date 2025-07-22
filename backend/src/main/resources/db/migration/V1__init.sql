@@ -59,6 +59,7 @@ create table budget(
     bdi decimal(10, 2),
     total_value decimal(10, 2),
     total_with_bdi decimal(10, 2),
+    status varchar(45) NOT NULL,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     user_id varchar(36),

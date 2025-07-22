@@ -1,5 +1,6 @@
 package com.mass_branches.model;
 
+import com.mass_branches.converter.BudgetStatusConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,6 +37,8 @@ public class Budget {
     private BigDecimal totalValue;
     @Column(name = "total_with_bdi", precision = 10, scale = 2)
     private BigDecimal totalWithBdi;
+    @Convert(converter = BudgetStatusConverter.class)
+    private BudgetStatus status;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
