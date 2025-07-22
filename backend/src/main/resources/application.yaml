@@ -11,6 +11,9 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
   sql:
     init:
       mode: always
@@ -21,3 +24,6 @@ server:
 jwt:
   secret:
     key: ${ENV_JWT_KEY}
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
