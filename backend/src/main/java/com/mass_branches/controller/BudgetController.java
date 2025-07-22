@@ -13,8 +13,7 @@ import com.mass_branches.model.User;
 import com.mass_branches.service.BudgetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,6 +63,24 @@ public class BudgetController {
         service.delete(id, user);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{id}/export", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<byte[]> exportBudget(@PathVariable String id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        byte[] response = service.exportBudget(id, user);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDisposition(
+                ContentDisposition
+                        .attachment()
+                        .filename("orcamento-%s.xlsx".formatted(id))
+                        .build()
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
     }
 
     @GetMapping("/quantity")
@@ -144,7 +161,7 @@ public class BudgetController {
     ) {
         User user = (User) authentication.getPrincipal();
 
-        List<BudgetElementGetResponse> response = service.listAllElements(user, id);
+        List<BudgetElementGetResponse> response = service.listAllElementsByBudgetId(user, id);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

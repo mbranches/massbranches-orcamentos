@@ -11,14 +11,22 @@ import com.mass_branches.model.*;
 import com.mass_branches.repository.BudgetRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RequiredArgsConstructor
 @Service
@@ -51,7 +59,8 @@ public class BudgetService {
 
     @Transactional
     public void update(String id, BudgetPutRequest request, User user) {
-        if (!id.equals(request.id())) throw new BadRequestException("The url id (%s) is different from the request body id(%s)".formatted(id, request.id()));
+        if (!id.equals(request.id()))
+            throw new BadRequestException("The url id (%s) is different from the request body id(%s)".formatted(id, request.id()));
 
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id) : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
 
@@ -80,9 +89,9 @@ public class BudgetService {
         boolean fetchByName = description.isPresent();
         List<Budget> response =
                 isAdmin && shouldFetchAllBudgets && !fetchByName ? repository.findAll(sort)
-                : isAdmin && shouldFetchAllBudgets ? repository.findAllByDescriptionContaining(description.get(), sort)
-                : !fetchByName ? repository.findAllByUserAndActiveIsTrue(requestingUser, sort)
-                : repository.findAllByDescriptionContainingAndUserAndActiveIsTrue(description.get(), requestingUser, sort);
+                        : isAdmin && shouldFetchAllBudgets ? repository.findAllByDescriptionContaining(description.get(), sort)
+                        : !fetchByName ? repository.findAllByUserAndActiveIsTrue(requestingUser, sort)
+                        : repository.findAllByDescriptionContainingAndUserAndActiveIsTrue(description.get(), requestingUser, sort);
 
         return response.stream()
                 .map(BudgetGetResponse::by)
@@ -158,10 +167,14 @@ public class BudgetService {
         repository.save(budget);
     }
 
-    public List<BudgetElementGetResponse> listAllElements(User user, String id) {
+    public List<BudgetElementGetResponse> listAllElementsByBudgetId(User user, String id) {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
 
+        return listAllElementsByBudget(budget);
+    }
+
+    public List<BudgetElementGetResponse> listAllElementsByBudget(Budget budget) {
         List<BudgetItem> budgetItems = budgetItemService.findAllByBudget(budget);
         List<Stage> stages = stageService.findAllByBudget(budget);
 
@@ -216,5 +229,125 @@ public class BudgetService {
         budget.setActive(false);
 
         repository.save(budget);
+    }
+
+    public byte[] exportBudget(String id, User user) {
+        Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+                : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
+
+        List<BudgetElementGetResponse> budgetElements = listAllElementsByBudget(budget);
+
+        return generateBudgetFile(budget, budgetElements);
+    }
+
+    private byte[] generateBudgetFile(Budget budget, List<BudgetElementGetResponse> elements) {
+        try (
+                InputStream templateFile = getClass().getResourceAsStream("/templates/budget-template.xlsx");
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
+
+        ) {
+            if (templateFile == null) throw new IOException();
+
+            Workbook workbook = new XSSFWorkbook(templateFile);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            setBudgetDatas(budget, sheet);
+
+            Row stageRowTemplate = sheet.getRow(14);
+            CellStyle orderCellStyle = stageRowTemplate.getCell(0).getCellStyle();
+            CellStyle stageCellStyle = stageRowTemplate.getCell(1).getCellStyle();
+            CellStyle stageMonetaryCellStyle = stageRowTemplate.getCell(5).getCellStyle();
+
+            Row itemRowTemplate = sheet.getRow(15);
+            CellStyle itemCellStyle = itemRowTemplate.getCell(1).getCellStyle();
+            CellStyle itemMonetaryCellStyle = itemRowTemplate.getCell(5).getCellStyle();
+
+            short lineHeight = stageRowTemplate.getHeight();
+
+            int initialElementLine = 14;
+            AtomicInteger currentRowIndex = new AtomicInteger(initialElementLine);
+
+            int numberOfElementsToBeAdded = elements.size();
+            if (numberOfElementsToBeAdded > 3) {
+                int numberOfElementsLinesAlreadyCreated = 3;
+                int lastElementLine = 37;
+                sheet.shiftRows(initialElementLine, lastElementLine, numberOfElementsToBeAdded - numberOfElementsLinesAlreadyCreated);
+            }
+
+            elements.forEach(element -> {
+                Row row = sheet.createRow(currentRowIndex.getAndIncrement());
+                row.setHeight(lineHeight);
+
+                Cell orderCell = row.createCell(0);
+                Cell nameCell = row.createCell(1);
+                Cell unitCell = row.createCell(2);
+                Cell quantityCell = row.createCell(3);
+                Cell unitPriceCell = row.createCell(4);
+                Cell totalValueCell = row.createCell(5);
+
+                orderCell.setCellValue(element.order());
+                orderCell.setCellStyle(orderCellStyle);
+
+                switch (element.type()) {
+                    case ITEM -> {
+                        nameCell.setCellValue(element.name());
+                        nameCell.setCellStyle(itemCellStyle);
+
+                        unitCell.setCellValue(element.unitMeasurement());
+                        unitCell.setCellStyle(itemCellStyle);
+
+                        quantityCell.setCellValue(element.quantity().doubleValue());
+                        quantityCell.setCellStyle(itemCellStyle);
+
+                        unitPriceCell.setCellValue(element.unitPrice().doubleValue());
+                        unitPriceCell.setCellStyle(itemMonetaryCellStyle);
+
+                        totalValueCell.setCellValue(element.totalValue().doubleValue());
+                        totalValueCell.setCellStyle(itemMonetaryCellStyle);
+                    }
+
+                    case STAGE -> {
+                        nameCell.setCellValue(element.name());
+                        nameCell.setCellStyle(stageCellStyle);
+
+                        totalValueCell.setCellValue(element.totalValue().doubleValue());
+                        totalValueCell.setCellStyle(stageMonetaryCellStyle);
+
+                        unitCell.setCellStyle(stageCellStyle);
+                        quantityCell.setCellStyle(stageCellStyle);
+                        unitPriceCell.setCellStyle(stageCellStyle);
+                    }
+                }
+            });
+
+            workbook.write(outputStream);
+
+            workbook.close();
+
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void setBudgetDatas(Budget budget, Sheet sheet) {
+        Cell proposalNumberCell = sheet.getRow(0).getCell(1);
+        proposalNumberCell.setCellValue(budget.getProposalNumber());
+
+        if (budget.getCustomer() != null) {
+            Cell customerCell = sheet.getRow(10).getCell(0);
+            customerCell.setCellValue("Cliente: %s".formatted(budget.getCustomer().getName()));
+        }
+
+        Row bdiRow = sheet.getRow(17);
+
+        Cell bdiCell = bdiRow.getCell(0);
+        bdiCell.setCellValue("BDI (" + budget.getBdi() + "%):");
+
+        Cell bdiValueCell = bdiRow.getCell(5);
+        bdiValueCell.setCellValue(budget.getTotalWithBdi().min(budget.getTotalValue()).doubleValue());
+
+        Cell proposalValue = sheet.getRow(18).getCell(5);
+        proposalValue.setCellValue(budget.getTotalWithBdi().doubleValue());
     }
 }
