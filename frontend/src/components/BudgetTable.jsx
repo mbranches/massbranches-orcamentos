@@ -148,6 +148,15 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
         }
     };
 
+    const getStageIdOfNewItemIfExists = (order) => {
+        const [orderIntegerPart, orderDecimalPart] = order.split(".");
+        const stageOrder = `${orderIntegerPart}.0`;
+
+        const stage = elements.find(element => element.type === "STAGE" && element.order === stageOrder);
+
+        return stage ? stage.id : null;
+    }
+
     const saveItem = async () => {
         if(!validateNewItem()) return;
         
@@ -164,13 +173,17 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
                 item = response.data;
             } else item = newItem.item;
             
-            await createBudgetItem(currentBudget.id, newItem.order, item.id, formatedUnitPrice, formatedQuantity);
+            const stageId = getStageIdOfNewItemIfExists(newItem.order);
+
+            await createBudgetItem(currentBudget.id, stageId, newItem.order, item.id, formatedUnitPrice, formatedQuantity);
 
             setNewItem(null);
 
             await fetchBudgetElements();     
             await fetchBudget(); 
         } catch(error) {
+            console.log(error);
+            console.log(error.response);
             const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
                 
             statusValidate(status);
@@ -203,9 +216,9 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
                         {elements.map(element => {
                             switch(element.type) {
                                 case "STAGE":
-                                    return <BudgetStageRow key={element?.id} stage={element} onDeleteButtonClick={() => deleteStage(element?.id)} />;
+                                    return <BudgetStageRow key={`stage ${element?.id}`} stage={element} onDeleteButtonClick={() => deleteStage(element?.id)} />;
                                 case "ITEM":
-                                    return <BudgetItemRow key={element?.id} item={element} onDeleteButtonClick={() => deleteItem(element?.id)} />;
+                                    return <BudgetItemRow key={`item ${element?.id}`} item={element} onDeleteButtonClick={() => deleteItem(element?.id)} />;
                             }
                         })}
 

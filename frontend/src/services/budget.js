@@ -68,9 +68,10 @@ export async function createStage(budgetId, order, name) {
     return api.post(`/budgets/${budgetId}/stages`, request);
 }
 
-export async function createBudgetItem(budgetId, order, itemId, unitPrice, quantity) {
+export async function createBudgetItem(budgetId, stageId, order, itemId, unitPrice, quantity) {
     const request = {
         order,
+        stageId,
         itemId: itemId,
         unitPrice, 
         quantity

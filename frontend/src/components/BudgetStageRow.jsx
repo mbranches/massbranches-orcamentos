@@ -1,3 +1,4 @@
+import { formatCurrency } from "../utils/format";
 import BudgetElementActions from "./BudgetElementActions";
 import BudgetStage from "./BudgetStage";
 import StageData from "./StageData";
@@ -7,7 +8,8 @@ function BudgetStageRow({ stage, onDeleteButtonClick }) {
         <BudgetStage>
             <StageData>{stage?.order}</StageData>
             <StageData>{stage?.name}</StageData>
-            <td colSpan={4} />
+            <td colSpan={3} />
+            <StageData>{formatCurrency(stage?.totalValue)}</StageData>
             <StageData>
                 <BudgetElementActions onDeleteButtonClick={onDeleteButtonClick} />
             </StageData>
