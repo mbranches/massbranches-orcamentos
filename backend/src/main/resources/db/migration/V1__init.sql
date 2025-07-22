@@ -87,6 +87,6 @@ create table budget_item(
     total_value decimal(10, 2) NOT NULL ,
     total_with_bdi decimal(10, 2),
     FOREIGN KEY (budget_id) REFERENCES budget(idbudget),
-    FOREIGN KEY (stage_id) REFERENCES stage(idstage),
+    FOREIGN KEY (stage_id) REFERENCES stage(idstage) ON DELETE SET NULL,
     FOREIGN KEY (item_id) REFERENCES item(iditem)
 );
