@@ -138,7 +138,7 @@ function Budgets() {
 
             {deleteConfirmationBoxIsOpen && (
                 <div 
-                    className='fixed inset-0 bg-black/40 flex justify-center items-center'
+                    className='fixed inset-0 bg-black/20 flex justify-center items-center'
                     onClick={() => setDeleteConfirmationBoxIsOpen(false)}
                 >
                     <div 
