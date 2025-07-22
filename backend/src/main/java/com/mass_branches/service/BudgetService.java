@@ -48,6 +48,7 @@ public class BudgetService {
                 .bdi(postRequest.bdi() != null ? postRequest.bdi() : BigDecimal.ZERO)
                 .totalValue(BigDecimal.ZERO)
                 .totalWithBdi(BigDecimal.ZERO)
+                .status(postRequest.status())
                 .user(user)
                 .active(true)
                 .build();
@@ -76,6 +77,7 @@ public class BudgetService {
         budget.setDescription(request.description());
         budget.setProposalNumber(request.proposalNumber());
         budget.setCustomer(customer);
+        budget.setStatus(request.status());
 
         recalculateTotals(budget);
     }
