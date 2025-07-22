@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record BudgetItemPostRequest(
+        Long stageId,
         @NotNull(message = "The field 'itemId' is required")
         Long itemId,
         @NotBlank(message = "The field 'order' is required")

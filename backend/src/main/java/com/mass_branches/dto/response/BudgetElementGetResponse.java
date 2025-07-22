@@ -36,7 +36,7 @@ public record BudgetElementGetResponse(
                 null,
                 null,
                 null,
-                null,
+                stage.getTotalValue(),
                 BudgetElementType.STAGE
         );
     }

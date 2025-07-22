@@ -6,6 +6,7 @@ import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.Budget;
 import com.mass_branches.model.BudgetItem;
 import com.mass_branches.model.Item;
+import com.mass_branches.model.Stage;
 import com.mass_branches.repository.BudgetItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.List;
 public class BudgetItemService {
     private final BudgetItemRepository repository;
 
-    public BudgetItem create(Budget budget, Item item, BudgetItemPostRequest postRequest) {
+    public BudgetItem create(Budget budget, Item item, BudgetItemPostRequest postRequest, Stage stage) {
         BigDecimal bdi = budget.getBdi();
 
         BigDecimal unitPrice = postRequest.unitPrice();
@@ -32,13 +33,16 @@ public class BudgetItemService {
                 .quantity(quantity)
                 .build();
 
+
+        if (stage != null) budgetItemToSave.setStage(stage);
+
         setNewTotalValues(budgetItemToSave, bdi);
 
         return repository.save(budgetItemToSave);
     }
 
     private void setNewTotalValues(BudgetItem budgetItem, BigDecimal bdi) {
-        BigDecimal totalValue = budgetItem.getItem().getUnitPrice().multiply(budgetItem.getQuantity()).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal totalValue = budgetItem.getUnitPrice().multiply(budgetItem.getQuantity()).setScale(2, RoundingMode.HALF_UP);
         BigDecimal percentage = bdi.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
         BigDecimal totalWithBdi = totalValue.multiply(BigDecimal.ONE.add(percentage)).setScale(2, RoundingMode.HALF_UP);
 
@@ -58,9 +62,7 @@ public class BudgetItemService {
         return repository.findAllByBudget(budget);
     }
 
-    public void remove(Budget budget, Long budgetItemId) {
-        BudgetItem budgetItem = findByIdOrThrowsNotFoundException(budgetItemId);
-
+    public void remove(Budget budget, BudgetItem budgetItem) {
         if (!budgetItem.getBudget().equals(budget)) throw new BadRequestException("Budget item does not belongs to the given budget");
 
         repository.delete(budgetItem);
@@ -77,5 +79,9 @@ public class BudgetItemService {
         budgetItems.forEach(budgetItem -> setNewTotalValues(budgetItem, budget.getBdi()));
 
         repository.saveAll(budgetItems);
+    }
+
+    public List<BudgetItem> findAllByStage(Stage stage) {
+        return repository.findAllByStage(stage);
     }
 }

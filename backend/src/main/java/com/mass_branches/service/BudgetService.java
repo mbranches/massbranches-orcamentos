@@ -125,10 +125,15 @@ public class BudgetService {
         Long itemId = postRequest.itemId();
         Item item = itemService.findByIdAndUserAndActiveIsTrueOrThrowsNotFoundException(itemId, budget.getUser());
 
-        BudgetItem savedBudgetItem = budgetItemService.create(budget, item, postRequest);
+        Long stageId = postRequest.stageId();
+        boolean stageIdIsPresent = stageId != null;
+
+        Stage stage = stageIdIsPresent ? stageService.findByIdOrThrowsNotFoundException(stageId) : null;
+
+        BudgetItem savedBudgetItem = budgetItemService.create(budget, item, postRequest, stage);
 
         recalculateTotals(budget);
-
+        if (stageIdIsPresent) stageService.recalculateTotalValue(stage);
         return BudgetItemPostResponse.by(savedBudgetItem);
     }
 
@@ -183,11 +188,15 @@ public class BudgetService {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
 
-        budgetItemService.remove(budget, budgetItemId);
+        BudgetItem budgetItem = budgetItemService.findByIdOrThrowsNotFoundException(budgetItemId);
+        budgetItemService.remove(budget, budgetItem);
 
         recalculateTotals(budget);
+
+        if (budgetItem.getStage() != null) stageService.recalculateTotalValue(budgetItem.getStage());
     }
 
+    @Transactional
     public void removeStage(User user, String id, Long stageId) {
         Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
