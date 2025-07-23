@@ -35,6 +35,7 @@ public record BudgetGetResponse(
         BigDecimal bdi,
         BigDecimal totalValue,
         BigDecimal totalWithBdi,
+        String status,
         UserByBudgetGetResponse ownerUser
 ) {
     public static BudgetGetResponse by(Budget budget) {
@@ -51,6 +52,7 @@ public record BudgetGetResponse(
                 budget.getBdi(),
                 budget.getTotalValue(),
                 budget.getTotalWithBdi(),
+                budget.getStatus().getStatus(),
                 ownerUser
         );
     }

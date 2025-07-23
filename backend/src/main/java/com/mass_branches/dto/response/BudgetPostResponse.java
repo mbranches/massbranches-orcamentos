@@ -22,7 +22,8 @@ public record BudgetPostResponse(
         String proposalNumber,
         BigDecimal bdi,
         BigDecimal totalValue,
-        BigDecimal totalWithBdi
+        BigDecimal totalWithBdi,
+        String status
 ) {
     public static BudgetPostResponse by(Budget budget) {
         Customer customer = budget.getCustomer();
@@ -35,7 +36,8 @@ public record BudgetPostResponse(
                 budget.getProposalNumber(),
                 budget.getBdi(),
                 budget.getTotalValue(),
-                budget.getTotalWithBdi()
+                budget.getTotalWithBdi(),
+                budget.getStatus().getStatus()
         );
     }
 }
