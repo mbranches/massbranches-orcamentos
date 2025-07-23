@@ -10,6 +10,7 @@ import BudgetTable from '../components/BudgetTable';
 import { formatCurrency } from '../utils/format';
 import Card from '../components/Card';
 import { toast } from 'react-toastify';
+import BudgetStatus from '../components/BudgetStatus';
 
 function Budget() {
     const [newStage, setNewStage] = useState();
@@ -165,9 +166,14 @@ function Budget() {
                             <ChevronLeft />
                         </div>
 
-                        <div>
-                            <h2 className='text-3xl font-bold'>Detalhamento do Orçamento</h2>
-                            <p className='text-gray-600'>{currentBudget?.description} - {currentBudget?.proposalNumber}</p>
+                        <div className='flex justify-between items-center w-full'>
+                            <div>
+                                <h2 className='text-3xl font-bold'>Detalhamento do Orçamento</h2>
+                                <p className='text-gray-600'>{currentBudget?.description} - {currentBudget?.proposalNumber}</p>
+                            </div>
+                            <div>
+                                <BudgetStatus status={currentBudget?.status}/>
+                            </div>
                         </div>
                     </div>
 
