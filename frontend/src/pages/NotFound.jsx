@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import PanelLayout from '../components/PanelLayout'; // Importe seu layout
+import PanelLayout from '../components/PanelLayout';
 import { useState } from 'react';
 
 function NotFoundPage() {
