@@ -20,14 +20,14 @@ function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading,
     );
     
     const { control, register, handleSubmit, formState: { errors }, reset} = useForm({
-        defaultValues: {...defaultValues, customer: null, status: { value: "EM_ANDAMENTO", label: "Em andamento" }},
+        defaultValues: {...defaultValues, customer: null},
     });
 
     const budgetStatusOptions = [
         { id: "EM_ANDAMENTO", name: "Em andamento" },
         { id: "EM_ANALISE", name: "Em análise" },
         { id: "APROVADO", name: "Aprovado" },
-        { id: "REJEITADO", name: "Rejeitado" },
+        { id: "RECUSADO", name: "Rescusado" },
     ];
 
     useEffect(() => {
@@ -111,7 +111,6 @@ function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading,
                     control={control}
                     options={budgetStatusOptions}
                     noOptionsMessage={"Nenhum status encontrado"}
-                    defaultValue={{ id: "EM_ANDAMENTO", name: "Em andamento" }}
                 />
             </div>
 

@@ -46,7 +46,7 @@ function CreateBudget() {
                         </h3>
                     </div>
 
-                    <BudgetForm submitButtonLabel={"Criar"} onSubmit={onFormSubmit} setLoading={setLoading} />
+                    <BudgetForm submitButtonLabel={"Criar"} defaultValues={{status: { value: "EM_ANDAMENTO", label: "Em andamento" }}} onSubmit={onFormSubmit} setLoading={setLoading} />
                 </div>
             </PanelLayout>
 

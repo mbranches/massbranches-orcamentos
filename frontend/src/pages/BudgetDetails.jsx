@@ -50,7 +50,7 @@ function BudgetData() {
 
             const budgetStatus = data.status.value;
 
-            await updateBudget({id: id, customerId: customerId, description: data.description, proposalNumber: data.proposalNumber, budgetStatus, bdi: data.bdi});
+            await updateBudget({id: id, customerId: customerId, description: data.description, proposalNumber: data.proposalNumber, status: budgetStatus, bdi: data.bdi});
 
             toast.success("Orçamento atualizado com sucesso");
             navigate(`/orcamentos/${id}`);
@@ -62,6 +62,13 @@ function BudgetData() {
             setLoading(false);
         }
     };
+
+    const budgetStatusOptionsMap = {
+        "em andamento": { id: "EM_ANDAMENTO", name: "Em andamento" },
+        "em análise": { id: "EM_ANALISE", name: "Em análise" },
+        "aprovado": { id: "APROVADO", name: "Aprovado" },
+        "recusado": { id: "RECUSADO", name: "Recusado" },
+    }
 
     return (
         <div className="bg-gray-100">
@@ -80,7 +87,7 @@ function BudgetData() {
                             </h3>
                         </div>
 
-                        {budget && (<BudgetForm submitButtonLabel={"Atualizar"} onSubmit={onFormSubmit} setLoading={setLoading} defaultValues={budget} selectedCustomer={selectedCustomer}/>)}
+                        {budget && (<BudgetForm submitButtonLabel={"Atualizar"} onSubmit={onFormSubmit} setLoading={setLoading} defaultValues={{...budget, status: {value: budgetStatusOptionsMap[budget.status].id, label: budgetStatusOptionsMap[budget.status].name}}} selectedCustomer={selectedCustomer}/>)}
                     </div>
                 </div>
             </PanelLayout>

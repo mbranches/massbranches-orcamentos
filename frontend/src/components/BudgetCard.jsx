@@ -1,15 +1,20 @@
 import { Eye, LucideSquarePen, LucideTrash2 } from "lucide-react";
 import { formatCurrency } from "../utils/format";
 import BudgetCardAction from "./BudgetCardAction";
+import BudgetStatus from "./BudgetStatus";
 
 function BudgetCard({budget, onViewButtonClick, onEditButtonClick, onDeleteButtonClick}) {
     return (
         <div className="p-4 border border-gray-200 hover:border-gray-300 rounded-lg transition-all duration-200">
             <div className="flex flex-col gap-3">
-                <div>
+                <div className="flex gap-2 items-center">
                     <h3 className="font-semibold text-lg">
                         {budget.description}
                     </h3>
+
+                    <div>
+                        <BudgetStatus status={budget.status} />
+                    </div>
                 </div>
 
                 <div className="flex flex-col gap-2 justify-between text-sm md:flex-row">
