@@ -90,7 +90,7 @@ function Budgets() {
     }, [refreshBudgets])
 
     return (
-        <PanelLayout actualSection={"budgets"} setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen} refreshSidebar={refreshBudgets}>
+        <PanelLayout actualSection={"visualizar-orcamentos"} setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen} refreshSidebar={refreshBudgets}>
             {loading && <LoadingScreen />}
 
             <div className='w-full min-h-screen mt lg:ml-[310px] mt-[83px] p-4 flex flex-col gap-4'>
