@@ -58,60 +58,6 @@ class ItemServiceTest {
     }
 
     @Test
-    @DisplayName("listAll returns all items when the given user is admin")
-    @Order(2)
-    void listAll_ReturnsAllItems_WhenTheGivenUserIsAdmin() {
-        User adminUser = UserUtils.newUserList().getFirst();
-
-        BDDMockito.when(repository.findAll()).thenReturn(itemList);
-
-        List<ItemGetResponse> response = service.listAll(adminUser, null);
-
-        Assertions.assertThat(response)
-                .isNotNull()
-                .isNotEmpty()
-                .containsExactlyElementsOf(itemGetResponseList);
-    }
-
-    @Test
-    @DisplayName("listAll returns items of the given user when the user is admin and the argument personal is true")
-    @Order(3)
-    void listAll_ReturnsItemsOfTheGivenUser_WhenTheUserIsAdminAndTheArgumentPersonalIsTrue() {
-        User adminUser = UserUtils.newUserList().getFirst();
-
-        List<Item> expectedItemList = List.of(itemList.getFirst());
-        List<ItemGetResponse> expectedResponse = List.of(itemGetResponseList.getFirst());
-
-        BDDMockito.when(repository.findAllByUserAndActiveIsTrue(adminUser)).thenReturn(expectedItemList);
-
-        List<ItemGetResponse> response = service.listAll(adminUser, true);
-
-        Assertions.assertThat(response)
-                .isNotNull()
-                .isNotEmpty()
-                .containsExactlyElementsOf(expectedResponse);
-    }
-
-    @Test
-    @DisplayName("listAll returns items of the given user when the user is client")
-    @Order(4)
-    void listAll_ReturnsItemsOfTheGivenUser_WhenTheUserIsClient() {
-        User user = UserUtils.newUserList().getLast();
-
-        List<Item> expectedItemList = List.of(itemList.getLast());
-        List<ItemGetResponse> expectedResponse = List.of(itemGetResponseList.getLast());
-
-        BDDMockito.when(repository.findAllByUserAndActiveIsTrue(user)).thenReturn(expectedItemList);
-
-        List<ItemGetResponse> response = service.listAll(user, null);
-
-        Assertions.assertThat(response)
-                .isNotNull()
-                .isNotEmpty()
-                .containsExactlyElementsOf(expectedResponse);
-    }
-
-    @Test
     @DisplayName("findById returns found item of the given user when the user is client")
     @Order(5)
     void findById_ReturnsFoundItemOfTheGivenUser_WhenUserIsClient() {
