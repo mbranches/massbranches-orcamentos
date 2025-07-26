@@ -38,13 +38,13 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemGetResponse>> listAll(
+    public ResponseEntity<List<ItemGetResponse>> listAllMy(
             Authentication authentication,
             @RequestParam(required = false) Optional<String> name
     ) {
         User user = (User) authentication.getPrincipal();
 
-        List<ItemGetResponse> response = service.listMyAll(user, name);
+        List<ItemGetResponse> response = service.listAllMy(user, name);
 
         return ResponseEntity.ok(response);
     }

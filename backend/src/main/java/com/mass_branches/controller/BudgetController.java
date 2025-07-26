@@ -43,13 +43,13 @@ public class BudgetController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<List<BudgetGetResponse>> listMyAll(
+    public ResponseEntity<List<BudgetGetResponse>> listAllMy(
             Authentication authentication,
             @RequestParam(required = false) Optional<String> description
     ) {
         User user = (User) authentication.getPrincipal();
 
-        List<BudgetGetResponse> response = service.listMyAll(user, description);
+        List<BudgetGetResponse> response = service.listAllMy(user, description);
         return ResponseEntity.ok(response);
     }
 

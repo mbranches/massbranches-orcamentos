@@ -95,7 +95,7 @@ public class BudgetService {
                 .toList();
     }
 
-    public List<BudgetGetResponse> listMyAll(User requestingUser, Optional<String> description) {
+    public List<BudgetGetResponse> listAllMy(User requestingUser, Optional<String> description) {
         Sort sort = Sort.by("updatedAt").descending();
 
         boolean fetchByName = description.isPresent();

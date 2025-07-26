@@ -45,7 +45,7 @@ public class ItemService {
                 .toList();
     }
 
-    public List<ItemGetResponse> listMyAll(User user, Optional<String> name) {
+    public List<ItemGetResponse> listAllMy(User user, Optional<String> name) {
         Sort sort = Sort.by("name").ascending();
         boolean fetchByName = name.isPresent();
 
