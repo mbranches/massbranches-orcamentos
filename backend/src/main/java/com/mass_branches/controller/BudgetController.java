@@ -42,7 +42,7 @@ public class BudgetController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/me")
+    @GetMapping("/my")
     public ResponseEntity<List<BudgetGetResponse>> listAllMy(
             Authentication authentication,
             @RequestParam(required = false) Optional<String> description

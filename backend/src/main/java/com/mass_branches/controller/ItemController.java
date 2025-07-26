@@ -37,7 +37,7 @@ public class ItemController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/me")
+    @GetMapping("/my")
     public ResponseEntity<List<ItemGetResponse>> listAllMy(
             Authentication authentication,
             @RequestParam(required = false) Optional<String> name
