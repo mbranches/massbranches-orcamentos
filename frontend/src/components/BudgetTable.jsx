@@ -182,8 +182,6 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
             await fetchBudgetElements();     
             await fetchBudget(); 
         } catch(error) {
-            console.log(error);
-            console.log(error.response);
             const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
                 
             statusValidate(status);

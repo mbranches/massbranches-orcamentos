@@ -128,7 +128,7 @@ function Budgets() {
                             <Search size={15} />
                         </div>
 
-                        <input type="text" placeholder='Buscar por descrição do orçamento' className='block text-sm w-full px-1 py-1 outline-none' onChange={(e) => {
+                            <input type="text" placeholder='Buscar por descrição do orçamento' className='block text-sm w-full px-1 py-1 outline-none' onChange={(e) => {
                             filterBudgets(e.target.value, statusToSearch);
                         }}/>
                     </div>

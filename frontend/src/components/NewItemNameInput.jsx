@@ -24,8 +24,6 @@ function NewItemNameInput({ value, error, placeholder, newItem, setNewItem, thro
             } catch (error) {
                 const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
 
-                console.log(error);
-                
                 statusValidate(status);
             }
         }    

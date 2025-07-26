@@ -52,15 +52,12 @@ function AuthProvider({ children }) {
 
         setToken(token);
         setUser(await fetchUser(token));
-        console.log("login")
     };
 
     const logout = () => {
         localStorage.removeItem('token');
         setToken(null);
         setUser(null);
-
-        console.log("logout")
     };
 
     const contextValue = {
