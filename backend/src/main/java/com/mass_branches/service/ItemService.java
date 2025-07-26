@@ -8,9 +8,11 @@ import com.mass_branches.model.Item;
 import com.mass_branches.model.User;
 import com.mass_branches.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -31,24 +33,28 @@ public class ItemService {
         return ItemPostResponse.by(savedItem);
     }
 
-    public List<ItemGetResponse> listAll(User user, String name, Boolean personal) {
-        boolean isAdmin = user.isAdmin();
-        boolean isPersonal = Boolean.TRUE.equals(personal);
-        boolean hasName = name != null && !name.isBlank();
+    public List<ItemGetResponse> listAll(Optional<String> name) {
+        Sort sort = Sort.by("name").ascending();
+        boolean fetchByName = name.isPresent();
 
-        List<Item> items;
+        List<Item> items = fetchByName ? repository.findAllByNameContaining(name.get(), sort)
+                : repository.findAll(sort);
 
-        if(isAdmin && !isPersonal && !hasName) {
-            items = repository.findAll();
-        } else if (isAdmin && !isPersonal) {
-            items = repository.findAllByNameContaining(name);
-        } else if (hasName) {
-            items = repository.findAllByUserAndNameContainingAndActiveIsTrue(user, name);
-        } else {
-            items = repository.findAllByUserAndActiveIsTrue(user);
-        }
+        return items.stream()
+                .map(ItemGetResponse::by)
+                .toList();
+    }
 
-        return items.stream().map(ItemGetResponse::by).toList();
+    public List<ItemGetResponse> listMyAll(User user, Optional<String> name) {
+        Sort sort = Sort.by("name").ascending();
+        boolean fetchByName = name.isPresent();
+
+        List<Item> items = fetchByName ? repository.findAllByUserAndNameContainingAndActiveIsTrue(user, name.get(), sort)
+                : repository.findAllByUserAndActiveIsTrue(user, sort);
+
+        return items.stream()
+                .map(ItemGetResponse::by)
+                .toList();
     }
 
     public ItemGetResponse findById(User user, Long id) {

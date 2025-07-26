@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/items")
@@ -30,14 +31,20 @@ public class ItemController {
     }
 
     @GetMapping
+    public ResponseEntity<List<ItemGetResponse>> listAll(@RequestParam(required = false) Optional<String> name) {
+        List<ItemGetResponse> response = service.listAll(name);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
     public ResponseEntity<List<ItemGetResponse>> listAll(
             Authentication authentication,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) Boolean personal
+            @RequestParam(required = false) Optional<String> name
     ) {
         User user = (User) authentication.getPrincipal();
 
-        List<ItemGetResponse> response = service.listAll(user, name, personal);
+        List<ItemGetResponse> response = service.listMyAll(user, name);
 
         return ResponseEntity.ok(response);
     }
