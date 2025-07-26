@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import ElementDataInput from "./ElementDataInput";
-import { useAuth } from "../hooks/useAuth";
 import { searchItemsByName } from "../services/item";
 import { toast } from "react-toastify";
+import statusValidate from "../utils/statusValidate";
 
 function NewItemNameInput({ value, error, placeholder, newItem, setNewItem, throwableError }) {
     const [query, setQuery] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
-    const { isAdmin } = useAuth();
 
     useEffect(() => {
         const fetchSuggestions = async () => { 
@@ -19,11 +18,13 @@ function NewItemNameInput({ value, error, placeholder, newItem, setNewItem, thro
             }
 
             try {
-                const response = isAdmin ? await searchItemsByName(query, true) : await searchItemsByName(query) ;
+                const response = await searchItemsByName(query);
 
                 setSuggestions(response.data);
             } catch (error) {
                 const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+
+                console.log(error);
                 
                 statusValidate(status);
             }

@@ -1,13 +1,9 @@
 import api from "./Api";
 
-export async function searchItemsByName(name, personal = false) {
+export async function searchItemsByName(name) {
     const params = new URLSearchParams({ name });
 
-    if(personal) {
-        params.append("personal", "true");
-    }
-
-    return api(`/items?${params.toString()}`);
+    return api(`/items/my?${params.toString()}`);
 }
 
 export async function createItem(name, unitMeasurement, unitPrice) {

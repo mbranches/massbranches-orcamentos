@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import PanelLayout from '../components/PanelLayout';
-import { deleteBudgetById, findAllBudgets, findAllBudgetsByDescription } from '../services/budget';
+import { deleteBudgetById, findAllMyBudgets, findAllMyBudgetsByDescription } from '../services/budget';
 import { Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import BudgetCard from '../components/BudgetCard';
 import LoadingScreen from '../components/LoadingScreen';
 import statusValidate from '../utils/statusValidate';
 import { toast } from 'react-toastify';
-import { useAuth } from '../hooks/useAuth';
 
 function Budgets() {
     const [loading, setLoading] = useState(false);
@@ -51,7 +50,7 @@ function Budgets() {
         setLoading(true);
 
         try {
-            const response = isAdmin ? await findAllBudgets(true) : await findAllBudgets();
+            const response = await findAllMyBudgets();
 
             setBudgets(response.data);
         } catch (error) {
@@ -70,7 +69,7 @@ function Budgets() {
         }
 
         try {
-            const response = isAdmin ? await findAllBudgetsByDescription(description, true) : await filterBudgetsByDescription(description);
+            const response = await findAllMyBudgetsByDescription(description);
 
             setBudgets(response.data);
         } catch (error) {

@@ -17,29 +17,17 @@ export async function findBudgetById(id) {
     return api(`/budgets/${id}`);
 }
 
-export async function findAllBudgets(personal = false) {
-    let url = `/budgets`;
+export async function findAllMyBudgets() {
+  const url = "/budgets/my";
 
-    const params = new URLSearchParams();
-    if(personal) {
-        params.append("personal", true);
-
-        url += `?${params.toString()}`
-    }
-
-    return api(url);
+  return api(url);
 }
 
-export async function findAllBudgetsByDescription(description, personal = false) {
-    let url = `/budgets`;
-
+export async function findAllMyBudgetsByDescription(description) {
     const params = new URLSearchParams();
     params.append("description", description);
-    if(personal) {
-        params.append("personal", true);
-    }
 
-    url += `?${params.toString()}`;
+    const url = `/budgets/my?${params.toString()}`;
 
     return api(url);
 }
