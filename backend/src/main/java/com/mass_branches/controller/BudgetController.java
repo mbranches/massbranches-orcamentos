@@ -9,6 +9,7 @@ import com.mass_branches.dto.response.BudgetGetResponse;
 import com.mass_branches.dto.response.BudgetItemPostResponse;
 import com.mass_branches.dto.response.BudgetPostResponse;
 import com.mass_branches.dto.response.StagePostResponse;
+import com.mass_branches.model.BudgetStatus;
 import com.mass_branches.model.User;
 import com.mass_branches.service.BudgetService;
 import jakarta.validation.Valid;
@@ -36,8 +37,11 @@ public class BudgetController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BudgetGetResponse>> listAll(@RequestParam(required = false) Optional<String> description) {
-        List<BudgetGetResponse> response = service.listAll(description);
+    public ResponseEntity<List<BudgetGetResponse>> listAll(
+            @RequestParam(required = false) Optional<String> description,
+            @RequestParam(required = false) Optional<BudgetStatus> status
+    ) {
+        List<BudgetGetResponse> response = service.listAll(description, status);
 
         return ResponseEntity.ok(response);
     }
@@ -45,11 +49,13 @@ public class BudgetController {
     @GetMapping("/my")
     public ResponseEntity<List<BudgetGetResponse>> listAllMy(
             Authentication authentication,
-            @RequestParam(required = false) Optional<String> description
+            @RequestParam(required = false) Optional<String> description,
+            @RequestParam(required = false) Optional<BudgetStatus> status
     ) {
         User user = (User) authentication.getPrincipal();
 
-        List<BudgetGetResponse> response = service.listAllMy(user, description);
+        List<BudgetGetResponse> response = service.listAllMy(user, description, status);
+
         return ResponseEntity.ok(response);
     }
 

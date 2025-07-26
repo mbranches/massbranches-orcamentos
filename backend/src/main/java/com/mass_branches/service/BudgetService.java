@@ -82,25 +82,32 @@ public class BudgetService {
         recalculateTotals(budget);
     }
 
-    public List<BudgetGetResponse> listAll(Optional<String> description) {
+    public List<BudgetGetResponse> listAll(Optional<String> description, Optional<BudgetStatus> status) {
         Sort sort = Sort.by("updatedAt").descending();
 
         boolean fetchByName = description.isPresent();
-
-        List<Budget> budgets = fetchByName ? repository.findAllByDescriptionContaining(description.get(), sort)
-                : repository.findAll();
+        boolean fetchByStatus = status.isPresent();
+        List<Budget> budgets =
+                fetchByName && fetchByStatus ? repository.findAllByDescriptionContainingAndStatus(description.get(), status.get(), sort)
+                        : fetchByName ? repository.findAllByDescriptionContaining(description.get(), sort)
+                        : fetchByStatus ? repository.findAllByStatus(status.get(), sort)
+                        : repository.findAll(sort);
 
         return budgets.stream()
                 .map(BudgetGetResponse::by)
                 .toList();
     }
 
-    public List<BudgetGetResponse> listAllMy(User requestingUser, Optional<String> description) {
+    public List<BudgetGetResponse> listAllMy(User requestingUser, Optional<String> description, Optional<BudgetStatus> status) {
         Sort sort = Sort.by("updatedAt").descending();
 
+        boolean fetchByStatus = status.isPresent();
         boolean fetchByName = description.isPresent();
-        List<Budget> budgets = fetchByName ? repository.findAllByDescriptionContainingAndUserAndActiveIsTrue(description.get(), requestingUser, sort)
-                        :  repository.findAllByUserAndActiveIsTrue(requestingUser, sort);
+        List<Budget> budgets =
+                fetchByName && fetchByStatus ? repository.findAllByDescriptionContainingAndStatusAndActiveIsTrue(description.get(), status.get(), sort)
+                        : fetchByName ? repository.findAllByDescriptionContainingAndUserAndActiveIsTrue(description.get(), requestingUser, sort)
+                        : fetchByStatus ? repository.findAllByStatusAndActiveIsTrue(status.get(), sort)
+                        : repository.findAllByUserAndActiveIsTrue(requestingUser, sort);
 
         return budgets.stream()
                 .map(BudgetGetResponse::by)

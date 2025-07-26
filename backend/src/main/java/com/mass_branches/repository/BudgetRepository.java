@@ -1,6 +1,7 @@
 package com.mass_branches.repository;
 
 import com.mass_branches.model.Budget;
+import com.mass_branches.model.BudgetStatus;
 import com.mass_branches.model.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,12 @@ public interface BudgetRepository extends JpaRepository<Budget, String> {
     List<Budget> findAllByDescriptionContaining(String description, Sort sort);
 
     List<Budget> findAllByDescriptionContainingAndUserAndActiveIsTrue(String description, User user, Sort sort);
+
+    List<Budget> findAllByDescriptionContainingAndStatusAndActiveIsTrue(String description, BudgetStatus status, Sort sort);
+
+    List<Budget> findAllByStatusAndActiveIsTrue(BudgetStatus budgetStatus, Sort sort);
+
+    List<Budget> findAllByDescriptionContainingAndStatus(String s, BudgetStatus budgetStatus, Sort sort);
+
+    List<Budget> findAllByStatus(BudgetStatus status, Sort sort);
 }
