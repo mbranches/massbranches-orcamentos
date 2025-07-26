@@ -82,20 +82,27 @@ public class BudgetService {
         recalculateTotals(budget);
     }
 
-    public List<BudgetGetResponse> listAll(User requestingUser, Optional<String> description, Boolean personal) {
+    public List<BudgetGetResponse> listAll(Optional<String> description) {
         Sort sort = Sort.by("updatedAt").descending();
 
-        boolean shouldFetchAllBudgets = !Boolean.TRUE.equals(personal);
-
-        boolean isAdmin = requestingUser.isAdmin();
         boolean fetchByName = description.isPresent();
-        List<Budget> response =
-                isAdmin && shouldFetchAllBudgets && !fetchByName ? repository.findAll(sort)
-                        : isAdmin && shouldFetchAllBudgets ? repository.findAllByDescriptionContaining(description.get(), sort)
-                        : !fetchByName ? repository.findAllByUserAndActiveIsTrue(requestingUser, sort)
-                        : repository.findAllByDescriptionContainingAndUserAndActiveIsTrue(description.get(), requestingUser, sort);
 
-        return response.stream()
+        List<Budget> budgets = fetchByName ? repository.findAllByDescriptionContaining(description.get(), sort)
+                : repository.findAll();
+
+        return budgets.stream()
+                .map(BudgetGetResponse::by)
+                .toList();
+    }
+
+    public List<BudgetGetResponse> listMyAll(User requestingUser, Optional<String> description) {
+        Sort sort = Sort.by("updatedAt").descending();
+
+        boolean fetchByName = description.isPresent();
+        List<Budget> budgets = fetchByName ? repository.findAllByDescriptionContainingAndUserAndActiveIsTrue(description.get(), requestingUser, sort)
+                        :  repository.findAllByUserAndActiveIsTrue(requestingUser, sort);
+
+        return budgets.stream()
                 .map(BudgetGetResponse::by)
                 .toList();
     }

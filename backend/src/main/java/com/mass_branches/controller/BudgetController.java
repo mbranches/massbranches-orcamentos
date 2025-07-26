@@ -36,14 +36,20 @@ public class BudgetController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BudgetGetResponse>> listAll(
+    public ResponseEntity<List<BudgetGetResponse>> listAll(@RequestParam(required = false) Optional<String> description) {
+        List<BudgetGetResponse> response = service.listAll(description);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<List<BudgetGetResponse>> listMyAll(
             Authentication authentication,
-            @RequestParam(required = false) Boolean personal,
             @RequestParam(required = false) Optional<String> description
     ) {
         User user = (User) authentication.getPrincipal();
 
-        List<BudgetGetResponse> response = service.listAll(user, description, personal);
+        List<BudgetGetResponse> response = service.listMyAll(user, description);
         return ResponseEntity.ok(response);
     }
 
