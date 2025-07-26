@@ -18,14 +18,21 @@ export async function findBudgetById(id) {
 }
 
 export async function findAllMyBudgets() {
-  const url = "/budgets/my";
+    const url = "/budgets/my";
 
-  return api(url);
+    return api(url);
 }
 
-export async function findAllMyBudgetsByDescription(description) {
+export async function filterMyBudgets(description, status) {
     const params = new URLSearchParams();
-    params.append("description", description);
+
+    if(description) {
+        params.append("description", description);
+    }
+
+    if(status) {
+        params.append("status", status);
+    }
 
     const url = `/budgets/my?${params.toString()}`;
 
