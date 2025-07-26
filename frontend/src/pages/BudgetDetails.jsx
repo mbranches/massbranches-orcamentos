@@ -5,7 +5,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import {toast, ToastContainer} from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import { findBudgetById, updateBudget } from '../services/budget';
-import statusValidate from '../Utils/statusValidate';
+import statusValidate from '../utils/statusValidate';
 import { ChevronLeft } from 'lucide-react';
 
 function BudgetData() { 

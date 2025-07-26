@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {createStage, createBudgetItem, deleteItemByBudgetId, deleteStageByBudgetId} from '../services/budget';
 import { toast } from 'react-toastify';
-import statusValidate from '../Utils/statusValidate';
+import statusValidate from '../utils/statusValidate';
 import Th from '../components/Th';
 import BudgetItemRow from '../components/BudgetItemRow';
 import BudgetStageRow from '../components/BudgetStageRow';

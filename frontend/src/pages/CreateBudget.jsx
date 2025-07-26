@@ -4,7 +4,7 @@ import { useState } from 'react';
 import LoadingScreen from '../components/LoadingScreen';
 import {createBudget} from "../services/budget";
 import { useNavigate } from 'react-router-dom';
-import statusValidate from '../Utils/statusValidate';
+import statusValidate from '../utils/statusValidate';
 import { toast } from 'react-toastify';
 
 function CreateBudget() {

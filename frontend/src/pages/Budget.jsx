@@ -3,7 +3,7 @@ import PanelLayout from '../components/PanelLayout'
 import {exportBudgetById, findBudgetById, listElementsByBudgetId} from '../services/budget';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadingScreen from '../components/LoadingScreen'
-import statusValidate from '../Utils/statusValidate';
+import statusValidate from '../utils/statusValidate';
 import Action from '../components/Action'
 import { Box, ChevronLeft, FileDown, Info, ListPlus, LucideSquarePen } from 'lucide-react';
 import BudgetTable from '../components/BudgetTable';
