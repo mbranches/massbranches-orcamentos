@@ -2,14 +2,12 @@ import { useForm } from "react-hook-form";
 import FormSelect from "./FormSelect";
 import FormTextField from "./FormTextField";
 import { useEffect, useState } from "react";
-import {listAllCustomers} from "../services/customer";
+import {listMyAllCustomers} from "../services/customer";
 import statusValidate from "../Utils/statusValidate";
-import { useAuth } from "../hooks/useAuth";
 import { toast } from "react-toastify";
 
 function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading, selectedCustomer }) {
     const [ customers, setCustomers ] = useState([]);
-    const { isAdmin } = useAuth();
 
     const showRequiredErrorMessage = () => (
         <p className='text-red-500 -mt-3 text-[13px]'>Campo obrigatório.</p>
@@ -36,7 +34,7 @@ function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading,
             setLoading(true);
 
             try {
-                const customers = isAdmin? await listAllCustomers(true) : await listAllCustomers();
+                const customers = await listMyAllCustomers();
 
                 setCustomers(customers);
             } catch(error) {
