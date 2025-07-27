@@ -8,6 +8,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import statusValidate from '../utils/statusValidate';
 import { toast } from 'react-toastify';
 import FilterSelect from '../components/FilterSelect';
+import SearchBar from '../components/SearchBar';
 
 function Budgets() {
     const [loading, setLoading] = useState(false);
@@ -123,15 +124,10 @@ function Budgets() {
                 </div>
 
                 <div className='flex flex-col sm:flex-row w-full gap-3'>
-                    <div className='flex items-center border border-gray-300 rounded-md p-2 w-full sm:w-4/5'>
-                        <div className='flex items-center justify-center px-2'>
-                            <Search size={15} />
-                        </div>
-
-                            <input type="text" placeholder='Buscar por descrição do orçamento' className='block text-sm w-full px-1 py-1 outline-none' onChange={(e) => {
-                            filterBudgets(e.target.value, statusToSearch);
-                        }}/>
+                    <div className='sm:w-4/5 w-full'>
+                        <SearchBar placeholder={'Buscar por descrição do orçamento'} onSearch={(e) => filterBudgets(e.target.value, statusToSearch)} />
                     </div>
+                        
 
                     <div className='w-full sm:w-1/5'>
                         <FilterSelect options={budgetStatusFilterOptions} selected={budgetStatusFilterOptions[0]} value={"status"} onChange={(e) => filterBudgets(descriptionToSearch, e.target.value)}/>
