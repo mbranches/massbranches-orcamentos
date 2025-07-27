@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import {listMyAllCustomers} from "../services/customer";
 import statusValidate from "../Utils/statusValidate";
 import { toast } from "react-toastify";
+import FormSubmitButton from '../components/FormSubmitButton'
 
 function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading, selectedCustomer }) {
     const [ customers, setCustomers ] = useState([]);
@@ -127,7 +128,7 @@ function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading,
             {(errors?.bdi?.type === "required" && showRequiredErrorMessage()) || (errors?.bdi?.type === "pattern" && showBdiInvalidError())}
 
             <div className="flex justify-end">
-                <button type="submit" className='w-full py-4 px-10 md:py-2 md:w-auto border border-slate-300 hover:border-slate-400 rounded-lg text-slate-700 outline-none cursor-pointer'>{submitButtonLabel   }</button>
+                <FormSubmitButton label={submitButtonLabel} />
             </div>
         </form>
     );
