@@ -70,4 +70,13 @@ public class CustomerController {
 
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(Authentication authentication, @PathVariable String id) {
+        User user = (User) authentication.getPrincipal();
+
+        service.delete(user, id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

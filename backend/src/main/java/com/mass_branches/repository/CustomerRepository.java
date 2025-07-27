@@ -29,4 +29,6 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     List<Customer> findAllByUserAndActiveIsTrueAndType_Name(User user, CustomerTypeName typeName, Sort sort);
 
     List<Customer> findAllByUserAndActiveIsTrueAndNameContaining(User user, String name, Sort sort);
+
+    Optional<Customer> findByIdAndActiveIsTrue(String id);
 }

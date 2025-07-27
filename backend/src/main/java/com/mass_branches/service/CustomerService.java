@@ -99,6 +99,11 @@ public class CustomerService {
                 .orElseThrow(() -> throwsCustomerIdNotFoundException(id));
     }
 
+    public Customer findByIdAndActiveIsTrueOrThrowsNotFoundException(String id) {
+        return repository.findByIdAndActiveIsTrue(id)
+                .orElseThrow(() -> throwsCustomerIdNotFoundException(id));
+    }
+
     public Customer findByUserAndIdOrThrowsNotFoundException(User user, String id) {
         return repository.findByUserAndActiveIsTrueAndId(user, id)
                 .orElseThrow(() -> throwsCustomerIdNotFoundException(id));
@@ -110,5 +115,13 @@ public class CustomerService {
 
     public Integer numberOfCustomers(User user) {
         return repository.countCustomersByUser(user);
+    }
+
+    public void delete(User user, String id) {
+        Customer customer = user.isAdmin() ? findByIdAndActiveIsTrueOrThrowsNotFoundException(id) : findByUserAndIdOrThrowsNotFoundException(user, id);
+
+        customer.setActive(false);
+
+        repository.save(customer);
     }
 }
