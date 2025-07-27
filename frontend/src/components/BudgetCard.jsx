@@ -1,6 +1,6 @@
 import { Eye, LucideSquarePen, LucideTrash2 } from "lucide-react";
 import { formatCurrency } from "../utils/format";
-import BudgetCardAction from "./BudgetCardAction";
+import CardAction from "./CardAction";
 import BudgetStatus from "./BudgetStatus";
 
 function BudgetCard({budget, onViewButtonClick, onEditButtonClick, onDeleteButtonClick}) {
@@ -37,17 +37,17 @@ function BudgetCard({budget, onViewButtonClick, onEditButtonClick, onDeleteButto
                     </div>
 
                     <div className="flex gap-2 h-1/3">
-                        <BudgetCardAction icon={<Eye size={16}/>} onClick={onViewButtonClick}>
+                        <CardAction icon={<Eye size={16}/>} onClick={onViewButtonClick}>
                             Ver
-                        </BudgetCardAction>
+                        </CardAction>
 
-                        <BudgetCardAction icon={<LucideSquarePen size={16}/>} onClick={onEditButtonClick}>
+                        <CardAction icon={<LucideSquarePen size={16}/>} onClick={onEditButtonClick}>
                             Editar dados
-                        </BudgetCardAction>
+                        </CardAction>
 
-                        <BudgetCardAction icon={<LucideTrash2 size={16}/>} onClick={onDeleteButtonClick} color="red">
+                        <CardAction icon={<LucideTrash2 size={16}/>} onClick={onDeleteButtonClick} color="red">
                             Excluir
-                        </BudgetCardAction>
+                        </CardAction>
                     </div>
                 </div>
             </div>

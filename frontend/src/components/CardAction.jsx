@@ -1,4 +1,4 @@
-function BudgetCardAction({icon, onClick, children, color = "default"}) {
+function CardAction({icon, onClick, children, color = "default"}) {
     const colorMap = {
         default: "",
         red: "text-red-600",
@@ -15,4 +15,4 @@ function BudgetCardAction({icon, onClick, children, color = "default"}) {
     );
 }
 
-export default BudgetCardAction;
+export default CardAction;
