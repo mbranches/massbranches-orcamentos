@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import FilterSelect from '../components/FilterSelect';
 import SearchBar from '../components/SearchBar';
 import ButtonNew from '../components/ButtonNew';
+import DeleteConfirmationBox from '../components/DeleteConfirmationBox';
 
 function Budgets() {
     const [loading, setLoading] = useState(false);
@@ -154,38 +155,12 @@ function Budgets() {
                 </div>
             </div>
 
-            {deleteConfirmationBoxIsOpen && (
-                <div 
-                    className='fixed inset-0 bg-black/20 flex justify-center items-center'
-                    onClick={() => setDeleteConfirmationBoxIsOpen(false)}
-                >
-                    <div 
-                        className='lg:ml-[310px] flex justify-center items-center flex-col gap-4 bg-white px-4 py-6 rounded-md shadow-lg'
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div>
-                            <h3>{`Excluir ${budgetToDelete.description} ?`}</h3>
-                            <p className='text-sm text-gray-600'>Essa ação não poderá ser desfeita</p>
-                        </div>
-
-                        <div className='flex gap-3'>
-                            <button 
-                                onClick={() => setDeleteConfirmationBoxIsOpen(false)}
-                                className='border border-gray-200 text-sm px-4 py-2 rounded-md hover:border-gray-300 transition-all duration-100 cursor-pointer'
-                            >
-                                Cancelar
-                            </button>
-
-                            <button 
-                                onClick={() => deleteBudget(budgetToDelete)}
-                                className='bg-red-500 text-white text-sm px-4 py-2 rounded-md hover:bg-red-600 transition-all duration-100 cursor-pointer'
-                            >
-                                Confirmar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <DeleteConfirmationBox 
+                deleteConfirmationBoxIsOpen={deleteConfirmationBoxIsOpen} 
+                setDeleteConfirmationBoxIsOpen={setDeleteConfirmationBoxIsOpen} 
+                objectToDelete={budgetToDelete?.description}
+                onDelete={() => deleteBudget(budgetToDelete)}
+            />
         </PanelLayout>
     );         
         
