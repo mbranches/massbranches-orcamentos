@@ -114,7 +114,7 @@ public class CustomerService {
     }
 
     public Integer numberOfCustomers(User user) {
-        return repository.countCustomersByUser(user);
+        return repository.countCustomersByUserAndActiveIsTrue(user);
     }
 
     public void delete(User user, String id) {
