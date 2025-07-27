@@ -1,5 +1,17 @@
+import { useEffect } from "react";
+
 function DeleteConfirmationBox({ deleteConfirmationBoxIsOpen, setDeleteConfirmationBoxIsOpen, onDelete, objectToDelete }) {
-        return deleteConfirmationBoxIsOpen && (
+    useEffect(() => {
+        if(deleteConfirmationBoxIsOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+        
+        return () => document.body.style.overflow = "unset";
+    }, [deleteConfirmationBoxIsOpen])    
+    
+    return deleteConfirmationBoxIsOpen && (
             <div 
                 className='fixed inset-0 z-40 bg-black/80 flex justify-center items-center'
                 onClick={() => setDeleteConfirmationBoxIsOpen(false)}
