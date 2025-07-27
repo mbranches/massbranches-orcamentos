@@ -1,11 +1,11 @@
 function DeleteConfirmationBox({ deleteConfirmationBoxIsOpen, setDeleteConfirmationBoxIsOpen, onDelete, objectToDelete }) {
         return deleteConfirmationBoxIsOpen && (
             <div 
-                className='fixed inset-0 bg-black/10 flex justify-center items-center'
+                className='fixed inset-0 z-40 bg-black/80 flex justify-center items-center'
                 onClick={() => setDeleteConfirmationBoxIsOpen(false)}
             >
                 <div 
-                    className='lg:ml-[310px] flex justify-center items-center flex-col gap-4 bg-white p-5 rounded-md shadow-lg'
+                    className='flex justify-center items-center flex-col gap-4 bg-white p-5 rounded-md shadow-lg'
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div>
@@ -23,7 +23,7 @@ function DeleteConfirmationBox({ deleteConfirmationBoxIsOpen, setDeleteConfirmat
 
                         <button 
                             onClick={onDelete}
-                            className='bg-red-500 text-white text-sm px-4 py-2 rounded-md hover:bg-red-600 transition-all duration-100 cursor-pointer'
+                            className='bg-red-500 text-white text-sm px-3 py-2 rounded-md hover:bg-red-600 transition-all duration-100 cursor-pointer'
                         >
                             Confirmar
                         </button>
