@@ -74,12 +74,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen, actualSection, refreshSidebar })
         <>
             {sidebarOpen && (
                 <div 
-                    className="fixed inset-0 bg-gray-300 opacity-50 z-40 lg:hidden" 
+                    className="fixed inset-0 bg-gray-300 opacity-50 z-30 lg:hidden" 
                     onClick={() => setSidebarOpen(false)} 
                 />
             )}
 
-            <div className={`w-[310px] h-screen z-50 transition-transform duration-200 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed bg-white shadow-xl overflow-y-auto`}>
+            <div className={`w-[310px] h-screen z-30 transition-transform duration-200 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed bg-white shadow-xl overflow-y-auto`}>
                 <div className='p-6 border-b-[1px] border-gray-200 flex items-center gap-2'>
                     <div onClick={() => navigate("/home")}>
                         <Logo />
