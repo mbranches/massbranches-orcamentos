@@ -8,11 +8,13 @@ import com.mass_branches.model.Customer;
 import com.mass_branches.model.CustomerType;
 import com.mass_branches.model.CustomerTypeName;
 import com.mass_branches.model.User;
+import com.mass_branches.repository.BudgetRepository;
 import com.mass_branches.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class CustomerService {
     private final CustomerRepository repository;
     private final CustomerTypeService customerTypeService;
+    private final BudgetRepository budgetRepository;
 
     public CustomerPostResponse create(User user, CustomerPostRequest postRequest) {
         CustomerType customerType = customerTypeService.findByNameOrThrowsNotFoundException(postRequest.type());
@@ -51,7 +54,12 @@ public class CustomerService {
                         : repository.findAll(sort);
 
         return customers.stream()
-                .map(CustomerGetResponse::by)
+                .map((customer) -> {
+                    long numberOfBudgets = budgetRepository.countBudgetsByCustomerAndActiveIsTrue(customer);
+                    BigDecimal totalInBudgetsWithBdi = budgetRepository.sumTotalWithBdiByCustomerAndActiveIsTrue(customer);
+
+                    return CustomerGetResponse.by(customer, numberOfBudgets, totalInBudgetsWithBdi);
+                })
                 .toList();
     }
 
@@ -68,15 +76,23 @@ public class CustomerService {
                         : repository.findAllByUserAndActiveIsTrue(user);
 
         return customers.stream()
-                .map(CustomerGetResponse::by)
+                .map((customer) -> {
+                    long numberOfBudgets = budgetRepository.countBudgetsByCustomerAndActiveIsTrue(customer);
+                    BigDecimal totalInBudgetsWithBdi = budgetRepository.sumTotalWithBdiByCustomerAndActiveIsTrue(customer);
+
+                    return CustomerGetResponse.by(customer, numberOfBudgets, totalInBudgetsWithBdi);
+                })
                 .toList();
     }
 
     public CustomerGetResponse findById(User requestingUser, String id) {
-        Customer response = requestingUser.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+        Customer customer = requestingUser.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdOrThrowsNotFoundException(requestingUser, id);
 
-        return CustomerGetResponse.by(response);
+        long numberOfBudgets = budgetRepository.countBudgetsByCustomerAndActiveIsTrue(customer);
+        BigDecimal totalInBudgetsWithBdi = budgetRepository.sumTotalWithBdiByCustomerAndActiveIsTrue(customer);
+
+        return CustomerGetResponse.by(customer, numberOfBudgets, totalInBudgetsWithBdi);
     }
 
     public Customer findByIdOrThrowsNotFoundException(String id) {
