@@ -9,6 +9,7 @@ import statusValidate from '../utils/statusValidate';
 import { toast } from 'react-toastify';
 import FilterSelect from '../components/FilterSelect';
 import SearchBar from '../components/SearchBar';
+import ButtonNew from '../components/ButtonNew';
 
 function Budgets() {
     const [loading, setLoading] = useState(false);
@@ -117,9 +118,8 @@ function Budgets() {
                         <p className='text-gray-600'>{budgets.length} orçamentos encontrados.</p>
                     </div>
         
-                    <div className='bg-black w-full sm:w-auto text-white flex items-center px-4 py-2 rounded-sm h-10 gap-2 cursor-pointer hover:bg-gray-800 transition-all duration-100' onClick={() => navigate("/orcamentos/criar")}>
-                        <div><Plus size={20} /></div>
-                        <span className='text-sm'>Novo Orçamento</span>
+                    <div>
+                        <ButtonNew label={'Novo Orçamento'} onClick={() => navigate("/orcamentos/criar")} />
                     </div>
                 </div>
 
