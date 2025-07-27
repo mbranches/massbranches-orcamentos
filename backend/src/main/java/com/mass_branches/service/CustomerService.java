@@ -3,6 +3,8 @@ package com.mass_branches.service;
 import com.mass_branches.dto.request.CustomerPostRequest;
 import com.mass_branches.dto.response.CustomerGetResponse;
 import com.mass_branches.dto.response.CustomerPostResponse;
+import com.mass_branches.dto.response.CustomerPutRequest;
+import com.mass_branches.exception.BadRequestException;
 import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.Customer;
 import com.mass_branches.model.CustomerType;
@@ -10,6 +12,7 @@ import com.mass_branches.model.CustomerTypeName;
 import com.mass_branches.model.User;
 import com.mass_branches.repository.BudgetRepository;
 import com.mass_branches.repository.CustomerRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -121,6 +124,22 @@ public class CustomerService {
         Customer customer = user.isAdmin() ? findByIdAndActiveIsTrueOrThrowsNotFoundException(id) : findByUserAndIdOrThrowsNotFoundException(user, id);
 
         customer.setActive(false);
+
+        repository.save(customer);
+    }
+
+    public void update(String id, CustomerPutRequest request, User user) {
+        if (!id.equals(request.id())) {
+            throw new BadRequestException("The url id (%s) is different from the request body id(%s)".formatted(id, request.id()));
+        }
+
+        Customer customer = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+                : findByUserAndIdOrThrowsNotFoundException(user, id);
+
+        CustomerType customerType = customerTypeService.findByNameOrThrowsNotFoundException(request.type().name());
+
+        customer.setName(request.name());
+        customer.setType(customerType);
 
         repository.save(customer);
     }

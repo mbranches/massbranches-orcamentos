@@ -3,6 +3,7 @@ package com.mass_branches.controller;
 import com.mass_branches.dto.request.CustomerPostRequest;
 import com.mass_branches.dto.response.CustomerGetResponse;
 import com.mass_branches.dto.response.CustomerPostResponse;
+import com.mass_branches.dto.response.CustomerPutRequest;
 import com.mass_branches.model.CustomerTypeName;
 import com.mass_branches.model.User;
 import com.mass_branches.service.CustomerService;
@@ -69,6 +70,19 @@ public class CustomerController {
         Integer response = service.numberOfCustomers(user);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(
+            Authentication authentication,
+            @PathVariable String id,
+            @Valid @RequestBody CustomerPutRequest request
+    ) {
+        User user = (User) authentication.getPrincipal();
+
+        service.update(id, request, user);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
