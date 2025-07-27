@@ -5,12 +5,11 @@ import com.mass_branches.model.CustomerTypeName;
 
 import java.math.BigDecimal;
 
-public record CustomerGetResponse(String id, String name, String description, CustomerTypeName type, Long numberOfBudgets, BigDecimal totalInBudgetsWithBdi) {
+public record CustomerGetResponse(String id, String name, CustomerTypeName type, Long numberOfBudgets, BigDecimal totalInBudgetsWithBdi) {
     public static CustomerGetResponse by(Customer customer, long numberOfBudgets, BigDecimal totalInBudgetsWithBdi) {
         return new CustomerGetResponse(
                 customer.getId(),
                 customer.getName(),
-                customer.getDescription(),
                 customer.getType().getName(),
                 numberOfBudgets,
                 totalInBudgetsWithBdi

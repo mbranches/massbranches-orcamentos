@@ -22,7 +22,6 @@ public class Customer {
     private String id;
     @Column(nullable = false)
     private String name;
-    private String description;
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_type_id")
     private CustomerType type;

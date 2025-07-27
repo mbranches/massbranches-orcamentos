@@ -31,7 +31,6 @@ create table customer_type(
 create table customer(
     idcustomer varchar(36) PRIMARY KEY,
     name varchar(100) NOT NULL,
-    description varchar(120),
     customer_type_id bigint NOT NULL,
     active tinyint NOT NULL,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,

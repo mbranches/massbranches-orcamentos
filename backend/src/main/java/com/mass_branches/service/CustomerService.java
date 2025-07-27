@@ -30,7 +30,6 @@ public class CustomerService {
 
         Customer customer = Customer.builder()
                 .name(postRequest.name())
-                .description(postRequest.description())
                 .type(customerType)
                 .active(true)
                 .user(user)
