@@ -6,6 +6,7 @@ import com.mass_branches.dto.response.CustomerPostResponse;
 import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.Customer;
 import com.mass_branches.model.CustomerType;
+import com.mass_branches.model.CustomerTypeName;
 import com.mass_branches.model.User;
 import com.mass_branches.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -36,15 +38,36 @@ public class CustomerService {
         return CustomerPostResponse.by(savedCustomer);
     }
 
-    public List<CustomerGetResponse> listAll(User user, Boolean personal) {
+    public List<CustomerGetResponse> listAll(Optional<String> name, Optional<CustomerTypeName> type) {
         Sort sort = Sort.by("updatedAt").descending();
 
-        boolean shouldFetchAllCustomers = !Boolean.TRUE.equals(personal);
+        boolean fetchByName = name.isPresent();
+        boolean fetchByType = type.isPresent();
 
-        List<Customer> response = user.isAdmin() && shouldFetchAllCustomers ? repository.findAll(sort)
-                : repository.findAllByUserAndActiveIsTrue(user);
+        List<Customer> customers =
+                fetchByName && fetchByType ? repository.findAllByNameContainingAndType_Name(name.get(), type.get(), sort)
+                        : fetchByType ?  repository.findAllByType_Name(type.get(), sort)
+                        : fetchByName ? repository.findAllByNameContaining(name.get(), sort)
+                        : repository.findAll(sort);
 
-        return response.stream()
+        return customers.stream()
+                .map(CustomerGetResponse::by)
+                .toList();
+    }
+
+    public List<CustomerGetResponse> listMyAll(User user, Optional<String> name, Optional<CustomerTypeName> type) {
+        Sort sort = Sort.by("updatedAt").descending();
+
+        boolean fetchByName = name.isPresent();
+        boolean fetchByType = type.isPresent();
+
+        List<Customer> customers =
+                fetchByName && fetchByType ? repository.findAllByUserAndActiveIsTrueAndNameContainingAndType_Name(user, name.get(), type.get(), sort)
+                        : fetchByType ? repository.findAllByUserAndActiveIsTrueAndType_Name(user, type.get(), sort)
+                        : fetchByName ? repository.findAllByUserAndActiveIsTrueAndNameContaining(user, name.get(), sort)
+                        : repository.findAllByUserAndActiveIsTrue(user);
+
+        return customers.stream()
                 .map(CustomerGetResponse::by)
                 .toList();
     }

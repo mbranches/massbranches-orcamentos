@@ -3,6 +3,7 @@ package com.mass_branches.controller;
 import com.mass_branches.dto.request.CustomerPostRequest;
 import com.mass_branches.dto.response.CustomerGetResponse;
 import com.mass_branches.dto.response.CustomerPostResponse;
+import com.mass_branches.model.CustomerTypeName;
 import com.mass_branches.model.User;
 import com.mass_branches.service.CustomerService;
 import jakarta.validation.Valid;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/customers")
@@ -31,12 +33,23 @@ public class CustomerController {
 
     @GetMapping
     public ResponseEntity<List<CustomerGetResponse>> listAll(
+            @RequestParam(required = false) Optional<String> name,
+            @RequestParam(required = false) Optional<CustomerTypeName> type
+            ) {
+
+        List<CustomerGetResponse> response = service.listAll(name, type);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<CustomerGetResponse>> listMyAll(
             Authentication authentication,
-            @RequestParam(required = false) Boolean personal
+            @RequestParam(required = false) Optional<String> name,
+            @RequestParam(required = false) Optional<CustomerTypeName> type
     ) {
         User user = (User) authentication.getPrincipal();
 
-        List<CustomerGetResponse> response = service.listAll(user, personal);
+        List<CustomerGetResponse> response = service.listMyAll(user, name, type);
         return ResponseEntity.ok(response);
     }
 
