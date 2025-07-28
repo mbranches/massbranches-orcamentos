@@ -366,4 +366,14 @@ public class BudgetService {
         Cell proposalValue = sheet.getRow(18).getCell(5);
         proposalValue.setCellValue(budget.getTotalWithBdi().doubleValue());
     }
+
+    public List<BudgetGetResponse> listAllByCustomerId(User user, String id) {
+        Customer customer = customerService.findByUserAndIdOrThrowsNotFoundException(user, id);
+
+        Sort sort = Sort.by("updatedAt").descending();
+
+        List<Budget> budgets = repository.findAllByCustomerAndActiveIsTrue(customer, sort);
+
+        return budgets.stream().map(BudgetGetResponse::by).toList();
+    }
 }

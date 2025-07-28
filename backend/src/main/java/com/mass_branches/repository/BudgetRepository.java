@@ -40,4 +40,6 @@ public interface BudgetRepository extends JpaRepository<Budget, String> {
 
     @Query("SELECT COALESCE(SUM(b.totalWithBdi), 0) FROM Budget b WHERE b.customer = :customer AND b.active = true")
     BigDecimal sumTotalWithBdiByCustomerAndActiveIsTrue(@Param("customer") Customer customer);
+
+    List<Budget> findAllByCustomerAndActiveIsTrue(Customer customer, Sort sort);
 }

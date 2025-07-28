@@ -1,11 +1,13 @@
 package com.mass_branches.controller;
 
 import com.mass_branches.dto.request.CustomerPostRequest;
+import com.mass_branches.dto.response.BudgetGetResponse;
 import com.mass_branches.dto.response.CustomerGetResponse;
 import com.mass_branches.dto.response.CustomerPostResponse;
 import com.mass_branches.dto.response.CustomerPutRequest;
 import com.mass_branches.model.CustomerTypeName;
 import com.mass_branches.model.User;
+import com.mass_branches.service.BudgetService;
 import com.mass_branches.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.Optional;
 @RestController
 public class CustomerController {
     private final CustomerService service;
+    private final BudgetService budgetService;
 
     @PostMapping
     public ResponseEntity<CustomerPostResponse> post(Authentication authentication, @Valid @RequestBody CustomerPostRequest postRequest) {
@@ -51,6 +54,15 @@ public class CustomerController {
         User user = (User) authentication.getPrincipal();
 
         List<CustomerGetResponse> response = service.listMyAll(user, name, type);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/my/{id}/budgets")
+    public ResponseEntity<List<BudgetGetResponse>> listBudgetsByCustomerId(Authentication authentication, @PathVariable String id) {
+        User user = (User) authentication.getPrincipal();
+
+        List<BudgetGetResponse> response = budgetService.listAllByCustomerId(user, id);
+
         return ResponseEntity.ok(response);
     }
 
