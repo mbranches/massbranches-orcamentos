@@ -9,7 +9,7 @@ function BudgetStatus({ status }) {
     const formattedStatus = status ? status[0].toUpperCase() + status.slice(1).toLowerCase() : null;
 
     return (
-        <span className={`inline-flex items-center px-3 py-1 text-sm font-semibold rounded-full ${mappedColor[status]}`}>
+        <span className={`inline-flex items-center px-2 py-[2px] text-xs font-semibold rounded-full ${mappedColor[status]}`}>
             {formattedStatus}
         </span>
     );

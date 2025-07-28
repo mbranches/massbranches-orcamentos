@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-function Modal({ modalIsOpen, setModalIsOpen, children }) {
+function Modal({ modalIsOpen, setModalIsOpen, children, className }) {
     useEffect(() => {
         if(modalIsOpen) {
             document.body.style.overflow = "hidden";
@@ -13,11 +13,11 @@ function Modal({ modalIsOpen, setModalIsOpen, children }) {
 
     return (
         <div 
-            className='fixed inset-0 z-40 bg-black/80 flex justify-center items-center' 
+            className='fixed inset-0 z-40 -m-1 bg-black/80 flex justify-center items-center' 
             onClick={() => setModalIsOpen(false)}
         >
             <div 
-                className='bg-white p-6 rounded-lg shadow'
+                className={`bg-white p-6 rounded-lg shadow ${className}`}
                 onClick={e => e.stopPropagation()}
             >
                 { children }

@@ -12,6 +12,7 @@ import Budget from './pages/Budget.jsx'
 import BudgetDetails from './pages/BudgetDetails.jsx'
 import { ToastContainer } from 'react-toastify'
 import Budgets from './pages/Budgets.jsx'
+import Customers from './pages/Customers.jsx'
 
 const router = createBrowserRouter(
   [
@@ -42,7 +43,11 @@ const router = createBrowserRouter(
         {
           path: "/orcamentos/:id/dados",
           element: <BudgetDetails />
-        }
+        },
+        {
+          path: "/clientes",
+          element: <Customers />,
+        },
       ]
     },
     {
