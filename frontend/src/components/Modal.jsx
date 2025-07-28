@@ -17,7 +17,7 @@ function Modal({ modalIsOpen, setModalIsOpen, children }) {
             onClick={() => setModalIsOpen(false)}
         >
             <div 
-                className='bg-white p-6 w-2/3 md:w-1/3 rounded-lg shadow'
+                className='bg-white p-6 rounded-lg shadow'
                 onClick={e => e.stopPropagation()}
             >
                 { children }

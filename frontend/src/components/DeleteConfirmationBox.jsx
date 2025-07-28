@@ -13,7 +13,7 @@ function DeleteConfirmationBox({ deleteConfirmationBoxIsOpen, setDeleteConfirmat
     
     return deleteConfirmationBoxIsOpen && (
             <div 
-                className='fixed inset-0 z-40 bg-black/80 flex justify-center items-center'
+                className='fixed inset-0 z-40 bg-black/80 -m-1 flex justify-center items-center'
                 onClick={() => setDeleteConfirmationBoxIsOpen(false)}
             >
                 <div 
