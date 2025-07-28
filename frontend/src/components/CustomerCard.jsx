@@ -35,7 +35,7 @@ function CustomerCard({customer, onViewButtonClick, onEditButtonClick, onDeleteB
                     <div className="flex flex-col">
                         <span className="text-gray-600">Total em orçamentos com BDI:</span>
                     
-                        <span className="font-bold text-lg text-green-600">
+                        <span className="font-bold text-green-600">
                             {formatCurrency(customer.totalInBudgetsWithBdi)}
                         </span>
                     </div>

@@ -39,7 +39,7 @@ function BudgetCard({budget, onViewButtonClick, onEditButtonClick, onDeleteButto
                     <div className="flex flex-col">
                         <span className="text-gray-600">Total com BDI:</span>
                     
-                        <span className="font-bold text-lg text-green-600">{formatCurrency(budget.totalWithBdi)}</span>
+                        <span className="font-bold text-green-600">{formatCurrency(budget.totalWithBdi)}</span>
                     </div>
 
                     <div className="flex gap-2 h-1/3">
