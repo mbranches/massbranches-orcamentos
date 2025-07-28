@@ -6,6 +6,12 @@ export const formatCurrency = (value) => {
   });
 };
 
+export const formatDate = (unformattedDate) => {
+  const [year, month, day] = unformattedDate.split("-");
+  
+  return `${day}/${month}/${year}`
+};
+
 export const formatDecimal = (value) => {
   if (typeof value === "string") {
     return value.replace(",", ".");

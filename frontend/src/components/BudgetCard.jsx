@@ -1,5 +1,5 @@
 import { Eye, LucideSquarePen, LucideTrash2 } from "lucide-react";
-import { formatCurrency } from "../utils/format";
+import { formatCurrency, formatDate } from "../utils/format";
 import CardAction from "./CardAction";
 import BudgetStatus from "./BudgetStatus";
 
@@ -28,6 +28,12 @@ function BudgetCard({budget, onViewButtonClick, onEditButtonClick, onDeleteButto
                         <span className="text-gray-600">Cliente:</span>
                     
                         <span className="font-medium">{budget.customer?.name || ""}</span>
+                    </div>
+
+                    <div className="flex flex-col">
+                        <span className="text-gray-600">Data de criação:</span>
+                    
+                        <span className="font-medium">{formatDate(budget.createdAt) || "00/00/00"}</span>
                     </div>
 
                     <div className="flex flex-col">

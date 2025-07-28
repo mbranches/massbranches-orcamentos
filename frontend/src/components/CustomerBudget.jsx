@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import BudgetStatus from "./BudgetStatus";
-import { formatCurrency } from "../utils/format";
+import { formatCurrency, formatDate } from "../utils/format";
 
 function CustomerBudget({ budget }) {
     const navigate = useNavigate();
@@ -32,6 +32,12 @@ function CustomerBudget({ budget }) {
                         <span className="text-gray-600">Cliente:</span>
                     
                         <span className="font-medium">{budget.customer?.name || ""}</span>
+                    </div>
+                    
+                    <div className="flex flex-col">
+                        <span className="text-gray-600">Data de criação:</span>
+                    
+                        <span className="font-medium">{formatDate(budget.createdAt) || "00/00/00"}</span>
                     </div>
 
                     <div className="flex flex-col">
