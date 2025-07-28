@@ -94,7 +94,7 @@ public class BudgetService {
                         : repository.findAll(sort);
 
         return budgets.stream()
-                .map(BudgetGetResponse::by)
+                .map(budget -> BudgetGetResponse.by(budget, budget.getCreatedAt().toLocalDate()))
                 .toList();
     }
 
@@ -110,7 +110,7 @@ public class BudgetService {
                         : repository.findAllByUserAndActiveIsTrue(requestingUser, sort);
 
         return budgets.stream()
-                .map(BudgetGetResponse::by)
+                .map(budget -> BudgetGetResponse.by(budget, budget.getCreatedAt().toLocalDate()))
                 .toList();
     }
 
@@ -118,7 +118,7 @@ public class BudgetService {
         Budget response = requestingUser.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(requestingUser, id);
 
-        return BudgetGetResponse.by(response);
+        return BudgetGetResponse.by(response, response.getCreatedAt().toLocalDate());
     }
 
     public Budget findByIdOrThrowsNotFoundException(String id) {
@@ -374,6 +374,8 @@ public class BudgetService {
 
         List<Budget> budgets = repository.findAllByCustomerAndActiveIsTrue(customer, sort);
 
-        return budgets.stream().map(BudgetGetResponse::by).toList();
+        return budgets.stream()
+                .map(budget -> BudgetGetResponse.by(budget, budget.getCreatedAt().toLocalDate()))
+                .toList();
     }
 }

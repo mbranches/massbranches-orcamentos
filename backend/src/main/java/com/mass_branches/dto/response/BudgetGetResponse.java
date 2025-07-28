@@ -3,8 +3,10 @@ package com.mass_branches.dto.response;
 import com.mass_branches.model.Budget;
 import com.mass_branches.model.Customer;
 import com.mass_branches.model.User;
+import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 record CustomerByBudgetGetResponse(String id, String name, String type) {
     public static CustomerByBudgetGetResponse by(Customer customer) {
@@ -36,9 +38,10 @@ public record BudgetGetResponse(
         BigDecimal totalValue,
         BigDecimal totalWithBdi,
         String status,
+        LocalDate createdAt,
         UserByBudgetGetResponse ownerUser
 ) {
-    public static BudgetGetResponse by(Budget budget) {
+    public static BudgetGetResponse by(Budget budget, LocalDate createdAt) {
         UserByBudgetGetResponse ownerUser = UserByBudgetGetResponse.by(budget.getUser());
 
         Customer customer = budget.getCustomer();
@@ -53,6 +56,7 @@ public record BudgetGetResponse(
                 budget.getTotalValue(),
                 budget.getTotalWithBdi(),
                 budget.getStatus().getStatus(),
+                createdAt,
                 ownerUser
         );
     }
