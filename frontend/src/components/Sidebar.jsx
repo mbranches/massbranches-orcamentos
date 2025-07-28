@@ -28,13 +28,13 @@ function Sidebar({ sidebarOpen, setSidebarOpen, actualSection, refreshSidebar })
             key: "criar-orcamento"
         },
         {
-            label: "Visualizar Orçamentos",
+            label: "Meus Orçamentos",
             icon: <FileText size={20} />,
             onClick: () => navigate("/orcamentos"),
             key: "visualizar-orcamentos"
         },
         {
-            label: "Visualizar Clientes",
+            label: "Meus Clientes",
             icon: <Users size={20} />,
             onClick: () => navigate("/clientes"),
             key: "visualizar-clientes"
