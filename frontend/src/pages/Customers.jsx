@@ -75,7 +75,7 @@ function Customers() {
 
             toast.success("Cliente deletado com sucesso")
         } catch(error) {
-            const status = error?.response?.status || 
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente");
                 
             statusValidate(status);
         } finally {
