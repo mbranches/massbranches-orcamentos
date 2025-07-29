@@ -216,7 +216,7 @@ function Customers() {
             </div>
 
             { createNewCustomerFormIsOpen && (
-                <Modal modalIsOpen={createNewCustomerFormIsOpen} setModalIsOpen={setCreateNewCustomerFormIsOpen} width={"w-2/3 md:w-1/3"}>
+                <Modal modalIsOpen={createNewCustomerFormIsOpen} setModalIsOpen={setCreateNewCustomerFormIsOpen} className={"w-2/3 md:w-1/3"}>
                     <CustomerForm 
                         onSubmit={onSumbitCreateCustomerForm} 
                         submitButtonLabel={"Criar"} 
