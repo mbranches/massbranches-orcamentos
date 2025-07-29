@@ -1,5 +1,5 @@
 import SidebarItem from './SidebarItem';
-import {  Calculator, FileText, Home, Plus, Users, X } from 'lucide-react';
+import {  Box, Calculator, FileText, Home, Plus, Users, X } from 'lucide-react';
 import Logo from './Logo'
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -38,6 +38,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen, actualSection, refreshSidebar })
             icon: <Users size={20} />,
             onClick: () => navigate("/clientes"),
             key: "visualizar-clientes"
+        },
+        {
+            label: "Meus Itens",
+            icon: <Box size={20} />,
+            onClick: () => navigate("/itens"),
+            key: "visualizar-itens"
         }
     ]
 
