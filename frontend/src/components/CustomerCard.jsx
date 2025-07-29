@@ -43,7 +43,7 @@ function CustomerCard({customer, onViewButtonClick, onEditButtonClick, onDeleteB
                         </span>
                     </div>
 
-                    <div className="flex gap-2 h-1/3">
+                    <div className="flex gap-2 h-1/3" onClick={e => e.stopPropagation()}>
                         <CardAction icon={<Eye size={16}/>} onClick={onViewButtonClick}>
                             Ver
                         </CardAction>
