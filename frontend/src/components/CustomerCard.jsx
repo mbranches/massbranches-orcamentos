@@ -5,7 +5,10 @@ import CustomerType from "./CustomerType";
 
 function CustomerCard({customer, onViewButtonClick, onEditButtonClick, onDeleteButtonClick}) {
     return (
-        <div className="p-4 border border-gray-200 hover:border-gray-300 rounded-lg transition-all duration-200">
+        <div 
+            className="p-4 border border-gray-200 hover:shadow-md cursor-pointer rounded-lg transition-all duration-200"
+            onClick={onViewButtonClick}
+        >
             <div className="flex flex-col gap-3">
                 <div className="flex gap-2 items-center">
                     <div className="rounded-full text-slate-600 bg-gray-100 p-3">
