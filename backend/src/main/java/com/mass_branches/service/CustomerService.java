@@ -75,7 +75,7 @@ public class CustomerService {
                 fetchByName && fetchByType ? repository.findAllByUserAndActiveIsTrueAndNameContainingAndType_Name(user, name.get(), type.get(), sort)
                         : fetchByType ? repository.findAllByUserAndActiveIsTrueAndType_Name(user, type.get(), sort)
                         : fetchByName ? repository.findAllByUserAndActiveIsTrueAndNameContaining(user, name.get(), sort)
-                        : repository.findAllByUserAndActiveIsTrue(user);
+                        : repository.findAllByUserAndActiveIsTrue(user, sort);
 
         return customers.stream()
                 .map((customer) -> {

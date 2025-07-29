@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, String> {
-    List<Customer> findAllByUserAndActiveIsTrue(User user);
+    List<Customer> findAllByUserAndActiveIsTrue(User user, Sort sort);
 
     Optional<Customer> findByUserAndActiveIsTrueAndId(User user, String id);
 
