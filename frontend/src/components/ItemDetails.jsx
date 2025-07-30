@@ -17,7 +17,7 @@ function ItemDetails({ item, setModalIsOpen }) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-10 justify-between text-sm">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-10 justify-between text-sm">
                 <div className="flex flex-col">
                     <span className="text-gray-600">Unidade de medida:</span>
                 
