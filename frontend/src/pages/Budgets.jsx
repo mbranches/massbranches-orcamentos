@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import PanelLayout from '../components/PanelLayout';
 import { deleteBudgetById, findAllMyBudgets, filterMyBudgets } from '../services/budget';
-import { Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import BudgetCard from '../components/BudgetCard';
 import LoadingScreen from '../components/LoadingScreen';
@@ -11,6 +10,8 @@ import FilterSelect from '../components/FilterSelect';
 import SearchBar from '../components/SearchBar';
 import ButtonNew from '../components/ButtonNew';
 import DeleteConfirmationBox from '../components/DeleteConfirmationBox';
+import Modal from '../components/Modal';
+import BudgetDetails from '../components/BudgetDetails';
 
 function Budgets() {
     const [loading, setLoading] = useState(false);
@@ -24,6 +25,10 @@ function Budgets() {
     const [deleteConfirmationBoxIsOpen, setDeleteConfirmationBoxIsOpen] = useState(false);
 
     const [budgetToDelete, setBudgetToDelete] = useState();
+
+    const [budgetToViewDetails, setBudgetToViewDetails] = useState(null);
+
+    const [budgetDetailsModalIsOpen, setBudgetDetailsModalIsOpen] = useState(false)
 
     const navigate = useNavigate();
 
@@ -104,6 +109,11 @@ function Budgets() {
         setBudgetToDelete(budget);
     };
 
+    const onBudgetCardClick = budget => {
+        setBudgetToViewDetails(budget);
+        setBudgetDetailsModalIsOpen(true);
+    }
+
     useEffect(() => {
         fetchBudgets();
     }, [refreshBudgets])
@@ -145,6 +155,7 @@ function Budgets() {
                                 onViewButtonClick={() => navigate(`/orcamentos/${budget.id}`)}
                                 onEditButtonClick={() => navigate(`/orcamentos/${budget.id}/dados`)}
                                 onDeleteButtonClick={() => onDeleteBudgetButtonClick(budget)} 
+                                onCardClick={() => onBudgetCardClick(budget)}
                             />
                         );
                     })) || (
@@ -161,6 +172,15 @@ function Budgets() {
                 objectToDelete={budgetToDelete?.description}
                 onDelete={() => deleteBudget(budgetToDelete)}
             />
+
+            {budgetDetailsModalIsOpen && (
+                <Modal modalIsOpen={budgetDetailsModalIsOpen} setModalIsOpen={setBudgetDetailsModalIsOpen} className={"w-2/3 md:w-2/5"}>
+                    <BudgetDetails 
+                        budget={budgetToViewDetails}
+                        setModalIsOpen={setBudgetDetailsModalIsOpen}
+                    />
+                </Modal>
+            )}
         </PanelLayout>
     );         
         

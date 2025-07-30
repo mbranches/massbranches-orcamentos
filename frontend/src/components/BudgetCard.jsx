@@ -3,9 +3,12 @@ import { formatCurrency, formatDate } from "../utils/format";
 import CardAction from "./CardAction";
 import BudgetStatus from "./BudgetStatus";
 
-function BudgetCard({budget, onViewButtonClick, onEditButtonClick, onDeleteButtonClick}) {
+function BudgetCard({budget, onViewButtonClick, onEditButtonClick, onDeleteButtonClick, onCardClick}) {
     return (
-        <div className="p-4 border border-gray-200 hover:border-gray-300 rounded-lg transition-all duration-200">
+        <div 
+            className="p-4 border border-gray-200 hover:shadow-md cursor-pointer rounded-lg transition-all duration-200"
+            onClick={onCardClick}    
+        >
             <div className="flex flex-col gap-3">
                 <div className="flex gap-2 items-center">
                     <h3 className="font-semibold text-lg">
@@ -42,7 +45,10 @@ function BudgetCard({budget, onViewButtonClick, onEditButtonClick, onDeleteButto
                         <span className="font-bold text-green-600">{formatCurrency(budget.totalWithBdi)}</span>
                     </div>
 
-                    <div className="flex gap-2 h-1/3">
+                    <div 
+                        className="flex gap-2 h-1/3"
+                        onClick={e => e.stopPropagation()}
+                    >
                         <CardAction icon={<Eye size={16}/>} onClick={onViewButtonClick}>
                             Ver
                         </CardAction>
