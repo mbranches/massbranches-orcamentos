@@ -6,6 +6,7 @@ import com.mass_branches.dto.response.ItemPostResponse;
 import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.Item;
 import com.mass_branches.model.User;
+import com.mass_branches.repository.BudgetItemRepository;
 import com.mass_branches.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @Service
 public class ItemService {
     private final ItemRepository repository;
+    private final BudgetItemRepository budgetItemRepository;
 
     public ItemPostResponse create(User user, ItemPostRequest postRequest) {
         Item itemToSave = Item.builder()
@@ -41,7 +43,10 @@ public class ItemService {
                 : repository.findAll(sort);
 
         return items.stream()
-                .map(ItemGetResponse::by)
+                .map(item -> {
+                    long numberOfUses = budgetItemRepository.countBudgetItemByItem(item);
+                    return ItemGetResponse.by(item, numberOfUses);
+                })
                 .toList();
     }
 
@@ -53,7 +58,10 @@ public class ItemService {
                 : repository.findAllByUserAndActiveIsTrue(user, sort);
 
         return items.stream()
-                .map(ItemGetResponse::by)
+                .map(item -> {
+                    long numberOfUses = budgetItemRepository.countBudgetItemByItem(item);
+                    return ItemGetResponse.by(item, numberOfUses);
+                })
                 .toList();
     }
 
@@ -61,7 +69,9 @@ public class ItemService {
         Item item = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByIdAndUserAndActiveIsTrueOrThrowsNotFoundException(id, user);
 
-        return ItemGetResponse.by(item);
+        long numberOfUses = budgetItemRepository.countBudgetItemByItem(item);
+
+        return ItemGetResponse.by(item, numberOfUses);
     }
 
     public Item findByIdOrThrowsNotFoundException(Long id){

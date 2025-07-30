@@ -2,6 +2,7 @@ package com.mass_branches.repository;
 
 import com.mass_branches.model.Budget;
 import com.mass_branches.model.BudgetItem;
+import com.mass_branches.model.Item;
 import com.mass_branches.model.Stage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,6 @@ public interface BudgetItemRepository extends JpaRepository<BudgetItem, Long> {
     List<BudgetItem> findAllByBudget(Budget budget);
 
     List<BudgetItem> findAllByStage(Stage stage);
+
+    long countBudgetItemByItem(Item item);
 }

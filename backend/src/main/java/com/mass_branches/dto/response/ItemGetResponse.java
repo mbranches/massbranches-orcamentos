@@ -8,14 +8,16 @@ public record ItemGetResponse(
         Long id,
         String name,
         String unitMeasurement,
-        BigDecimal unitPrice
+        BigDecimal unitPrice,
+        Long numberOfUses
 ) {
-    public static ItemGetResponse by(Item item) {
+    public static ItemGetResponse by(Item item, Long numberOfUses) {
         return new ItemGetResponse(
                 item.getId(),
                 item.getName(),
                 item.getUnitMeasurement(),
-                item.getUnitPrice()
+                item.getUnitPrice(),
+                numberOfUses
         );
     }
 }
