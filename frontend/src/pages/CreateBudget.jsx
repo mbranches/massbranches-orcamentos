@@ -6,6 +6,7 @@ import {createBudget} from "../services/budget";
 import { useNavigate } from 'react-router-dom';
 import statusValidate from '../utils/statusValidate';
 import { toast } from 'react-toastify';
+import { formatDecimal } from '../utils/format';
 
 function CreateBudget() {
     const [ sidebarOpen, setSidebarOpen ] = useState();
@@ -21,7 +22,7 @@ function CreateBudget() {
             const customerId = data.customer?.value;
             const status = data.status.value;
 
-            const response = await createBudget(customerId, data.description, data.proposalNumber, status, data.bdi);
+            const response = await createBudget(customerId, data.description, data.proposalNumber, status, formatDecimal(data.bdi));
 
             const createdBudget = response.data;
 

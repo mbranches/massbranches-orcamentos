@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { findBudgetById, updateBudget } from '../services/budget';
 import statusValidate from '../utils/statusValidate';
 import { ChevronLeft } from 'lucide-react';
+import { formatDecimal } from '../utils/format';
 
 function BudgetData() { 
     const navigate = useNavigate();
@@ -50,7 +51,7 @@ function BudgetData() {
 
             const budgetStatus = data.status.value;
 
-            await updateBudget({id: id, customerId: customerId, description: data.description, proposalNumber: data.proposalNumber, status: budgetStatus, bdi: data.bdi});
+            await updateBudget({id: id, customerId: customerId, description: data.description, proposalNumber: data.proposalNumber, status: budgetStatus, bdi: formatDecimal(data.bdi)});
 
             toast.success("Orçamento atualizado com sucesso");
             navigate(`/orcamentos/${id}`);
