@@ -13,6 +13,7 @@ import BudgetDetails from './pages/BudgetDetails.jsx'
 import { ToastContainer } from 'react-toastify'
 import Budgets from './pages/Budgets.jsx'
 import Customers from './pages/Customers.jsx'
+import Items from './pages/Items.jsx'
 
 const router = createBrowserRouter(
   [
@@ -47,7 +48,10 @@ const router = createBrowserRouter(
         {
           path: "/clientes",
           element: <Customers />,
-        },
+        },{
+          path: "/itens",
+          element: <Items />
+        }
       ]
     },
     {
