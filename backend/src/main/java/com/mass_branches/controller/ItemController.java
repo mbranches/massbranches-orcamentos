@@ -1,6 +1,7 @@
 package com.mass_branches.controller;
 
 import com.mass_branches.dto.request.ItemPostRequest;
+import com.mass_branches.dto.request.ItemPutRequest;
 import com.mass_branches.dto.response.ItemGetResponse;
 import com.mass_branches.dto.response.ItemPostResponse;
 import com.mass_branches.model.User;
@@ -56,5 +57,14 @@ public class ItemController {
         ItemGetResponse response = service.findById(user, id);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(Authentication authentication, @PathVariable Long id, @Valid @RequestBody ItemPutRequest request) {
+        User user = (User) authentication.getPrincipal();
+
+        service.update(user, id, request);
+
+        return ResponseEntity.noContent().build();
     }
 }

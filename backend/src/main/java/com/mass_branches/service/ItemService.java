@@ -1,13 +1,16 @@
 package com.mass_branches.service;
 
 import com.mass_branches.dto.request.ItemPostRequest;
+import com.mass_branches.dto.request.ItemPutRequest;
 import com.mass_branches.dto.response.ItemGetResponse;
 import com.mass_branches.dto.response.ItemPostResponse;
+import com.mass_branches.exception.BadRequestException;
 import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.Item;
 import com.mass_branches.model.User;
 import com.mass_branches.repository.BudgetItemRepository;
 import com.mass_branches.repository.ItemRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -86,5 +89,18 @@ public class ItemService {
 
     public NotFoundException newItemIdNotFoundException(Long id) {
         return new NotFoundException("Item with id '%s' not found".formatted(id))   ;
+    }
+
+    public void update(User user, Long id, ItemPutRequest request) {
+        if (!id.equals(request.id()))
+            throw new BadRequestException("The url id (%s) is different from the request body id(%s)".formatted(id, request.id()));
+
+        Item item = user.isAdmin() ? findByIdOrThrowsNotFoundException(id) : findByIdAndUserAndActiveIsTrueOrThrowsNotFoundException(id, user);
+
+        item.setName(request.name());
+        item.setUnitMeasurement(request.unitMeasurement());
+        item.setUnitPrice(request.unitPrice());
+
+        repository.save(item);
     }
 }
