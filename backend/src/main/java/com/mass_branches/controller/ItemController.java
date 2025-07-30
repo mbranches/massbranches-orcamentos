@@ -67,4 +67,12 @@ public class ItemController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(Authentication authentication, @PathVariable Long id) {
+        User user = (User) authentication.getPrincipal();
+        service.delete(user, id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -20,4 +20,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByUserAndNameContainingAndActiveIsTrue(User user, String name, Sort sort);
 
     List<Item> findAllByUserAndActiveIsTrue(User user, Sort sort);
+
+    Optional<Item> findByIdAndActiveIsTrue(Long id);
 }

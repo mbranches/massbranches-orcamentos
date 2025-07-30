@@ -82,6 +82,11 @@ public class ItemService {
                 .orElseThrow(() -> newItemIdNotFoundException(id));
     }
 
+    public Item findByIdAndActiveIsTrueOrThrowsNotFoundException(Long id){
+        return repository.findByIdAndActiveIsTrue(id)
+                .orElseThrow(() -> newItemIdNotFoundException(id));
+    }
+
     public Item findByIdAndUserAndActiveIsTrueOrThrowsNotFoundException(Long id, User user){
         return repository.findByIdAndUserAndActiveIsTrue(id, user)
                 .orElseThrow(() -> newItemIdNotFoundException(id));
@@ -100,6 +105,15 @@ public class ItemService {
         item.setName(request.name());
         item.setUnitMeasurement(request.unitMeasurement());
         item.setUnitPrice(request.unitPrice());
+
+        repository.save(item);
+    }
+
+    public void delete(User user, Long id) {
+        Item item = user.isAdmin() ? findByIdAndActiveIsTrueOrThrowsNotFoundException(id)
+                : findByIdAndUserAndActiveIsTrueOrThrowsNotFoundException(id, user);
+
+        item.setActive(false);
 
         repository.save(item);
     }
