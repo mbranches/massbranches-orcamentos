@@ -35,7 +35,7 @@ function BudgetDetails({ budget, setModalIsOpen }) {
                     <span className="text-gray-600">Cliente:</span>
                 
                     <span className="font-bold">
-                        {budget.customer.name}
+                        {budget.customer?.name}
                     </span>
                 </div>
 
