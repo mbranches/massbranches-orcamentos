@@ -17,9 +17,9 @@ function App() {
 
           <CardMenu icon={<FileText size={24}/>} title="Visualizar Orçamentos" description="Gerenciar meus orçamentos" color="blue" onButtonClick={() => navigate('/orcamentos')}/>
           
-          <CardMenu icon={<Users size={24}/>} title="Visualizar Clientes" description="Gerenciar meus clientes" color="purple" onButtonClick={() => navigate('/clientes')}/>
+          <CardMenu icon={<Users size={24}/>} title="Meus Clientes" description="Gerenciar meus clientes" color="purple" onButtonClick={() => navigate('/clientes')}/>
           
-          <CardMenu icon={<Box size={24}/>} title="Visualizar Itens" description="Gerenciar meus Itens" color="orange" onButtonClick={() => navigate('/clientes')}/>
+          <CardMenu icon={<Box size={24}/>} title="Meus Itens" description="Gerenciar meus Itens" color="orange" onButtonClick={() => navigate('/clientes')}/>
         </div>
       </PanelLayout>
     </div>
