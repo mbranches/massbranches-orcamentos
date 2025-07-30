@@ -9,7 +9,7 @@ import AuthProvider from './contexts/AuthProvider.jsx';
 import PrivateRoutes from './routes/PrivateRoutes.jsx'
 import NotFoundRedirect from './routes/NotFoundRedirect'
 import Budget from './pages/Budget.jsx'
-import BudgetDetails from './pages/BudgetDetails.jsx'
+import BudgetData from './pages/BudgetData.jsx'
 import { ToastContainer } from 'react-toastify'
 import Budgets from './pages/Budgets.jsx'
 import Customers from './pages/Customers.jsx'
@@ -43,7 +43,7 @@ const router = createBrowserRouter(
         },
         {
           path: "/orcamentos/:id/dados",
-          element: <BudgetDetails />
+          element: <BudgetData />
         },
         {
           path: "/clientes",
