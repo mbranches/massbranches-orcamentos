@@ -61,7 +61,7 @@ function CustomerDetails({ customer, setModalIsOpen }) {
                 </h4>
             </div>
 
-            <div className="flex flex-col px-2 gap-3 max-h-56 overflow-auto">
+            <div className="flex flex-col p-2 gap-3 max-h-56 overflow-auto">
                 {
                     budgetsOfCustomer.map(budget =>
                         <CustomerBudget key={budget.id} budget={budget}/>
