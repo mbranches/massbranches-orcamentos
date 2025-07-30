@@ -36,7 +36,6 @@ function CustomerDetails({ customer, setModalIsOpen }) {
     return (
         <div 
             className="flex flex-col gap-4"
-            onClick={(e) => e.stopPropagation()}
         >
             {loading && <LoadingScreen />}
             <div className="flex justify-between items-center">
