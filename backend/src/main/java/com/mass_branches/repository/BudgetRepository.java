@@ -1,6 +1,8 @@
 package com.mass_branches.repository;
 
+import com.mass_branches.dto.response.CustomerByCustomerRank;
 import com.mass_branches.model.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -46,4 +48,15 @@ public interface BudgetRepository extends JpaRepository<Budget, String> {
     long countBudgetsByUserAndCustomer_Type_NameAndActiveIsTrue(User user, CustomerTypeName customerTypeName);
 
     long countBudgetsByUserAndCustomer_Type_NameAndStatusAndActiveIsTrue(User user, CustomerTypeName customerTypeName, BudgetStatus status);
+
+    @Query("""
+        SELECT new com.mass_branches.dto.response.CustomerByCustomerRank(
+                b.customer.id, b.customer.name, b.customer.type.name, COUNT(b)
+            )
+            FROM Budget b
+            WHERE b.active = true
+            GROUP BY b.customer.id, b.customer.name, b.customer.type
+            ORDER BY count(b) DESC
+    """)
+    List<CustomerByCustomerRank> findTopCustomersByBudgetCountByUserAndActiveIsTrue(User user, Pageable page);
 }

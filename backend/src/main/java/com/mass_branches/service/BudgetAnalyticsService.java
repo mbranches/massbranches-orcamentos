@@ -1,12 +1,17 @@
 package com.mass_branches.service;
 
 import com.mass_branches.dto.response.ConversionRateByCustomerType;
+import com.mass_branches.dto.response.CustomerByCustomerRank;
 import com.mass_branches.model.BudgetStatus;
 import com.mass_branches.model.Customer;
 import com.mass_branches.model.CustomerTypeName;
 import com.mass_branches.model.User;
 import com.mass_branches.repository.BudgetRepository;
+import com.mass_branches.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,6 +23,7 @@ import java.util.List;
 public class BudgetAnalyticsService {
 
     private final BudgetRepository budgetRepository;
+    private final CustomerRepository customerRepository;
 
     public BigDecimal getConversionRate(User user) {
         BigDecimal numberOfBudgets = BigDecimal.valueOf(budgetRepository.countBudgetsByUserAndActiveIsTrue(user));
@@ -46,5 +52,11 @@ public class BudgetAnalyticsService {
                 ConversionRateByCustomerType.by(pessoaFisica, conversionRateByPessoaFisica),
                 ConversionRateByCustomerType.by(pessoaJuridica, conversionRateByPessoaJuridica)
         );
+    }
+
+    public List<CustomerByCustomerRank> getCustomerRank(User user) {
+        Pageable pageable = PageRequest.of(0, 5);
+
+        return budgetRepository.findTopCustomersByBudgetCountByUserAndActiveIsTrue(user, pageable);
     }
 }

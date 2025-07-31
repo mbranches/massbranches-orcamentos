@@ -1,6 +1,7 @@
 package com.mass_branches.controller;
 
 import com.mass_branches.dto.response.ConversionRateByCustomerType;
+import com.mass_branches.dto.response.CustomerByCustomerRank;
 import com.mass_branches.model.User;
 import com.mass_branches.service.BudgetAnalyticsService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,15 @@ public class BudgetAnalyticsController {
         User user = (User) authentication.getPrincipal();
 
         List<ConversionRateByCustomerType> response = service.getConversionRateByCustomerType(user);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/customers/top")
+    public ResponseEntity<List<CustomerByCustomerRank>> getCustomerRank(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        List<CustomerByCustomerRank> response = service.getCustomerRank(user);
 
         return ResponseEntity.ok(response);
     }
