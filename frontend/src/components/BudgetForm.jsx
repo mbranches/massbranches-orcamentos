@@ -26,7 +26,7 @@ function BudgetForm({ submitButtonLabel, onSubmit, defaultValues={}, setLoading,
         { id: "EM_ANDAMENTO", name: "Em andamento" },
         { id: "EM_ANALISE", name: "Em análise" },
         { id: "APROVADO", name: "Aprovado" },
-        { id: "RECUSADO", name: "Rescusado" },
+        { id: "RECUSADO", name: "Recusado" },
     ];
 
     useEffect(() => {
