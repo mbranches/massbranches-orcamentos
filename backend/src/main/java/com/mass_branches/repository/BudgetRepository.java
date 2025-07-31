@@ -42,4 +42,6 @@ public interface BudgetRepository extends JpaRepository<Budget, String> {
     BigDecimal sumTotalWithBdiByCustomerAndActiveIsTrue(@Param("customer") Customer customer);
 
     List<Budget> findAllByCustomerAndActiveIsTrue(Customer customer, Sort sort);
+
+    Integer countBudgetsByUserAndStatusAndActiveIsTrue(User user, BudgetStatus budgetStatus);
 }
