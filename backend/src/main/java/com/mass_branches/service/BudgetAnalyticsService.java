@@ -59,4 +59,12 @@ public class BudgetAnalyticsService {
 
         return budgetRepository.findTopCustomersByBudgetCountByUserAndActiveIsTrue(user, pageable);
     }
+
+    public BigDecimal getTotalBudgeted(User user) {
+        return budgetRepository.sumTotalWithBdiByUserAndActiveIsTrue(user);
+    }
+
+    public BigDecimal getTotalApproved(User user) {
+        return budgetRepository.sumTotalWithBdiByUserAndStatusAndActiveIsTrue(user, BudgetStatus.APROVADO);
+    }
 }

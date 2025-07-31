@@ -29,6 +29,24 @@ public class BudgetAnalyticsController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/total")
+    public ResponseEntity<BigDecimal> getTotalBudgeted(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        BigDecimal response = service.getTotalBudgeted(user);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/total-approved")
+    public ResponseEntity<BigDecimal> getTotalApproved(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        BigDecimal response = service.getTotalApproved(user);
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/customers/type/conversion-rate")
     public ResponseEntity<List<ConversionRateByCustomerType>> getConversionRateByCustomerType(Authentication authentication) {
         User user = (User) authentication.getPrincipal();

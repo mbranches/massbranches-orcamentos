@@ -59,4 +59,16 @@ public interface BudgetRepository extends JpaRepository<Budget, String> {
             ORDER BY count(b) DESC
     """)
     List<CustomerByCustomerRank> findTopCustomersByBudgetCountByUserAndActiveIsTrue(User user, Pageable page);
+
+    @Query("""
+        SELECT COALESCE(SUM(b.totalWithBdi), 0) FROM Budget b
+            WHERE b.user = :user AND b.active = true
+    """)
+    BigDecimal sumTotalWithBdiByUserAndActiveIsTrue(User user);
+
+    @Query("""
+        SELECT COALESCE(SUM(b.totalWithBdi), 0) FROM Budget b
+            WHERE b.user = :user AND b.status = :status AND b.active = true
+    """)
+    BigDecimal sumTotalWithBdiByUserAndStatusAndActiveIsTrue(@Param("user") User user, @Param("status") BudgetStatus status);
 }
