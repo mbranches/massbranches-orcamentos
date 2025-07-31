@@ -1,9 +1,6 @@
 package com.mass_branches.repository;
 
-import com.mass_branches.model.Budget;
-import com.mass_branches.model.BudgetStatus;
-import com.mass_branches.model.Customer;
-import com.mass_branches.model.User;
+import com.mass_branches.model.*;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -43,5 +41,9 @@ public interface BudgetRepository extends JpaRepository<Budget, String> {
 
     List<Budget> findAllByCustomerAndActiveIsTrue(Customer customer, Sort sort);
 
-    Integer countBudgetsByUserAndStatusAndActiveIsTrue(User user, BudgetStatus budgetStatus);
+    long countBudgetsByUserAndStatusAndActiveIsTrue(User user, BudgetStatus budgetStatus);
+
+    long countBudgetsByUserAndCustomer_Type_NameAndActiveIsTrue(User user, CustomerTypeName customerTypeName);
+
+    long countBudgetsByUserAndCustomer_Type_NameAndStatusAndActiveIsTrue(User user, CustomerTypeName customerTypeName, BudgetStatus status);
 }

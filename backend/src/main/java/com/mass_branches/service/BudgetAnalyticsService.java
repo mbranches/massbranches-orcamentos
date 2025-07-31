@@ -1,6 +1,9 @@
 package com.mass_branches.service;
 
+import com.mass_branches.dto.response.ConversionRateByCustomerType;
 import com.mass_branches.model.BudgetStatus;
+import com.mass_branches.model.Customer;
+import com.mass_branches.model.CustomerTypeName;
 import com.mass_branches.model.User;
 import com.mass_branches.repository.BudgetRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -21,5 +25,26 @@ public class BudgetAnalyticsService {
 
         return numberOfBudgets.equals(BigDecimal.ZERO) ? BigDecimal.ZERO :
                 numberOfApprovedBudgets.multiply(BigDecimal.valueOf(100)).divide(numberOfBudgets, 2, RoundingMode.HALF_UP);
+    }
+
+    public List<ConversionRateByCustomerType> getConversionRateByCustomerType(User user) {
+        CustomerTypeName pessoaFisica = CustomerTypeName.PESSOA_FISICA;
+        CustomerTypeName pessoaJuridica = CustomerTypeName.PESSOA_JURIDICA;
+
+        BigDecimal numberOfBudgetsByPessoaFisica = BigDecimal.valueOf(budgetRepository.countBudgetsByUserAndCustomer_Type_NameAndActiveIsTrue(user, pessoaFisica));
+        BigDecimal numberOfBudgetsByPessoaJuridica = BigDecimal.valueOf(budgetRepository.countBudgetsByUserAndCustomer_Type_NameAndActiveIsTrue(user, pessoaJuridica));
+
+        BigDecimal numberOfApprovedBudgetsByPessoaFisica = BigDecimal.valueOf(budgetRepository.countBudgetsByUserAndCustomer_Type_NameAndStatusAndActiveIsTrue(user, pessoaFisica, BudgetStatus.APROVADO));
+        BigDecimal numberOfApprovedBudgetsByPessoaJuridica = BigDecimal.valueOf(budgetRepository.countBudgetsByUserAndCustomer_Type_NameAndStatusAndActiveIsTrue(user, pessoaJuridica, BudgetStatus.APROVADO));
+
+        BigDecimal conversionRateByPessoaFisica = numberOfBudgetsByPessoaFisica.equals(BigDecimal.ZERO) ? BigDecimal.ZERO :
+                numberOfApprovedBudgetsByPessoaFisica.multiply(BigDecimal.valueOf(100)).divide(numberOfBudgetsByPessoaFisica, 2, RoundingMode.HALF_UP);
+        BigDecimal conversionRateByPessoaJuridica = numberOfBudgetsByPessoaJuridica.equals(BigDecimal.ZERO) ? BigDecimal.ZERO :
+                numberOfApprovedBudgetsByPessoaJuridica.multiply(BigDecimal.valueOf(100)).divide(numberOfBudgetsByPessoaJuridica, 2, RoundingMode.HALF_UP);
+
+        return List.of(
+                ConversionRateByCustomerType.by(pessoaFisica, conversionRateByPessoaFisica),
+                ConversionRateByCustomerType.by(pessoaJuridica, conversionRateByPessoaJuridica)
+        );
     }
 }

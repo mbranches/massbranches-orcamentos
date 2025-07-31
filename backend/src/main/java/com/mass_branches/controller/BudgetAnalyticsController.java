@@ -1,6 +1,6 @@
 package com.mass_branches.controller;
 
-import com.mass_branches.dto.response.BudgetAnalyticsMonthlyGetResponse;
+import com.mass_branches.dto.response.ConversionRateByCustomerType;
 import com.mass_branches.model.User;
 import com.mass_branches.service.BudgetAnalyticsService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,15 @@ public class BudgetAnalyticsController {
         User user = (User) authentication.getPrincipal();
 
         BigDecimal response = service.getConversionRate(user);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/customers/type/conversion-rate")
+    public ResponseEntity<List<ConversionRateByCustomerType>> getConversionRateByCustomerType(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        List<ConversionRateByCustomerType> response = service.getConversionRateByCustomerType(user);
 
         return ResponseEntity.ok(response);
     }
