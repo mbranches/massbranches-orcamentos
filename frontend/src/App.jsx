@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="bg-gray-100">
       <PanelLayout sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} actualSection={"tela-inicial"}>
-        <div className="lg:ml-[310px] mt-20 md:mt-0 p-6 grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl ">
+        <div className="lg:ml-[310px] mt-20 p-6 grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl ">
           <CardMenu icon={<Calculator size={24}/>} title="Criar Orçamento" description="Novo orçamento de obra" color="green" onButtonClick={() => navigate('/orcamentos/criar')}/>
 
           <CardMenu icon={<FileText size={24}/>} title="Visualizar Orçamentos" description="Gerenciar meus orçamentos" color="blue" onButtonClick={() => navigate('/orcamentos')}/>
