@@ -30,21 +30,25 @@ Durante os meus primeiros estudos com Java, desenvolvi um aplicativo desktop par
 
 - Criação de orçamentos 
 - Divisão dos orçamentos em etapas
-- Cálculo de valor por etapa
-- Definição de status do orçamento (em andamento, em análise, aprovado ou negado)
+- Cálculo automático de valor total por etapa
+- Definição de status do orçamento (em andamento, em análise, aprovado ou recusado)
 - Cálculos de orçamentos com ou sem bdi
 - Listagem de todos orçamentos
-- Filtro por status
-- Exportação de orçamento para Excel
+- Filtro de orçamentos por status
+- Exportação de orçamento para a planilha de proposta da empresa
 - Criação automática de item ao ser utilizado em um orçamento
-
-## 🕐 Futuras funcionalidades
-
-- Análises gerais com base no orçamento
 - Criação de clientes
-- Listagem de clientes
-- Análises de orçamentos por clientes
-- Criação de item fora do orçamento
+- Visualização de orçamentos de cada cliente
+- Filtro de clientes por tipo
+- Criação de itens
+- Visualização de itens
+- Quantidade de uso por item
+- Análise avançadas:
+  - Taxa de conversão de orçamentos
+  - Taxa de conversão por tipo de cliente
+  - Rank de clientes com mais orçamentos
+  - Valor total orçado
+  - Valor total aprovado
 
 ## 📸 Demonstração
 
@@ -57,11 +61,6 @@ Durante os meus primeiros estudos com Java, desenvolvi um aplicativo desktop par
 ![Tela inicial](./assets/home.png)
 
 ---
-### 🧾 Listagem de orçamentos
-
-![Listagem de orçamentos](./assets/budget-list.png)
-
----
 
 ### 🧾 Criação de orçamento
 
@@ -69,9 +68,33 @@ Durante os meus primeiros estudos com Java, desenvolvi um aplicativo desktop par
 
 ---
 
-### 📄 Exportação para Excel
+### 📋 Listagem de orçamentos
+
+![Listagem de orçamentos](./assets/budget-list.png)
+
+---
+
+### 📤 Exportação para Excel
 
 ![Exportação](./assets/exporting-excel.gif)
+
+---
+
+### 👥 Listagem de clientes
+
+![Exportação](./assets/my-customers.png)
+
+---
+
+### 📑 Listagem de orçamentos por cliente
+
+![Exportação](assets/budgets-by-customer.png)
+
+---
+
+### 🧱 Listagem de itens
+
+![Exportação](assets/my-items.png)
 
 ---
 
@@ -140,4 +163,4 @@ Durante os meus primeiros estudos com Java, desenvolvi um aplicativo desktop par
 
 ## 🚀 Utilizando o sistema
 
-- Acesse `http://localhost:5173/` para acessar ao sistema e ter acesso a todas as suas funcionalidades
+- Acesse `http://localhost:5173/login` para acessar ao sistema e ter acesso a todas as suas funcionalidades
