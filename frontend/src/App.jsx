@@ -1,4 +1,4 @@
-import { Box, Calculator, FileText, Users } from "lucide-react";
+import { Box, Calculator, ChartNoAxesCombined, FileText, Users,  } from "lucide-react";
 import CardMenu from "./components/CardMenu";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,10 @@ function App() {
           <CardMenu icon={<Users size={24}/>} title="Meus Clientes" description="Gerenciar meus clientes" color="purple" onButtonClick={() => navigate('/clientes')}/>
           
           <CardMenu icon={<Box size={24}/>} title="Meus Itens" description="Gerenciar meus Itens" color="orange" onButtonClick={() => navigate('/clientes')}/>
+          
+          <div className="col-span-2">
+            <CardMenu icon={<ChartNoAxesCombined size={24} />} title="Minhas Análises" description="Análises dos meus orçamentos" color="gray" onButtonClick={() => navigate('/analytics')}/>
+          </div>
         </div>
       </PanelLayout>
     </div>
