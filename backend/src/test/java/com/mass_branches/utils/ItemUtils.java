@@ -24,11 +24,11 @@ public class ItemUtils {
         return new ArrayList<>(List.of(item1, item2, item3));
     }
 
-    public static List<ItemGetResponse> newItemGetResponseList() {
-        return newItemList().stream().map(item ->
-                new ItemGetResponse(item.getId(), item.getName(), item.getUnitMeasurement(), item.getUnitPrice())
-        ).toList();
-    }
+//    public static List<ItemGetResponse> newItemGetResponseList() {
+//        return newItemList().stream().map(item ->
+//                new ItemGetResponse(item.getId(), item.getName(), item.getUnitMeasurement(), item.getUnitPrice())
+//        ).toList();
+//    }
 
     public static Item newItemToSave() {
         User user = UserUtils.newUserList().getFirst();

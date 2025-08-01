@@ -33,7 +33,7 @@ class ItemServiceTest {
     @BeforeEach
     void init() {
         itemList = ItemUtils.newItemList();
-        itemGetResponseList = ItemUtils.newItemGetResponseList();
+//        itemGetResponseList = ItemUtils.newItemGetResponseList();
     }
 
     @Test
