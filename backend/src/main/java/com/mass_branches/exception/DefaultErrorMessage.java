@@ -1,4 +1,10 @@
 package com.mass_branches.exception;
 
-public record DefaultErrorMessage(Integer status, String message) {
-}
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record DefaultErrorMessage(
+        @Schema(description = "response error status code")
+        Integer status,
+        @Schema(example = "message", description = "response error message")
+        String message
+) {}

@@ -1,3 +1,8 @@
 package com.mass_branches.dto.response;
 
-public record LoginResponse(String accessToken) {}
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record LoginResponse(
+        @Schema(example = "your-jwt-token", description = "your jwt access token")
+        String accessToken
+) {}
