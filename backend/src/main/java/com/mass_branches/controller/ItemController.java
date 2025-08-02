@@ -6,6 +6,8 @@ import com.mass_branches.dto.response.ItemGetResponse;
 import com.mass_branches.dto.response.ItemPostResponse;
 import com.mass_branches.model.User;
 import com.mass_branches.service.ItemService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Items", description = "Operations with items")
+@SecurityRequirement(name = "Bearer Authentication")
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/items")
 @RestController

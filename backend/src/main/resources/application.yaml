@@ -27,3 +27,8 @@ jwt:
 logging:
   level:
     org.hibernate.orm.jdbc.bind: trace
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    tagsSorter: "alpha"

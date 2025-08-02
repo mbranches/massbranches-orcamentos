@@ -4,6 +4,8 @@ import com.mass_branches.dto.response.ConversionRateByCustomerType;
 import com.mass_branches.dto.response.CustomerByCustomerRank;
 import com.mass_branches.model.User;
 import com.mass_branches.service.BudgetAnalyticsService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Tag(name = "Budget Analytics", description = "Analyses based on the requesting user budgets")
+@SecurityRequirement(name = "Bearer Authentication")
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/budgets/analytics")
 @RestController
