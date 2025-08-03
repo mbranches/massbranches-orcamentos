@@ -139,11 +139,11 @@ public class BudgetAnalyticsController {
     }
 
     @Operation(
-            summary = "",
+            summary = "get top 5 users with most budgets of the requesting user",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "get top 5 users with most budgets of the requesting user",
+                            description = "successfully get top 5 users with most budgets of the requesting user",
                             content = @Content(
                                     array = @ArraySchema(
                                             schema = @Schema(implementation = CustomerByCustomerRank.class)
