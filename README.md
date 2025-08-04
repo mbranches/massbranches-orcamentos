@@ -93,6 +93,11 @@ Durante os meus primeiros estudos com Java, desenvolvi um aplicativo desktop par
 
 ---
 
+## 📖 Documentação da API
+ 
+> A API está completamente documentada, para visitar a documentação basta acessar a url `http://localhost:8080/swagger-ui.html`
+
+![Demonstração swagger-ui](assets/swagger-ui.png)
 
 ## 🛠️ Tecnologias utilizadas
 
@@ -101,6 +106,7 @@ Durante os meus primeiros estudos com Java, desenvolvi um aplicativo desktop par
   - ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.0-brightgreen?logo=spring) - Framework para criação da APIs REST em Java.
   - ![JPA](https://img.shields.io/badge/Spring_Data_JPA-blue?logo=eclipselink) - Framework para mapeamento objeto-relacional.
   - ![Spring Security](https://img.shields.io/badge/Spring_Security-gray?logo=springsecurity) - Implementação da autenticação e autorização com JWT.
+  - ![Spring Doc](https://img.shields.io/badge/Spring_Security-gray?logo=springsecurity) - Documentação da API com Swagger UI.
   - ![Flyway](https://img.shields.io/badge/flyway-red?logo=flyway) - Ferramenta para versionamento do banco de dados.
   - ![Hibernate](https://img.shields.io/badge/Hibernate-grey?logo=hibernate) - Framework ORM para persistência de dados.
   - ![Docker](https://img.shields.io/badge/Docker-blue?logo=docker) - Para conteinerização do Banco de dados.
