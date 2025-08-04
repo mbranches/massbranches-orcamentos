@@ -279,7 +279,7 @@ public class BudgetController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "budget found successfully",
+                            description = "successfully get the number of the requesting user budgets",
                             content = @Content(
                                     schema = @Schema(example = "25", type = "number")
                             )
