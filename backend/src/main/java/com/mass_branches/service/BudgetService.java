@@ -82,22 +82,6 @@ public class BudgetService {
         recalculateTotals(budget);
     }
 
-    public List<BudgetGetResponse> listAll(Optional<String> description, Optional<BudgetStatus> status) {
-        Sort sort = Sort.by("updatedAt").descending();
-
-        boolean fetchByName = description.isPresent();
-        boolean fetchByStatus = status.isPresent();
-        List<Budget> budgets =
-                fetchByName && fetchByStatus ? repository.findAllByDescriptionContainingAndStatus(description.get(), status.get(), sort)
-                        : fetchByName ? repository.findAllByDescriptionContaining(description.get(), sort)
-                        : fetchByStatus ? repository.findAllByStatus(status.get(), sort)
-                        : repository.findAll(sort);
-
-        return budgets.stream()
-                .map(budget -> BudgetGetResponse.by(budget, budget.getCreatedAt().toLocalDate()))
-                .toList();
-    }
-
     public List<BudgetGetResponse> listAllMy(User requestingUser, Optional<String> description, Optional<BudgetStatus> status) {
         Sort sort = Sort.by("updatedAt").descending();
 

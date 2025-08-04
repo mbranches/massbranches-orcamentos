@@ -75,45 +75,6 @@ public class BudgetController {
     }
 
     @Operation(
-            summary = "List all budgets",
-            parameters = {
-                    @Parameter(
-                            name = "description",
-                            description = "description to filter budgets"
-                    ),
-                    @Parameter(
-                            name = "status",
-                            description = "status to filter budgets"
-                    )
-            },
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "successfully list all budgets",
-                            content = @Content(
-                                    array = @ArraySchema(
-                                            schema = @Schema(implementation = BudgetGetResponse.class)
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "the requesting user does not have admin role",
-                            content = @Content
-                    )
-            }
-    )
-    @GetMapping
-    public ResponseEntity<List<BudgetGetResponse>> listAll(
-            @RequestParam(required = false) Optional<String> description,
-            @RequestParam(required = false) Optional<BudgetStatus> status
-    ) {
-        List<BudgetGetResponse> response = service.listAll(description, status);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @Operation(
             summary = "List all the requesting user budgets",
             parameters = {
                     @Parameter(
