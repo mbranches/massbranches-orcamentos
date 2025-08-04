@@ -42,28 +42,6 @@ public class CustomerService {
         return CustomerPostResponse.by(savedCustomer);
     }
 
-    public List<CustomerGetResponse> listAll(Optional<String> name, Optional<CustomerTypeName> type) {
-        Sort sort = Sort.by("updatedAt").descending();
-
-        boolean fetchByName = name.isPresent();
-        boolean fetchByType = type.isPresent();
-
-        List<Customer> customers =
-                fetchByName && fetchByType ? repository.findAllByNameContainingAndType_Name(name.get(), type.get(), sort)
-                        : fetchByType ?  repository.findAllByType_Name(type.get(), sort)
-                        : fetchByName ? repository.findAllByNameContaining(name.get(), sort)
-                        : repository.findAll(sort);
-
-        return customers.stream()
-                .map((customer) -> {
-                    long numberOfBudgets = budgetRepository.countBudgetsByCustomerAndActiveIsTrue(customer);
-                    BigDecimal totalInBudgetsWithBdi = budgetRepository.sumTotalWithBdiByCustomerAndActiveIsTrue(customer);
-
-                    return CustomerGetResponse.by(customer, numberOfBudgets, totalInBudgetsWithBdi);
-                })
-                .toList();
-    }
-
     public List<CustomerGetResponse> listAllMy(User user, Optional<String> name, Optional<CustomerTypeName> type) {
         Sort sort = Sort.by("updatedAt").descending();
 

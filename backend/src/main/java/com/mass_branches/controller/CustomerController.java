@@ -66,45 +66,6 @@ public class CustomerController {
     }
 
     @Operation(
-            summary = "List all customers",
-            parameters = {
-                    @Parameter(
-                            name = "name",
-                            description = "name to filter customers"
-                    ),
-                    @Parameter(
-                            name = "type",
-                            description = "type to filter customers"
-                    )
-            },
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "successfully list all customer",
-                            content = @Content(
-                                    array = @ArraySchema(
-                                            schema = @Schema(implementation = CustomerGetResponse.class)
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "the requesting user does not have admin role",
-                            content = @Content
-                    )
-            }
-    )
-    @GetMapping
-    public ResponseEntity<List<CustomerGetResponse>> listAll(
-            @RequestParam(required = false) Optional<String> name,
-            @RequestParam(required = false) Optional<CustomerTypeName> type
-    ) {
-
-        List<CustomerGetResponse> response = service.listAll(name, type);
-        return ResponseEntity.ok(response);
-    }
-
-    @Operation(
             summary = "List all the requesting user customers",
             parameters = {
                     @Parameter(
