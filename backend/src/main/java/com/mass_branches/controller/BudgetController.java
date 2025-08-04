@@ -76,6 +76,16 @@ public class BudgetController {
 
     @Operation(
             summary = "List all budgets",
+            parameters = {
+                    @Parameter(
+                            name = "description",
+                            description = "description to filter budgets"
+                    ),
+                    @Parameter(
+                            name = "status",
+                            description = "status to filter budgets"
+                    )
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -105,6 +115,16 @@ public class BudgetController {
 
     @Operation(
             summary = "List all the requesting user budgets",
+            parameters = {
+                    @Parameter(
+                            name = "description",
+                            description = "description to filter the requesting user budgets"
+                    ),
+                    @Parameter(
+                            name = "status",
+                            description = "status to filter the requesting user budgets"
+                    )
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -123,14 +143,14 @@ public class BudgetController {
             }
     )
     @GetMapping("/my")
-    public ResponseEntity<List<BudgetGetResponse>> listAllMy(
+    public ResponseEntity<List<BudgetGetResponse>> listMyAll(
             Authentication authentication,
             @RequestParam(required = false) Optional<String> description,
             @RequestParam(required = false) Optional<BudgetStatus> status
     ) {
         User user = (User) authentication.getPrincipal();
 
-        List<BudgetGetResponse> response = service.listAllMy(user, description, status);
+        List<BudgetGetResponse> response = service.listMyAll(user, description, status);
 
         return ResponseEntity.ok(response);
     }
