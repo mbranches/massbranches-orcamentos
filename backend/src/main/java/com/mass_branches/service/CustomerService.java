@@ -64,7 +64,7 @@ public class CustomerService {
                 .toList();
     }
 
-    public List<CustomerGetResponse> listMyAll(User user, Optional<String> name, Optional<CustomerTypeName> type) {
+    public List<CustomerGetResponse> listAllMy(User user, Optional<String> name, Optional<CustomerTypeName> type) {
         Sort sort = Sort.by("updatedAt").descending();
 
         boolean fetchByName = name.isPresent();

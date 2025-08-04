@@ -134,14 +134,14 @@ public class CustomerController {
             }
     )
     @GetMapping("/my")
-    public ResponseEntity<List<CustomerGetResponse>> listMyAll(
+    public ResponseEntity<List<CustomerGetResponse>> listAllMy(
             Authentication authentication,
             @RequestParam(required = false) Optional<String> name,
             @RequestParam(required = false) Optional<CustomerTypeName> type
     ) {
         User user = (User) authentication.getPrincipal();
 
-        List<CustomerGetResponse> response = service.listMyAll(user, name, type);
+        List<CustomerGetResponse> response = service.listAllMy(user, name, type);
         return ResponseEntity.ok(response);
     }
 
