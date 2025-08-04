@@ -388,7 +388,7 @@ public class BudgetController {
             parameters = {
                     @Parameter(
                             name = "id",
-                            description = "budget id to update"
+                            description = "budget item id to remove"
                     ),
                     @Parameter(
                             name = "budgetItemId",
