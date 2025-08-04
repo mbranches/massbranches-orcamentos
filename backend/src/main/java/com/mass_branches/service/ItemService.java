@@ -10,7 +10,6 @@ import com.mass_branches.model.Item;
 import com.mass_branches.model.User;
 import com.mass_branches.repository.BudgetItemRepository;
 import com.mass_branches.repository.ItemRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -36,21 +35,6 @@ public class ItemService {
         Item savedItem = repository.save(itemToSave);
 
         return ItemPostResponse.by(savedItem);
-    }
-
-    public List<ItemGetResponse> listAll(Optional<String> name) {
-        Sort sort = Sort.by("name").ascending();
-        boolean fetchByName = name.isPresent();
-
-        List<Item> items = fetchByName ? repository.findAllByNameContaining(name.get(), sort)
-                : repository.findAll(sort);
-
-        return items.stream()
-                .map(item -> {
-                    long numberOfUses = budgetItemRepository.countBudgetItemByItem(item);
-                    return ItemGetResponse.by(item, numberOfUses);
-                })
-                .toList();
     }
 
     public List<ItemGetResponse> listAllMy(User user, Optional<String> name) {

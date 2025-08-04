@@ -35,13 +35,6 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ItemGetResponse>> listAll(@RequestParam(required = false) Optional<String> name) {
-        List<ItemGetResponse> response = service.listAll(name);
-
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/my")
     public ResponseEntity<List<ItemGetResponse>> listAllMy(
             Authentication authentication,
