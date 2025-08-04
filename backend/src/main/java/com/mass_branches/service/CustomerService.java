@@ -135,7 +135,7 @@ public class CustomerService {
         Customer customer = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdOrThrowsNotFoundException(user, id);
 
-        CustomerType customerType = customerTypeService.findByNameOrThrowsNotFoundException(request.type().name());
+        CustomerType customerType = customerTypeService.findByNameOrThrowsNotFoundException(request.type());
 
         customer.setName(request.name());
         customer.setType(customerType);
