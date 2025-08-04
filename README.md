@@ -8,10 +8,10 @@
 
 - [✍️ Motivação](#-motivação)
 - [🎯 Funcionalidades atuais](#-funcionalidades-atuais-)
-- [🕐 Funcionalidades futuras](#-futuras-funcionalidades)
 - [📸 Demonstração](#-demonstração)
+- [📖 Documentação da API](#-documentação-da-api)
 - [🛠️ Tecnologias utilizadas](#-tecnologias-utilizadas)
-- [🖥️ Como rodar na sua máquina](#️-como-rodar-na-sua-máquina)
+- [🖥️ Como rodar na sua máquina](#-como-rodar-na-sua-máquina)
 - [🚀 Utilizando o sistema](#-utilizando-o-sistema)
 
 ---
