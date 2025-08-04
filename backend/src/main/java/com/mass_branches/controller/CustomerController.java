@@ -268,6 +268,11 @@ public class CustomerController {
                             responseCode = "403",
                             description = "the requesting user is not authenticated",
                             content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "id was not found",
+                            responseCode = "404",
+                            content = @Content(schema = @Schema(implementation = DefaultErrorMessage.class))
                     )
             }
     )
