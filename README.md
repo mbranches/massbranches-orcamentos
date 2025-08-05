@@ -69,7 +69,7 @@ Durante os meus primeiros estudos com Java, desenvolvi um aplicativo desktop par
 
 ---
 
-### 📤 Exportação para Excel
+### 📤 Exportação para arquivo de proposta da Empresa
 
 ![Exportação](./assets/exporting-excel.gif)
 
@@ -90,6 +90,12 @@ Durante os meus primeiros estudos com Java, desenvolvi um aplicativo desktop par
 ### 🧱 Listagem de itens
 
 ![Exportação](assets/my-items.png)
+
+---
+
+### 📈 Análises
+
+![Análises](assets/analysis.gif)
 
 ---
 
