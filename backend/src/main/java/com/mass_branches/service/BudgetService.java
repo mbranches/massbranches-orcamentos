@@ -1,13 +1,11 @@
 package com.mass_branches.service;
 
-import com.mass_branches.dto.request.BudgetItemPostRequest;
-import com.mass_branches.dto.request.BudgetPostRequest;
-import com.mass_branches.dto.request.BudgetPutRequest;
-import com.mass_branches.dto.request.StagePostRequest;
+import com.mass_branches.dto.request.*;
 import com.mass_branches.dto.response.*;
 import com.mass_branches.exception.BadRequestException;
 import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.*;
+import com.mass_branches.repository.BudgetItemRepository;
 import com.mass_branches.repository.BudgetRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +34,7 @@ public class BudgetService {
     private final ItemService itemService;
     private final BudgetItemService budgetItemService;
     private final StageService stageService;
+    private final BudgetItemRepository budgetItemRepository;
 
     public BudgetPostResponse create(User user, BudgetPostRequest postRequest) {
         Customer customer = postRequest.customerId() != null ? customerService.findByUserAndIdOrThrowsNotFoundException(user, postRequest.customerId())
@@ -71,7 +70,7 @@ public class BudgetService {
         if (!bdi.equals(budget.getBdi())) {
             budget.setBdi(bdi);
 
-            budgetItemService.updateBudgetItemsTotalValueByBudget(budget, bdi);
+            budgetItemService.updateBudgetItemsTotalValueByBudget(budget);
         }
 
         budget.setDescription(request.description());
@@ -144,6 +143,30 @@ public class BudgetService {
         recalculateTotals(budget);
         if (stageIdIsPresent) stageService.recalculateTotalValue(stage);
         return BudgetItemPostResponse.by(savedBudgetItem);
+    }
+
+    @Transactional
+    public void updateBudgetItem(User user, String id, Long budgetItemId, BudgetItemPutRequest request) {
+        Budget budget = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
+                : findByUserAndIdAndActiveIsTrueOrThrowsNotFoundException(user, id);
+
+        if (!budgetItemId.equals(request.id()))
+            throw new BadRequestException("The url id (%s) is different from the request body id(%s)".formatted(id, request.id()));
+
+        Item item = itemService.findByIdAndUserAndActiveIsTrueOrThrowsNotFoundException(request.itemId(), budget.getUser());
+        Stage stage = stageService.findByIdOrThrowsNotFoundException(request.stageId());
+
+        BudgetItem budgetItemToUpdate = budgetItemService.findByIdOrThrowsNotFoundException(budgetItemId);
+        budgetItemToUpdate.setOrderIndex(request.order());
+        budgetItemToUpdate.setItem(item);
+        budgetItemToUpdate.setStage(stage);
+        budgetItemToUpdate.setUnitMeasurement(request.unitMeasurement());
+        budgetItemToUpdate.setQuantity(request.quantity());
+        budgetItemToUpdate.setUnitPrice(request.unitPrice());
+        budgetItemService.setNewTotalValues(budgetItemToUpdate, budget.getBdi());
+
+        stageService.recalculateTotalValue(stage);
+        recalculateTotals(budget);
     }
 
     public StagePostResponse addStage(User user, String id, StagePostRequest postRequest) {

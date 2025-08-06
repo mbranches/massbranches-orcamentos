@@ -42,7 +42,7 @@ public class BudgetItemService {
         return repository.save(budgetItemToSave);
     }
 
-    private void setNewTotalValues(BudgetItem budgetItem, BigDecimal bdi) {
+    public void setNewTotalValues(BudgetItem budgetItem, BigDecimal bdi) {
         BigDecimal totalValue = budgetItem.getUnitPrice().multiply(budgetItem.getQuantity()).setScale(2, RoundingMode.HALF_UP);
         BigDecimal percentage = bdi.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
         BigDecimal totalWithBdi = totalValue.multiply(BigDecimal.ONE.add(percentage)).setScale(2, RoundingMode.HALF_UP);
@@ -74,7 +74,7 @@ public class BudgetItemService {
                 .orElseThrow(() -> new NotFoundException("Budget item with id '%s' not found".formatted(id)));
     }
 
-    public void updateBudgetItemsTotalValueByBudget(Budget budget, BigDecimal bdi) {
+    public void updateBudgetItemsTotalValueByBudget(Budget budget) {
         List<BudgetItem> budgetItems = repository.findAllByBudget(budget);
 
         budgetItems.forEach(budgetItem -> setNewTotalValues(budgetItem, budget.getBdi()));

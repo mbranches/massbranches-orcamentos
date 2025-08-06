@@ -1,10 +1,7 @@
 package com.mass_branches.controller;
 
-import com.mass_branches.dto.request.BudgetPutRequest;
+import com.mass_branches.dto.request.*;
 import com.mass_branches.dto.response.BudgetElementGetResponse;
-import com.mass_branches.dto.request.BudgetItemPostRequest;
-import com.mass_branches.dto.request.BudgetPostRequest;
-import com.mass_branches.dto.request.StagePostRequest;
 import com.mass_branches.dto.response.BudgetGetResponse;
 import com.mass_branches.dto.response.BudgetItemPostResponse;
 import com.mass_branches.dto.response.BudgetPostResponse;
@@ -345,11 +342,62 @@ public class BudgetController {
     }
 
     @Operation(
+            summary = "Update budget item",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "budget id to update item"
+                    ),
+                    @Parameter(
+                            name = "budgetItemId",
+                            description = "budget item id to update"
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "budget item updated successfully",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "required field not given or the request body id does not match the url id",
+                            responseCode = "400",
+                            content = @Content(schema = @Schema(implementation = DefaultErrorMessage.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "the requesting user is not authenticated",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "budget id or budget item id was not found",
+                            responseCode = "404",
+                            content = @Content(
+                                    schema = @Schema(implementation = DefaultErrorMessage.class)
+                            )
+                    )
+            }
+    )
+    @PutMapping("{id}/items/{budgetItemId}")
+    public ResponseEntity<Void> updateItem(
+            Authentication authentication,
+            @PathVariable String id,
+            @PathVariable Long budgetItemId,
+            @Valid @RequestBody BudgetItemPutRequest request
+    ) {
+        User user = (User) authentication.getPrincipal();
+
+        service.updateBudgetItem(user, id, budgetItemId, request);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Operation(
             summary = "Remove budget item",
             parameters = {
                     @Parameter(
                             name = "id",
-                            description = "budget item id to remove"
+                            description = "budget id to remove item"
                     ),
                     @Parameter(
                             name = "budgetItemId",
