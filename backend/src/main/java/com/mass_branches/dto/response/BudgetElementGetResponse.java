@@ -22,7 +22,9 @@ public record BudgetElementGetResponse(
         @Schema(example = "1277", type = "number", description = "element total value")
         BigDecimal totalValue,
         @Schema(example = "ITEM", description = "element type")
-        BudgetElementType type
+        BudgetElementType type,
+        @Schema(example = "1", type = "number", description = "item id (present only in the item type element")
+        Long itemId
 ) {
     public static BudgetElementGetResponse by(BudgetItem budgetItem) {
         return new BudgetElementGetResponse(
@@ -33,7 +35,8 @@ public record BudgetElementGetResponse(
                 budgetItem.getUnitPrice(),
                 budgetItem.getQuantity(),
                 budgetItem.getTotalValue(),
-                BudgetElementType.ITEM
+                BudgetElementType.ITEM,
+                budgetItem.getItem().getId()
         );
     }
 
@@ -46,7 +49,8 @@ public record BudgetElementGetResponse(
                 null,
                 null,
                 stage.getTotalValue(),
-                BudgetElementType.STAGE
+                BudgetElementType.STAGE,
+                null
         );
     }
 }
