@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import CreateBudget from './pages/CreateBudget.jsx'
 import Login from './pages/Login.jsx'
 import AuthProvider from './contexts/AuthProvider.jsx';
@@ -26,6 +26,10 @@ const router = createBrowserRouter(
       path: "/",
       element: <PrivateRoutes />,
       children: [
+        {
+          index: true,
+          element: <Navigate to="/home" replace />
+        },
         {
           path: "/home",
           element: <App />
