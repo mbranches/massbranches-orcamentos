@@ -34,9 +34,11 @@ function NewItemNameInput({ value, error, placeholder, newItem, setNewItem, thro
     const selectItem = (item) => {
         setNewItem({
             ...newItem, 
-            item: item, 
+            name: item.name,
+            unitMeasurement: item.unitMeasurement,
             unitPrice: !newItem.unitPrice ? item.unitPrice 
-                : newItem.unitPrice
+            : newItem.unitPrice,
+            itemId: item.id
         });
     };
     
@@ -46,7 +48,7 @@ function NewItemNameInput({ value, error, placeholder, newItem, setNewItem, thro
                 value={value} 
                 onChange={(e) => {
                     setQuery(e.target.value);
-                    setNewItem({...newItem, item: {...newItem.item, id: "", name: e.target.value, unitPrice: ""}});
+                    setNewItem({...newItem, itemId:"", name: e.target.value, unitPrice: ""});
                 }} 
                 error={error} 
                 placeholder={placeholder} 

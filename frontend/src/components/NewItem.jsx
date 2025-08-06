@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import BudgetItem from "./BudgetItem";
 import BudgetItemData from "./BudgetItemData";
 import ElementDataInput from "./ElementDataInput";
@@ -11,13 +12,15 @@ function NewItem({newItem, setNewItem, newItemErrors, handlerRemove, handlerSave
                 <BudgetItemData>
                     <ElementDataInput
                         value={newItem.order}
-                        onChange={(e) => setNewItem({ ...newItem, order: e.target.value })}
+                        onChange={(e) => {
+                            setNewItem({ ...newItem, order: e.target.value });
+                        }}
                         throwableError={newItemErrors?.order}
                     />
                 </BudgetItemData>
                 <BudgetItemData>
                     <NewItemNameInput
-                        value={newItem.item.name}
+                        value={newItem?.name}
                         placeholder="Nome do Item"
                         setNewItem={setNewItem}
                         newItem={newItem}
@@ -26,10 +29,10 @@ function NewItem({newItem, setNewItem, newItemErrors, handlerRemove, handlerSave
                 </BudgetItemData>
                 <BudgetItemData>
                     <ElementDataInput
-                        value={newItem.item.unitMeasurement}
-                        onChange={(e) => setNewItem({ ...newItem, item: {...newItem.item, unitMeasurement: e.target.value} })}
+                        value={newItem.unitMeasurement}
+                        onChange={(e) => setNewItem({ ...newItem, unitMeasurement: e.target.value})}
                         placeholder="Unidade"
-                        disabled={!!newItem.item.id}
+                        disabled={!!newItem.itemId}
                         throwableError={newItemErrors?.unitMeasurement}
                     />
                 </BudgetItemData>

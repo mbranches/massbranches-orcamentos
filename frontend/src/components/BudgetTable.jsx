@@ -47,11 +47,11 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
             errors.order = invalidDecimalNumber;
         }
 
-        if(!newItem.item.name.trim()) {
+        if(!newItem.name.trim()) {
             errors.name = requiredField;
         }
 
-        if(!newItem.item.unitMeasurement.trim()) {
+        if(!newItem.unitMeasurement.trim()) {
             errors.unitMeasurement = requiredField;
         }
 
@@ -148,7 +148,7 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
         }
     };
 
-    const getStageIdOfNewItemIfExists = (order) => {
+    const getStageIdOfItemIfExists = (order) => {
         const [orderIntegerPart, orderDecimalPart] = order.split(".");
         const stageOrder = `${orderIntegerPart}.0`;
 
@@ -166,16 +166,16 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
         setLoading(true);
         
         try {
-            let item;
-            if(!newItem.item.id) {
-                const response = await createItem(newItem.item.name, newItem.item.unitMeasurement, formatedUnitPrice)
+            let itemId;
+            if(!newItem.itemId) {
+                const response = await createItem(newItem.name, newItem.unitMeasurement, formatedUnitPrice)
                 
-                item = response.data;
-            } else item = newItem.item;
+                itemId = response.data.id;
+            } else itemId = newItem.itemId;
             
-            const stageId = getStageIdOfNewItemIfExists(newItem.order);
+            const stageId = getStageIdOfItemIfExists(newItem.order);
 
-            await createBudgetItem(currentBudget.id, stageId, newItem.order, item.id, formatedUnitPrice, formatedQuantity);
+            await createBudgetItem(currentBudget.id, stageId, newItem.order, itemId, formatedUnitPrice, formatedQuantity);
 
             setNewItem(null);
 
@@ -222,7 +222,13 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
 
                         <NewStage newStage={newStage} setNewStage={setNewStage} handlerRemove={handlerRemoveNewStage} handlerSave={saveStage} newStageErrors={newStageErrors} />
 
-                        <NewItem newItem={newItem} setNewItem={setNewItem} handlerRemove={handlerRemoveNewBudgetItem} handlerSave={saveItem} newItemErrors={newItemErrors} />
+                        <NewItem 
+                            newItem={newItem} 
+                            setNewItem={setNewItem} 
+                            handlerRemove={handlerRemoveNewBudgetItem} 
+                            handlerSave={saveItem} 
+                            newItemErrors={newItemErrors} 
+                        />
 
                     </tbody>
                 </table>

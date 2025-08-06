@@ -79,8 +79,7 @@ function Budget() {
     const handleNewItem = () => {
         setNewItem({
             order: newItemOrder(),
-            item: {
-                id: "",
+            itemId: "",
                 name: "",
                 unitMeasurement: "",
                 unitPrice: "",
