@@ -31,7 +31,7 @@ public record BudgetElementGetResponse(
                 budgetItem.getId(),
                 budgetItem.getOrderIndex(),
                 budgetItem.getItem().getName(),
-                budgetItem.getItem().getUnitMeasurement(),
+                budgetItem.getUnitMeasurement(),
                 budgetItem.getUnitPrice(),
                 budgetItem.getQuantity(),
                 budgetItem.getTotalValue(),
