@@ -4,53 +4,71 @@ import { searchItemsByName } from "../services/item";
 import { toast } from "react-toastify";
 import statusValidate from "../utils/statusValidate";
 
-function NewItemNameInput({ value, error, placeholder, newItem, setNewItem, throwableError }) {
-    const [query, setQuery] = useState("");
+function NewItemNameInput({ placeholder, watch, throwableError, setValue }) {
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const nameValue = watch("name");
 
     useEffect(() => {
-        const fetchSuggestions = async () => { 
-            if(!query.trim()) {
+        const fetchSuggestions = async () => {
+            if (!nameValue || !nameValue.trim()) {
                 setSuggestions([]);
-
                 return;
             }
 
             try {
-                const response = await searchItemsByName(query);
-
+                const response = await searchItemsByName(nameValue);
                 setSuggestions(response.data);
             } catch (error) {
-                const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
-
+                const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente");
                 statusValidate(status);
             }
-        }    
+        };
 
-        fetchSuggestions();
-    }, [query]);
+        const debounceTimer = setTimeout(() => {
+            fetchSuggestions();
+        }, 300);
+
+        return () => clearTimeout(debounceTimer);
+
+    }, [nameValue]);
 
     const selectItem = (item) => {
-        setNewItem({
-            ...newItem, 
-            name: item.name,
-            unitMeasurement: item.unitMeasurement,
-            unitPrice: !newItem.unitPrice ? item.unitPrice 
-            : newItem.unitPrice,
-            itemId: item.id
-        });
+        setValue("name", item.name, { shouldValidate: true });
+        setValue("itemId", item.id, { shouldDirty: true });
+
+        const currentPrice = watch("unitPrice");
+        if (!currentPrice || currentPrice === "0" || currentPrice === "") {
+            setValue("unitPrice", item.unitPrice, { shouldDirty: true });
+        }
+
+        const currentUnitMeasurement = watch("unitMeasurement");
+        if (!currentUnitMeasurement || currentUnitMeasurement === "") {
+            setValue("unitMeasurement", item.unitMeasurement, { shouldDirty: true });
+        }
+        
+        setSuggestions([]);
+        setShowSuggestions(false);
     };
-    
+
+
+    const handleOnChange = (e) => {
+        const newName = e.target.value;
+        setValue("name", newName, { shouldValidate: true });
+
+        if(watch("itemId")) {
+            setValue("itemId", "", { shouldDirty: true });
+            setValue("unitPrice", "", { shouldDirty: true });
+            setValue("unitMeasurement", "", { shouldDirty: true });
+        }
+    };
+
+
     return (
         <div className="relative">
             <ElementDataInput 
-                value={value} 
-                onChange={(e) => {
-                    setQuery(e.target.value);
-                    setNewItem({...newItem, itemId:"", name: e.target.value, unitPrice: ""});
-                }} 
-                error={error} 
+                value={nameValue || ""}
+                onChange={handleOnChange} 
                 placeholder={placeholder} 
                 throwableError={throwableError}
                 onFocus={() => setShowSuggestions(true)} 
@@ -58,12 +76,12 @@ function NewItemNameInput({ value, error, placeholder, newItem, setNewItem, thro
             />
 
             {showSuggestions && suggestions.length > 0 && (
-                <ul className="w-full absolute bottom-full h-[60px] overflow-auto bg-white border border-slate-200">
+                <ul className="w-full absolute bottom-full h-[60px] overflow-auto bg-white border border-slate-200 z-10">
                     {suggestions.map(suggestion => 
                         <li 
                             key={suggestion.id} 
-                            className="p-2 hover:bg-slate-200" 
-                            onClick={() => selectItem(suggestion)}
+                            className="p-2 hover:bg-slate-200 cursor-pointer" 
+                            onMouseDown={() => selectItem(suggestion)}
                         >
                             {suggestion.name}
                         </li>

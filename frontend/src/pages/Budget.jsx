@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import BudgetStatus from '../components/BudgetStatus';
 
 function Budget() {
+    const [itemToEdit, setItemToEdit] = useState();
     const [newStage, setNewStage] = useState();
     const [newItem, setNewItem] = useState();
     const [sidebarOpen, setSidebarOpen] = useState();
@@ -80,10 +81,8 @@ function Budget() {
         setNewItem({
             order: newItemOrder(),
             itemId: "",
-                name: "",
-                unitMeasurement: "",
-                unitPrice: "",
-            },
+            name: "",
+            unitMeasurement: "",
             unitPrice: "",
             quantity: ""
         }); 
@@ -191,6 +190,8 @@ function Budget() {
                             setNewItem={setNewItem} 
                             newStage={newStage} 
                             setNewStage={setNewStage} 
+                            itemToEdit={itemToEdit}
+                            setItemToEdit={setItemToEdit}
                             fetchBudgetElements={fetchBudgetElements} 
                             setLoading={setLoading} 
                             currentBudget={currentBudget} 

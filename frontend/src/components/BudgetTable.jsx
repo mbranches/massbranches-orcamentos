@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {createStage, createBudgetItem, deleteItemByBudgetId, deleteStageByBudgetId} from '../services/budget';
+import {createStage, createBudgetItem, deleteItemByBudgetId, deleteStageByBudgetId, editBudgetItem} from '../services/budget';
 import { toast } from 'react-toastify';
 import statusValidate from '../utils/statusValidate';
 import Th from '../components/Th';
@@ -10,9 +10,8 @@ import { createItem } from '../services/item';
 import NewStage from './NewStage';
 import NewItem from './NewItem';
 
-function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetchBudgetElements, setLoading, currentBudget, fetchBudget}) {
+function BudgetTable({elements, newItem, setNewItem, itemToEdit, setItemToEdit, newStage, setNewStage, fetchBudgetElements, setLoading, currentBudget, fetchBudget}) {
     const [newStageErrors, setNewStageErrors] = useState();
-    const [newItemErrors, setNewItemErrors] = useState();
     const validateNewStage = () => {
         const errors = {};
 
@@ -32,57 +31,15 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
 
         return Object.keys(errors).length === 0;
     };
-    const validateNewItem = () => {
-        const errors = {};
-
-        const requiredField = "Campo obrigatório.";
-
-        const invalidDecimalNumber = "Formato inválido. Ex: 1.0";
-
-        const invalidNumeric = "Formato inválido. Ex: 1 ou 1.00";
-
-        if (!newItem.order.trim()) {
-            errors.order = requiredField;
-        } else if (!/^\d+\.\d+$/.test(newItem.order)) {
-            errors.order = invalidDecimalNumber;
-        }
-
-        if(!newItem.name.trim()) {
-            errors.name = requiredField;
-        }
-
-        if(!newItem.unitMeasurement.trim()) {
-            errors.unitMeasurement = requiredField;
-        }
-
-        if(!newItem.unitPrice) {
-            errors.unitPrice = requiredField;
-        } else if (isNumeric(newItem.unitPrice)) {
-            errors.unitPrice = invalidNumeric;
-        }
-
-        if(!newItem.quantity.trim()) {
-            errors.quantity = requiredField;
-        } else if (isNumeric(newItem.quantity)) {
-            errors.quantity = invalidNumeric;
-        }
-
-        setNewItemErrors(errors);
-
-        return Object.keys(errors).length === 0;
-    };
-    const isNumeric = (input) => {
-        const numericRegex = /!^\d+\.\d+$/
-        
-        return numericRegex.test(input);
-    };
     const handlerRemoveNewBudgetItem = () => {
         setNewItem(null);
-        setNewItemErrors(null);
     };
     const handlerRemoveNewStage = () => {
         setNewStage(null);
         setNewStageErrors(null);
+    };
+    const handlerRemoveEditBudgetItem = () => {
+        setItemToEdit(null);
     };
 
     const deleteItem = async (itemId) => {
@@ -157,38 +114,70 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
         return stage ? stage.id : null;
     }
 
-    const saveItem = async () => {
-        if(!validateNewItem()) return;
-        
-        const formatedUnitPrice = formatDecimal(newItem.unitPrice);
-        const formatedQuantity = formatDecimal(newItem.quantity);
+    const saveItem = async (data) => {
+        const formatedUnitPrice = formatDecimal(data.unitPrice);
+        const formatedQuantity = formatDecimal(data.quantity);
         
         setLoading(true);
         
         try {
-            let itemId;
-            if(!newItem.itemId) {
-                const response = await createItem(newItem.name, newItem.unitMeasurement, formatedUnitPrice)
-                
+            let itemId = data.itemId;
+            if(!itemId) {
+                const response = await createItem(data.name, data.unitMeasurement, formatedUnitPrice);
                 itemId = response.data.id;
-            } else itemId = newItem.itemId;
+            }
             
-            const stageId = getStageIdOfItemIfExists(newItem.order);
+            const stageId = getStageIdOfItemIfExists(data.order);
 
-            await createBudgetItem(currentBudget.id, stageId, newItem.order, itemId, formatedUnitPrice, formatedQuantity);
+            await createBudgetItem(currentBudget.id, stageId, data.order, itemId, data.unitMeasurement, formatedUnitPrice, formatedQuantity);
 
             setNewItem(null);
-
-            await fetchBudgetElements();     
+            await fetchBudgetElements();
             await fetchBudget(); 
         } catch(error) {
             const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
-                
             statusValidate(status);
         } finally {
             setLoading(false);
         }
     };
+
+    const editItem = async (data) => {
+        const formatedUnitPrice = formatDecimal(data.unitPrice);
+        const formatedQuantity = formatDecimal(data.quantity);
+            
+        setLoading(true);
+        
+        try {
+            let itemId = data.itemId;
+            if(!itemId) {
+                const response = await createItem(data.name, data.unitMeasurement, formatedUnitPrice);
+                itemId = response.data.id;
+            }
+            
+            const stageId = getStageIdOfItemIfExists(data.order);
+
+            await editBudgetItem(currentBudget.id, {
+                id: itemToEdit.id, 
+                stageId, 
+                order: data.order, 
+                itemId: itemId, 
+                unitMeasurement: data.unitMeasurement,
+                unitPrice: formatedUnitPrice, 
+                quantity: formatedQuantity
+            });
+
+            setItemToEdit(null);
+            await fetchBudgetElements();
+            await fetchBudget(); 
+        } catch(error) {
+            const status = error?.response?.status || toast.error("Ocorreu um erro interno, por favor tente novamente"); 
+            statusValidate(status);
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     return (
         <div className='bg-white'>
@@ -216,7 +205,22 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
                                 case "STAGE":
                                     return <BudgetStageRow key={`stage ${element?.id}`} stage={element} onDeleteButtonClick={() => deleteStage(element?.id)} />;
                                 case "ITEM":
-                                    return <BudgetItemRow key={`item ${element?.id}`} item={element} onDeleteButtonClick={() => deleteItem(element?.id)} />;
+                                    return element !== itemToEdit ? (
+                                        <BudgetItemRow 
+                                            key={`item ${element?.id}`} 
+                                            item={element} 
+                                            onEditButtonClick={() => setItemToEdit(element)} 
+                                            onDeleteButtonClick={() => deleteItem(element?.id)} 
+                                        />
+                                    ) : (
+                                        <NewItem 
+                                            key={`item edit ${element?.id}`}
+                                            newItem={itemToEdit}
+                                            setNewItem={setItemToEdit}
+                                            handlerRemove={handlerRemoveEditBudgetItem}
+                                            handlerSave={editItem}
+                                        />
+                                    )
                             }
                         })}
 
@@ -227,7 +231,6 @@ function BudgetTable({elements, newItem, setNewItem, newStage, setNewStage, fetc
                             setNewItem={setNewItem} 
                             handlerRemove={handlerRemoveNewBudgetItem} 
                             handlerSave={saveItem} 
-                            newItemErrors={newItemErrors} 
                         />
 
                     </tbody>

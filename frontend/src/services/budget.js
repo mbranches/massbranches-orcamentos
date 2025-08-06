@@ -88,16 +88,21 @@ export async function createStage(budgetId, order, name) {
     return api.post(`/budgets/${budgetId}/stages`, request);
 }
 
-export async function createBudgetItem(budgetId, stageId, order, itemId, unitPrice, quantity) {
+export async function createBudgetItem(budgetId, stageId, order, itemId, unitMeasurement, unitPrice, quantity) {
     const request = {
         order,
         stageId,
         itemId: itemId,
+        unitMeasurement,
         unitPrice, 
         quantity
     };
 
     return api.post(`/budgets/${budgetId}/items`, request);
+}
+
+export async function editBudgetItem(budgetId, request) {
+    return api.put(`/budgets/${budgetId}/items/${request.id}`, request);
 }
 
 export async function deleteItemByBudgetId(budgetId, itemId) {

@@ -3,7 +3,7 @@ import BudgetItem from "./BudgetItem";
 import BudgetItemData from "./BudgetItemData";
 import BudgetElementActions from './BudgetElementActions';
 
-function BudgetItemRow({ item, onDeleteButtonClick }) {
+function BudgetItemRow({ item, onDeleteButtonClick, onEditButtonClick }) {
     return(
         <BudgetItem>
             <BudgetItemData>{item?.order}</BudgetItemData>
@@ -13,7 +13,7 @@ function BudgetItemRow({ item, onDeleteButtonClick }) {
             <BudgetItemData>{item?.quantity}</BudgetItemData>
             <BudgetItemData>{formatCurrency(item.totalValue)}</BudgetItemData>
             <BudgetItemData>
-                <BudgetElementActions onDeleteButtonClick={onDeleteButtonClick} />
+                <BudgetElementActions onEditButtonClick={onEditButtonClick} onDeleteButtonClick={onDeleteButtonClick} />
             </BudgetItemData>
         </BudgetItem>
     );
