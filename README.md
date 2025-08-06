@@ -1,6 +1,6 @@
-# Branches Orçamentos
+# Mass & Branches Orçamentos
 
-> Sistema web para criação, auditoria e gestão de orçamentos da construção civil 
+> Sistema web para criação, auditoria e gestão de orçamentos da construção civil, criado para a empresa Mass & Branches
 
 ---
 
@@ -19,7 +19,7 @@
 
 ## ✍️ Motivação
 
-Durante os meus primeiros estudos com Java, desenvolvi um aplicativo desktop para criação de orçamentos simples, utilizando a tabela SINAPI como base. Ao apresentar o projeto a um familiar engenheiro civil, ele demonstrou bastante interesse na ideia. No entanto, identificamos diversos pontos a melhorar e recursos ausentes. A partir disso, estou trabalhando no desenvolvimento de uma versão web mais robusta, pensada para uso no dia a dia desse familiar.
+Durante os meus primeiros estudos com Java, desenvolvi um aplicativo desktop para criação de orçamentos simples, utilizando a tabela SINAPI como base. Ao apresentar o projeto a um familiar dono da empresa Mass & Branches, empresa da área de construção civil, ele demonstrou bastante interesse na ideia. No entanto, identificamos diversos pontos a melhorar e recursos ausentes. A partir disso, estou trabalhando no desenvolvimento de uma versão web mais robusta, pensada para uso no dia a dia de funcionários da empresa.
 
 ## 🎯 Funcionalidades atuais 
 
