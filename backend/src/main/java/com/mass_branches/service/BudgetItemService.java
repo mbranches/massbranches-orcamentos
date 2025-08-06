@@ -29,6 +29,7 @@ public class BudgetItemService {
                 .budget(budget)
                 .item(item)
                 .orderIndex(postRequest.order())
+                .unitMeasurement(postRequest.unitMeasurement())
                 .unitPrice(unitPrice)
                 .quantity(quantity)
                 .build();

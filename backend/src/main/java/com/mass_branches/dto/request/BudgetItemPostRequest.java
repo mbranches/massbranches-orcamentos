@@ -15,6 +15,9 @@ public record BudgetItemPostRequest(
         @Schema(example = "1.1", description = "order of the item in the budget")
         @NotBlank(message = "The field 'order' is required")
         String order,
+        @Schema(example = "m2", description = "budget item unit of measurement")
+        @NotBlank(message = "The field 'unitMeasurement' is required")
+        String unitMeasurement,
         @Schema(example = "25.54", description = "budget item unit price")
         @NotNull(message = "The field 'unitPrice' is required")
         BigDecimal unitPrice,

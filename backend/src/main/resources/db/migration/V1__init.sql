@@ -82,6 +82,7 @@ create table budget_item(
     item_id bigint NOT NULL,
     stage_id bigint,
     order_index varchar(20) NOT NULL,
+    unit_measurement varchar(10) NOT NULL,
     unit_price decimal(12, 4) NOT NULL,
     quantity decimal(10, 4) NOT NULL,
     total_value decimal(10, 2) NOT NULL ,

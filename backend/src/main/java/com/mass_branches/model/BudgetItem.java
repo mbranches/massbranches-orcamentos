@@ -28,6 +28,8 @@ public class BudgetItem {
     private Stage stage;
     @Column(name = "order_index", nullable = false)
     private String orderIndex;
+    @Column(nullable = false)
+    private String unitMeasurement;
     @Column(name = "unit_price", nullable = false, precision = 10, scale = 4)
     private BigDecimal unitPrice;
     @Column(nullable = false, precision = 10, scale = 4)
