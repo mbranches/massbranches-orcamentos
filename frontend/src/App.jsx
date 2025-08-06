@@ -21,7 +21,7 @@ function App() {
           
           <CardMenu icon={<Box size={24}/>} title="Meus Itens" description="Gerenciar meus Itens" color="orange" onButtonClick={() => navigate('/clientes')}/>
           
-          <div className="col-span-2">
+          <div className="md:col-span-2">
             <CardMenu icon={<ChartNoAxesCombined size={24} />} title="Minhas Análises" description="Análises dos meus orçamentos" color="gray" onButtonClick={() => navigate('/analytics')}/>
           </div>
         </div>
