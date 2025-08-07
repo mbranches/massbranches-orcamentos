@@ -12,6 +12,7 @@ import com.mass_branches.model.CustomerTypeName;
 import com.mass_branches.model.User;
 import com.mass_branches.repository.BudgetRepository;
 import com.mass_branches.repository.CustomerRepository;
+import com.mass_branches.repository.CustomerTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,11 @@ import java.util.Optional;
 @Service
 public class CustomerService {
     private final CustomerRepository repository;
-    private final CustomerTypeService customerTypeService;
     private final BudgetRepository budgetRepository;
+    private final CustomerTypeRepository customerTypeRepository;
 
     public CustomerPostResponse create(User user, CustomerPostRequest postRequest) {
-        CustomerType customerType = customerTypeService.findByNameOrThrowsNotFoundException(postRequest.type());
+        CustomerType customerType = customerTypeRepository.findByName(postRequest.type());
 
         Customer customer = Customer.builder()
                 .name(postRequest.name())
@@ -113,7 +114,7 @@ public class CustomerService {
         Customer customer = user.isAdmin() ? findByIdOrThrowsNotFoundException(id)
                 : findByUserAndIdOrThrowsNotFoundException(user, id);
 
-        CustomerType customerType = customerTypeService.findByNameOrThrowsNotFoundException(request.type());
+        CustomerType customerType = customerTypeRepository.findByName(request.type());
 
         customer.setName(request.name());
         customer.setType(customerType);
