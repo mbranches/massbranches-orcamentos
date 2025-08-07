@@ -12,7 +12,6 @@ import com.mass_branches.repository.BudgetItemRepository;
 import com.mass_branches.repository.ItemRepository;
 import com.mass_branches.utils.ItemUtils;
 import com.mass_branches.utils.UserUtils;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
