@@ -1,24 +1,32 @@
 package com.mass_branches.service;
 
 import com.mass_branches.dto.request.ItemPostRequest;
+import com.mass_branches.dto.request.ItemPutRequest;
 import com.mass_branches.dto.response.ItemGetResponse;
 import com.mass_branches.dto.response.ItemPostResponse;
+import com.mass_branches.exception.BadRequestException;
 import com.mass_branches.exception.NotFoundException;
 import com.mass_branches.model.Item;
 import com.mass_branches.model.User;
+import com.mass_branches.repository.BudgetItemRepository;
 import com.mass_branches.repository.ItemRepository;
 import com.mass_branches.utils.ItemUtils;
 import com.mass_branches.utils.UserUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
@@ -27,13 +35,17 @@ class ItemServiceTest {
     private ItemService service;
     @Mock
     private ItemRepository repository;
+    @Mock
+    private BudgetItemRepository budgetItemRepository;
     private List<Item> itemList;
     private List<ItemGetResponse> itemGetResponseList;
+    private final Sort SORT_BY_NAME = Sort.by("name").ascending();
+    private final long NUMBER_OF_USES_DEFAULT = 1L;
 
     @BeforeEach
     void init() {
         itemList = ItemUtils.newItemList();
-//        itemGetResponseList = ItemUtils.newItemGetResponseList();
+        itemGetResponseList = ItemUtils.newItemGetResponseList();
     }
 
     @Test
@@ -48,18 +60,18 @@ class ItemServiceTest {
         Item itemToSave = ItemUtils.newItemToSave();
         Item savedItem = ItemUtils.newItemSaved();
 
-        BDDMockito.when(repository.save(itemToSave)).thenReturn(savedItem);
+        when(repository.save(itemToSave)).thenReturn(savedItem);
 
         ItemPostResponse response = service.create(user, postRequest);
 
-        Assertions.assertThat(response)
+        assertThat(response)
                 .isNotNull()
                 .isEqualTo(expectedResponse);
     }
 
     @Test
     @DisplayName("findById returns found item of the given user when the user is client")
-    @Order(5)
+    @Order(2)
     void findById_ReturnsFoundItemOfTheGivenUser_WhenUserIsClient() {
         User user = UserUtils.newUserList().getLast();
 
@@ -68,18 +80,19 @@ class ItemServiceTest {
 
         ItemGetResponse expectedResponse = itemGetResponseList.getLast();
 
-        BDDMockito.when(repository.findByIdAndUserAndActiveIsTrue(idToSearch, user)).thenReturn(Optional.of(itemToBeFound));
+        when(repository.findByIdAndUserAndActiveIsTrue(idToSearch, user)).thenReturn(Optional.of(itemToBeFound));
+        when(budgetItemRepository.countBudgetItemByItem(itemToBeFound)).thenReturn(expectedResponse.numberOfUses());
 
         ItemGetResponse response = service.findById(user, idToSearch);
 
-        Assertions.assertThat(response)
+        assertThat(response)
                 .isNotNull()
                 .isEqualTo(expectedResponse);
     }
 
     @Test
     @DisplayName("findById returns found item when the given user is admin")
-    @Order(6)
+    @Order(3)
     void findById_ReturnsFoundItem_WhenTheGivenUserIsAdmin() {
         User user = UserUtils.newUserList().getFirst();
 
@@ -88,79 +101,238 @@ class ItemServiceTest {
 
         ItemGetResponse expectedResponse = itemGetResponseList.getLast();
 
-        BDDMockito.when(repository.findById(idToSearch)).thenReturn(Optional.of(itemToBeFound));
+        when(repository.findById(idToSearch)).thenReturn(Optional.of(itemToBeFound));
+        when(budgetItemRepository.countBudgetItemByItem(itemToBeFound)).thenReturn(expectedResponse.numberOfUses());
 
         ItemGetResponse response = service.findById(user, idToSearch);
 
-        Assertions.assertThat(response)
-                .isNotNull()
-                .isEqualTo(expectedResponse);
-    }
-
-    @Test
-    @DisplayName("findById returns found item when the item to be found is not active but the given user is admin")
-    @Order(7)
-    void findById_ReturnsFoundItem_WhenTheItemToBeFoundIsNotActiveButTheGivenUserIsAdmin() {
-        User user = UserUtils.newUserList().getFirst();
-
-        Item itemToBeFound = itemList.get(1);
-        Long idToSearch = itemToBeFound.getId();
-
-        ItemGetResponse expectedResponse = itemGetResponseList.get(1);
-
-        BDDMockito.when(repository.findById(idToSearch)).thenReturn(Optional.of(itemToBeFound));
-
-        ItemGetResponse response = service.findById(user, idToSearch);
-
-        Assertions.assertThat(response)
+        assertThat(response)
                 .isNotNull()
                 .isEqualTo(expectedResponse);
     }
 
     @Test
     @DisplayName("findById throws NotFoundException when the given id is not found")
-    @Order(8)
+    @Order(4)
     void findById_ThrowsNotFoundException_WhenTheGivenIdIsNotFound() {
         User user = UserUtils.newUserList().getFirst();
 
         Long randomId = 999L;
 
-        BDDMockito.when(repository.findById(randomId)).thenReturn(Optional.empty());
+        when(repository.findById(randomId)).thenReturn(Optional.empty());
 
-        Assertions.assertThatThrownBy(() -> service.findById(user, randomId))
+        assertThatThrownBy(() -> service.findById(user, randomId))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining("Item with id '%s' not found".formatted(randomId));
     }
 
     @Test
-    @DisplayName("findById throws NotFoundException when the item to be found does not belongs to the given user")
-    @Order(9)
-    void findById_ThrowsNotFoundException_WhenTheItemToBeFoundDoesNotBelongsToTheGivenUser() {
-        User user = UserUtils.newUserList().getLast();
+    @DisplayName("listAllMy returns found items of the given user when successful")
+    @Order(5)
+    void listAllMy_ReturnsFoundItemsOfTheGivenUser_WhenSuccessful() {
+        User user = UserUtils.newUserList().getFirst();
 
-        Item itemToBeFound = itemList.getFirst();
-        Long idToSearch = itemToBeFound.getId();
+        List<Item> itemsOfTheUser = itemList.stream()
+                .filter(item -> item.getUser().equals(user))
+                .toList();
 
-        BDDMockito.when(repository.findByIdAndUserAndActiveIsTrue(idToSearch, user)).thenReturn(Optional.empty());
+        List<ItemGetResponse> expectedResponse = itemsOfTheUser.stream()
+                .map(item -> ItemGetResponse.by(item, NUMBER_OF_USES_DEFAULT))
+                .toList();
 
-        Assertions.assertThatThrownBy(() -> service.findById(user, idToSearch))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("Item with id '%s' not found".formatted(idToSearch));
+        when(repository.findAllByUserAndActiveIsTrue(user, SORT_BY_NAME))
+                .thenReturn(itemsOfTheUser);
+        when(budgetItemRepository.countBudgetItemByItem(any()))
+                .thenReturn(NUMBER_OF_USES_DEFAULT);
+
+        List<ItemGetResponse> response = service.listAllMy(user, Optional.empty());
+
+        assertThat(response)
+                .isNotNull()
+                .isNotEmpty()
+                .containsExactlyElementsOf(expectedResponse);
     }
 
     @Test
-    @DisplayName("findById throws NotFoundException when the item of the client to be found is not active")
+    @DisplayName("listAllMy returns an empty list when the given user does not have items")
+    @Order(6)
+    void listAllMy_ReturnsEmpty_WhenTheGivenUserDoesNotHaveItems() {
+        User user = UserUtils.newUserList().getFirst();
+
+        when(repository.findAllByUserAndActiveIsTrue(user, SORT_BY_NAME))
+                .thenReturn(Collections.emptyList());
+
+        List<ItemGetResponse> response = service.listAllMy(user, Optional.empty());
+
+        assertThat(response)
+                .isNotNull()
+                .isEmpty();
+    }
+
+    @Test
+    @DisplayName("listAllMy returns found items of the given user when name given is found")
+    @Order(7)
+    void listAllMy_ReturnsFoundItemsOfTheGivenUser_WhenTheGivenNameIsFound() {
+        User user = UserUtils.newUserList().getFirst();
+
+        List<Item> itemsOfTheUser = itemList.stream()
+                .filter(item -> item.getUser().equals(user))
+                .toList();
+
+        Item itemToBeFound = itemsOfTheUser.getFirst();
+        String nameToSearch = itemToBeFound.getName();
+
+        List<ItemGetResponse> expectedResponse = itemsOfTheUser.stream()
+                .map(item -> ItemGetResponse.by(item, NUMBER_OF_USES_DEFAULT))
+                .toList();
+
+        when(repository.findAllByUserAndNameContainingAndActiveIsTrue(user, nameToSearch, SORT_BY_NAME))
+                .thenReturn(List.of(itemToBeFound));
+        when(budgetItemRepository.countBudgetItemByItem(any()))
+                .thenReturn(NUMBER_OF_USES_DEFAULT);
+
+        List<ItemGetResponse> response = service.listAllMy(user, Optional.of(nameToSearch));
+
+        assertThat(response)
+                .isNotNull()
+                .isNotEmpty()
+                .containsExactlyElementsOf(expectedResponse);
+    }
+
+    @Test
+    @DisplayName("listAllMy returns an empty list when the given name is not found")
+    @Order(8)
+    void listAllMy_ReturnsEmpty_WhenTheGivenNameIsNotFound() {
+        User user = UserUtils.newUserList().getFirst();
+
+        String randomName = "Random Name";
+
+        when(repository.findAllByUserAndNameContainingAndActiveIsTrue(user, randomName, SORT_BY_NAME))
+                .thenReturn(Collections.emptyList());
+
+        List<ItemGetResponse> response = service.listAllMy(user, Optional.of(randomName));
+
+        assertThat(response)
+                .isNotNull()
+                .isEmpty();
+    }
+
+    @Test
+    @DisplayName("update updates item when successful")
+    @Order(9)
+    void update_UpdatesItem_WhenSuccessful() {
+        User user = UserUtils.newUserList().get(1);
+        ItemPutRequest request = ItemUtils.newItemPutRequest();
+
+        Item itemToUpdate = ItemUtils.newItemList().get(1);
+        Item updatedItem = ItemUtils.newUpdatedItem();
+
+        when(repository.findByIdAndUserAndActiveIsTrue(request.id(), user))
+                .thenReturn(Optional.of(itemToUpdate));
+        when(repository.save(updatedItem)).thenReturn(updatedItem);
+
+        assertThatNoException()
+                .isThrownBy(() -> service.update(user, request.id(), request));
+    }
+
+    @Test
+    @DisplayName("update updates item when the given user is admin")
     @Order(10)
-    void findById_ThrowsNotFoundException_WhenTheItemOfTheGivenClientToBeFoundIsNotActive() {
+    void update_UpdatesItem_WhenTheGivenUserIsAdmin() {
+        User user = UserUtils.newUserList().getFirst();
+        ItemPutRequest request = ItemUtils.newItemPutRequest();
+
+        Item itemToUpdate = ItemUtils.newItemList().get(1);
+        Item updatedItem = ItemUtils.newUpdatedItem();
+
+        when(repository.findById(request.id()))
+                .thenReturn(Optional.of(itemToUpdate));
+        when(repository.save(updatedItem)).thenReturn(updatedItem);
+
+        assertThatNoException()
+                .isThrownBy(() -> service.update(user, request.id(), request));
+    }
+
+    @Test
+    @DisplayName("update throws BadRequestException when the url id is different from the request body id")
+    @Order(11)
+    void update_ThrowsBadRequestException_WhenTheUrlIdIsDifferentFromTheRequestBodyId() {
+        User user = UserUtils.newUserList().getFirst();
+
+        Long randomId = 999L;
+        ItemPutRequest request = ItemUtils.newItemPutRequest();
+
+        assertThatThrownBy(() -> service.update(user, randomId, request))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("The url id (%s) is different from the request body id(%s)".formatted(randomId, request.id()));
+    }
+
+    @Test
+    @DisplayName("update throws NotFoundException when the given id is not found")
+    @Order(12)
+    void update_ThrowsNotFoundException_WhenTheGivenIdIsNotFound() {
         User user = UserUtils.newUserList().get(1);
 
-        Item itemToBeFound = itemList.get(1);
-        Long idToSearch = itemToBeFound.getId();
+        Long randomId = 999L;
+        ItemPutRequest request = ItemUtils.newItemPutRequest().withId(randomId);
 
-        BDDMockito.when(repository.findByIdAndUserAndActiveIsTrue(idToSearch, user)).thenReturn(Optional.empty());
+        when(repository.findByIdAndUserAndActiveIsTrue(randomId, user))
+                .thenReturn(Optional.empty());
 
-        Assertions.assertThatThrownBy(() -> service.findById(user, idToSearch))
+        assertThatThrownBy(() -> service.update(user, request.id(), request))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("Item with id '%s' not found".formatted(idToSearch));
+                .hasMessageContaining("Item with id '%s' not found".formatted(randomId));
+    }
+
+    @Test
+    @DisplayName("delete set active false when successful")
+    @Order(13)
+    void delete_SetActiveFalse_WhenSuccessful() {
+        User user = UserUtils.newUserList().get(1);
+
+        Item itemToDelete = itemList.get(1);
+        Long idToDelete = itemToDelete.getId();
+
+        when(repository.findByIdAndUserAndActiveIsTrue(idToDelete, user))
+                .thenReturn(Optional.of(itemToDelete));
+        when(repository.save(itemToDelete.withActive(false)))
+                .thenReturn(itemToDelete.withActive(false));
+
+        assertThatNoException()
+                .isThrownBy(() -> service.delete(user, idToDelete));
+    }
+
+    @Test
+    @DisplayName("delete set active false when the given user is admin")
+    @Order(14)
+    void delete_SetActiveFalse_WhenTheGivenUserIsAdmin() {
+        User user = UserUtils.newUserList().getFirst();
+
+        Item itemToDelete = itemList.get(1);
+        Long idToDelete = itemToDelete.getId();
+
+        when(repository.findByIdAndActiveIsTrue(idToDelete))
+                .thenReturn(Optional.of(itemToDelete));
+        when(repository.save(itemToDelete.withActive(false)))
+                .thenReturn(itemToDelete.withActive(false));
+
+        assertThatNoException()
+                .isThrownBy(() -> service.delete(user, idToDelete));
+    }
+
+    @Test
+    @DisplayName("delete throws NotFoundException when the given id is not found")
+    @Order(15)
+    void delete_ThrowsNotFoundException_WhenTheGivenIdIsNotFound() {
+        User user = UserUtils.newUserList().get(1);
+
+        Long randomId = 999L;
+
+        when(repository.findByIdAndUserAndActiveIsTrue(randomId, user))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.delete(user, randomId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("Item with id '%s' not found".formatted(randomId));
     }
 }

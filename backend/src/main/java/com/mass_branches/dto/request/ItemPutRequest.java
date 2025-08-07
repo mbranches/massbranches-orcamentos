@@ -3,9 +3,11 @@ package com.mass_branches.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.With;
 
 import java.math.BigDecimal;
 
+@With
 public record ItemPutRequest(
         @Schema(example = "1", type = "number", description = "item id")
         @NotNull(message = "The field 'id' is required")

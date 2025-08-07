@@ -1,6 +1,7 @@
 package com.mass_branches.utils;
 
 import com.mass_branches.dto.request.ItemPostRequest;
+import com.mass_branches.dto.request.ItemPutRequest;
 import com.mass_branches.dto.response.ItemGetResponse;
 import com.mass_branches.dto.response.ItemPostResponse;
 import com.mass_branches.model.Item;
@@ -24,11 +25,11 @@ public class ItemUtils {
         return new ArrayList<>(List.of(item1, item2, item3));
     }
 
-//    public static List<ItemGetResponse> newItemGetResponseList() {
-//        return newItemList().stream().map(item ->
-//                new ItemGetResponse(item.getId(), item.getName(), item.getUnitMeasurement(), item.getUnitPrice())
-//        ).toList();
-//    }
+    public static List<ItemGetResponse> newItemGetResponseList() {
+        return newItemList().stream().map(item ->
+                new ItemGetResponse(item.getId(), item.getName(), item.getUnitMeasurement(), item.getUnitPrice(), 1L)
+        ).toList();
+    }
 
     public static Item newItemToSave() {
         User user = UserUtils.newUserList().getFirst();
@@ -64,6 +65,24 @@ public class ItemUtils {
                 item.getName(),
                 item.getUnitMeasurement(),
                 item.getUnitPrice()
+        );
+    }
+
+    public static Item newUpdatedItem() {
+        Item itemToUpdate = newItemList().get(1);
+        itemToUpdate.setName("New Name");
+        itemToUpdate.setUnitPrice(BigDecimal.valueOf(25));
+        itemToUpdate.setUnitMeasurement("m3");
+
+        return itemToUpdate;
+    }
+
+    public static ItemPutRequest newItemPutRequest() {
+        return new ItemPutRequest(
+                newUpdatedItem().getId(),
+                newUpdatedItem().getName(),
+                newUpdatedItem().getUnitMeasurement(),
+                newUpdatedItem().getUnitPrice()
         );
     }
 }
