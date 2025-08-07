@@ -11,11 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    List<Item> findAllByUserAndActiveIsTrue(User user);
-
     Optional<Item> findByIdAndUserAndActiveIsTrue(Long id, User user);
-
-    List<Item> findAllByNameContaining(String name, Sort sort);
 
     List<Item> findAllByUserAndNameContainingAndActiveIsTrue(User user, String name, Sort sort);
 
