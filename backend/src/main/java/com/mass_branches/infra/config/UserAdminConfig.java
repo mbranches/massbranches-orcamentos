@@ -4,8 +4,8 @@ import com.mass_branches.model.Role;
 import com.mass_branches.model.RoleType;
 import com.mass_branches.model.User;
 import com.mass_branches.model.UserRole;
+import com.mass_branches.repository.RoleRepository;
 import com.mass_branches.repository.UserRepository;
-import com.mass_branches.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,8 +20,8 @@ import java.util.List;
 public class UserAdminConfig implements CommandLineRunner {
     private static final Logger log = LogManager.getLogger(UserAdminConfig.class);
     private final UserRepository repository;
-    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -32,7 +32,7 @@ public class UserAdminConfig implements CommandLineRunner {
             return;
         }
 
-        Role adminRole = roleService.findByName(RoleType.ADMIN);
+        Role adminRole = roleRepository.findByName(RoleType.ADMIN);
 
         User user = User.builder()
                 .firstName("admin")
