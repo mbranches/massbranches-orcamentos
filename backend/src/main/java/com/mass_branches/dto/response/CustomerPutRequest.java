@@ -4,7 +4,9 @@ import com.mass_branches.model.CustomerTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.With;
 
+@With
 public record CustomerPutRequest(
         @Schema(example = "id-uuid-1", description = "customer's id")
         @NotBlank(message = "The field 'id' is required")

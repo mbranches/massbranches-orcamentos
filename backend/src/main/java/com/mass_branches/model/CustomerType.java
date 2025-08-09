@@ -1,11 +1,9 @@
 package com.mass_branches.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Builder
 @Entity(name = "customer_type")
@@ -15,6 +13,7 @@ public class CustomerType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idcustomer_type")
+    @EqualsAndHashCode.Include
     private Long id;
     @Enumerated(EnumType.STRING)
     private CustomerTypeName name;

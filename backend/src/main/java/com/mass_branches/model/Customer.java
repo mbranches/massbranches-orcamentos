@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @With
 @Getter
 @Setter
@@ -19,6 +20,7 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "idcustomer")
+    @EqualsAndHashCode.Include
     private String id;
     @Column(nullable = false)
     private String name;
