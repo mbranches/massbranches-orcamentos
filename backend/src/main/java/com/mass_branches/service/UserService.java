@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    private final UserRepository repository;
     private final JwtTokenService jwtTokenService;
     private final AuthenticationManager authenticationManager;
 
