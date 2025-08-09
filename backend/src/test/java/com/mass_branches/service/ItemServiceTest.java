@@ -72,17 +72,17 @@ class ItemServiceTest {
     @DisplayName("findById returns found item of the given user when the user is client")
     @Order(2)
     void findById_ReturnsFoundItemOfTheGivenUser_WhenUserIsClient() {
-        User user = UserUtils.newUserList().getLast();
+        User clientUser = UserUtils.newUserList().getLast();
 
         Item itemToBeFound = itemList.getLast();
         Long idToSearch = itemToBeFound.getId();
 
         ItemGetResponse expectedResponse = itemGetResponseList.getLast();
 
-        when(repository.findByIdAndUserAndActiveIsTrue(idToSearch, user)).thenReturn(Optional.of(itemToBeFound));
+        when(repository.findByIdAndUserAndActiveIsTrue(idToSearch, clientUser)).thenReturn(Optional.of(itemToBeFound));
         when(budgetItemRepository.countBudgetItemByItem(itemToBeFound)).thenReturn(expectedResponse.numberOfUses());
 
-        ItemGetResponse response = service.findById(user, idToSearch);
+        ItemGetResponse response = service.findById(clientUser, idToSearch);
 
         assertThat(response)
                 .isNotNull()
@@ -93,7 +93,7 @@ class ItemServiceTest {
     @DisplayName("findById returns found item when the given user is admin")
     @Order(3)
     void findById_ReturnsFoundItem_WhenTheGivenUserIsAdmin() {
-        User user = UserUtils.newUserList().getFirst();
+        User adminUser = UserUtils.newUserList().getFirst();
 
         Item itemToBeFound = itemList.getLast();
         Long idToSearch = itemToBeFound.getId();
@@ -103,7 +103,7 @@ class ItemServiceTest {
         when(repository.findById(idToSearch)).thenReturn(Optional.of(itemToBeFound));
         when(budgetItemRepository.countBudgetItemByItem(itemToBeFound)).thenReturn(expectedResponse.numberOfUses());
 
-        ItemGetResponse response = service.findById(user, idToSearch);
+        ItemGetResponse response = service.findById(adminUser, idToSearch);
 
         assertThat(response)
                 .isNotNull()
@@ -114,20 +114,35 @@ class ItemServiceTest {
     @DisplayName("findById throws NotFoundException when the given id is not found")
     @Order(4)
     void findById_ThrowsNotFoundException_WhenTheGivenIdIsNotFound() {
-        User user = UserUtils.newUserList().getFirst();
+        User clientUser = UserUtils.newUserList().get(1);
+
+        Long randomId = 999L;
+
+        when(repository.findByIdAndUserAndActiveIsTrue(randomId, clientUser)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.findById(clientUser, randomId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("Item with id '%s' not found".formatted(randomId));
+    }
+
+    @Test
+    @DisplayName("findById throws NotFoundException when the given id is not found and user is admin")
+    @Order(5)
+    void findById_ThrowsNotFoundException_WhenTheGivenIdIsNotFoundAndUserIsAdmin() {
+        User adminUser = UserUtils.newUserList().getFirst();
 
         Long randomId = 999L;
 
         when(repository.findById(randomId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.findById(user, randomId))
+        assertThatThrownBy(() -> service.findById(adminUser, randomId))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining("Item with id '%s' not found".formatted(randomId));
     }
 
     @Test
     @DisplayName("listAllMy returns found items of the given user when successful")
-    @Order(5)
+    @Order(6)
     void listAllMy_ReturnsFoundItemsOfTheGivenUser_WhenSuccessful() {
         User user = UserUtils.newUserList().getFirst();
 
@@ -154,7 +169,7 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("listAllMy returns an empty list when the given user does not have items")
-    @Order(6)
+    @Order(7)
     void listAllMy_ReturnsEmpty_WhenTheGivenUserDoesNotHaveItems() {
         User user = UserUtils.newUserList().getFirst();
 
@@ -170,7 +185,7 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("listAllMy returns found items of the given user when name given is found")
-    @Order(7)
+    @Order(8)
     void listAllMy_ReturnsFoundItemsOfTheGivenUser_WhenTheGivenNameIsFound() {
         User user = UserUtils.newUserList().getFirst();
 
@@ -200,7 +215,7 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("listAllMy returns an empty list when the given name is not found")
-    @Order(8)
+    @Order(9)
     void listAllMy_ReturnsEmpty_WhenTheGivenNameIsNotFound() {
         User user = UserUtils.newUserList().getFirst();
 
@@ -218,27 +233,27 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("update updates item when successful")
-    @Order(9)
+    @Order(10)
     void update_UpdatesItem_WhenSuccessful() {
-        User user = UserUtils.newUserList().get(1);
+        User clientUser = UserUtils.newUserList().get(1);
         ItemPutRequest request = ItemUtils.newItemPutRequest();
 
         Item itemToUpdate = ItemUtils.newItemList().get(1);
         Item updatedItem = ItemUtils.newUpdatedItem();
 
-        when(repository.findByIdAndUserAndActiveIsTrue(request.id(), user))
+        when(repository.findByIdAndUserAndActiveIsTrue(request.id(), clientUser))
                 .thenReturn(Optional.of(itemToUpdate));
         when(repository.save(updatedItem)).thenReturn(updatedItem);
 
         assertThatNoException()
-                .isThrownBy(() -> service.update(user, request.id(), request));
+                .isThrownBy(() -> service.update(clientUser, request.id(), request));
     }
 
     @Test
     @DisplayName("update updates item when the given user is admin")
-    @Order(10)
+    @Order(11)
     void update_UpdatesItem_WhenTheGivenUserIsAdmin() {
-        User user = UserUtils.newUserList().getFirst();
+        User adminUser = UserUtils.newUserList().getFirst();
         ItemPutRequest request = ItemUtils.newItemPutRequest();
 
         Item itemToUpdate = ItemUtils.newItemList().get(1);
@@ -249,43 +264,60 @@ class ItemServiceTest {
         when(repository.save(updatedItem)).thenReturn(updatedItem);
 
         assertThatNoException()
-                .isThrownBy(() -> service.update(user, request.id(), request));
+                .isThrownBy(() -> service.update(adminUser, request.id(), request));
     }
 
     @Test
     @DisplayName("update throws BadRequestException when the url id is different from the request body id")
-    @Order(11)
+    @Order(12)
     void update_ThrowsBadRequestException_WhenTheUrlIdIsDifferentFromTheRequestBodyId() {
-        User user = UserUtils.newUserList().getFirst();
+        User adminUser = UserUtils.newUserList().getFirst();
 
         Long randomId = 999L;
         ItemPutRequest request = ItemUtils.newItemPutRequest();
 
-        assertThatThrownBy(() -> service.update(user, randomId, request))
+        assertThatThrownBy(() -> service.update(adminUser, randomId, request))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("The url id (%s) is different from the request body id(%s)".formatted(randomId, request.id()));
     }
 
     @Test
     @DisplayName("update throws NotFoundException when the given id is not found")
-    @Order(12)
+    @Order(13)
     void update_ThrowsNotFoundException_WhenTheGivenIdIsNotFound() {
-        User user = UserUtils.newUserList().get(1);
+        User clientUser = UserUtils.newUserList().get(1);
 
         Long randomId = 999L;
         ItemPutRequest request = ItemUtils.newItemPutRequest().withId(randomId);
 
-        when(repository.findByIdAndUserAndActiveIsTrue(randomId, user))
+        when(repository.findByIdAndUserAndActiveIsTrue(randomId, clientUser))
                 .thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.update(user, request.id(), request))
+        assertThatThrownBy(() -> service.update(clientUser, request.id(), request))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("Item with id '%s' not found".formatted(randomId));
+    }
+
+    @Test
+    @DisplayName("update throws NotFoundException when the given id is not found and user is admin")
+    @Order(14)
+    void update_ThrowsNotFoundException_WhenTheGivenIdIsNotFoundAndUserIsAdmin() {
+        User adminUser = UserUtils.newUserList().getFirst();
+
+        Long randomId = 999L;
+        ItemPutRequest request = ItemUtils.newItemPutRequest().withId(randomId);
+
+        when(repository.findById(randomId))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.update(adminUser, request.id(), request))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining("Item with id '%s' not found".formatted(randomId));
     }
 
     @Test
     @DisplayName("delete set active false when successful")
-    @Order(13)
+    @Order(15)
     void delete_SetActiveFalse_WhenSuccessful() {
         User user = UserUtils.newUserList().get(1);
 
@@ -303,7 +335,7 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("delete set active false when the given user is admin")
-    @Order(14)
+    @Order(16)
     void delete_SetActiveFalse_WhenTheGivenUserIsAdmin() {
         User user = UserUtils.newUserList().getFirst();
 
@@ -321,13 +353,29 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("delete throws NotFoundException when the given id is not found")
-    @Order(15)
+    @Order(16)
     void delete_ThrowsNotFoundException_WhenTheGivenIdIsNotFound() {
         User user = UserUtils.newUserList().get(1);
 
         Long randomId = 999L;
 
         when(repository.findByIdAndUserAndActiveIsTrue(randomId, user))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.delete(user, randomId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("Item with id '%s' not found".formatted(randomId));
+    }
+
+    @Test
+    @DisplayName("delete throws NotFoundException when the given id is not found and user is admin")
+    @Order(17)
+    void delete_ThrowsNotFoundException_WhenTheGivenIdIsNotFoundAndUserIsAdmin() {
+        User user = UserUtils.newUserList().getFirst();
+
+        Long randomId = 999L;
+
+        when(repository.findByIdAndActiveIsTrue(randomId))
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.delete(user, randomId))
