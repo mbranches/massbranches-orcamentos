@@ -18,12 +18,6 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
 
     long countCustomersByUserAndActiveIsTrue(User user);
 
-    List<Customer> findAllByNameContainingAndType_Name(String name, CustomerTypeName typeName, Sort sort);
-
-    List<Customer> findAllByType_Name(CustomerTypeName typeName, Sort sort);
-
-    List<Customer> findAllByNameContaining(String name, Sort sort);
-
     List<Customer> findAllByUserAndActiveIsTrueAndNameContainingAndType_Name(User user, String name, CustomerTypeName typeName, Sort sort);
 
     List<Customer> findAllByUserAndActiveIsTrueAndType_Name(User user, CustomerTypeName typeName, Sort sort);
