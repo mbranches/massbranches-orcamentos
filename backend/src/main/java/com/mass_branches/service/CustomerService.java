@@ -94,7 +94,7 @@ public class CustomerService {
         return new NotFoundException("Customer with id '%s' not found".formatted(id));
     }
 
-    public Integer numberOfCustomers(User user) {
+    public long numberOfCustomers(User user) {
         return repository.countCustomersByUserAndActiveIsTrue(user);
     }
 

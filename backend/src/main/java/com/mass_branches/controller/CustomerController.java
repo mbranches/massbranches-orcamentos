@@ -200,10 +200,10 @@ public class CustomerController {
             }
     )
     @GetMapping("/quantity")
-    public ResponseEntity<Integer> numberOfCustomers(Authentication authentication) {
+    public ResponseEntity<Long> numberOfCustomers(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
-        Integer response = service.numberOfCustomers(user);
+        long response = service.numberOfCustomers(user);
 
         return ResponseEntity.ok(response);
     }
