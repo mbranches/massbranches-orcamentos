@@ -4,9 +4,10 @@ spring:
   application:
     name: orcamentos-mass
   datasource:
-    url: jdbc:mysql://localhost:3308/orcamentos_mass
-    username: root
-    password: ${ENV_MYSQL_PASSWORD}
+    url: ${ENV_DB_URL}
+    username: ${ENV_DB_USERNAME}
+    password: ${ENV_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
     hibernate:
